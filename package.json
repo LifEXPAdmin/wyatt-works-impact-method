@@ -4,7 +4,7 @@
   "private": true,
   "description": "From Idea to Impact: The Wyatt Works Method - Interactive implementation guide",
   "author": "Wyatt Works",
-  "homepage": "https://impact.wyatt-works.com",
+  "homepage": "https://method.wyatt-works.com",
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "next build --turbopack",

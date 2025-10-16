@@ -17,7 +17,7 @@ This is the dedicated website for the Wyatt Works Method - a systematic approach
 - **Styling**: Tailwind CSS
 - **Language**: TypeScript
 - **Deployment**: Vercel (planned)
-- **Domain**: `impact.wyatt-works.com`
+- **Domain**: `method.wyatt-works.com`
 
 ## 📁 Project Structure
 

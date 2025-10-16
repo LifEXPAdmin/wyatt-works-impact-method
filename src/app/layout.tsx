@@ -10,7 +10,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: 'website',
     locale: 'en_US',
-    url: 'https://impact.wyatt-works.com',
+    url: 'https://method.wyatt-works.com',
     siteName: 'From Idea to Impact',
     title: 'From Idea to Impact | The Wyatt Works Method',
     description: 'Transform your ideas into powerful impact with our proven methodology.',
