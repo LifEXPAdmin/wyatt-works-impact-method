@@ -22,7 +22,7 @@ export default function Home() {
       y: 0,
       transition: {
         duration: 0.6,
-        ease: "easeOut",
+        ease: [0.25, 0.46, 0.45, 0.94],
       },
     },
   };
@@ -34,7 +34,7 @@ export default function Home() {
       y: 0,
       transition: {
         duration: 0.5,
-        ease: "easeOut",
+        ease: [0.25, 0.46, 0.45, 0.94],
       },
     },
   };
@@ -122,7 +122,7 @@ export default function Home() {
                 rotateY: 5,
                 rotateX: 5,
                 scale: 1.02,
-                transition: { duration: 0.2, ease: "easeOut" }
+                transition: { duration: 0.2, ease: [0.25, 0.46, 0.45, 0.94] }
               }}
               style={{ transformStyle: "preserve-3d" }}
             >
