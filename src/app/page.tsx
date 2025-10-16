@@ -1,10 +1,10 @@
 "use client";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { motion } from "framer-motion";
+import { motion, type Variants } from "framer-motion";
 
 export default function Home() {
-  const containerVariants = {
+  const containerVariants: Variants = {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
@@ -15,26 +15,26 @@ export default function Home() {
     },
   };
 
-  const itemVariants = {
+  const itemVariants: Variants = {
     hidden: { opacity: 0, y: 20 },
     visible: {
       opacity: 1,
       y: 0,
       transition: {
         duration: 0.6,
-        ease: [0.25, 0.46, 0.45, 0.94],
+        ease: "easeOut",
       },
     },
   };
 
-  const cardVariants = {
+  const cardVariants: Variants = {
     hidden: { opacity: 0, y: 30 },
     visible: {
       opacity: 1,
       y: 0,
       transition: {
         duration: 0.5,
-        ease: [0.25, 0.46, 0.45, 0.94],
+        ease: "easeOut",
       },
     },
   };
@@ -122,7 +122,7 @@ export default function Home() {
                 rotateY: 5,
                 rotateX: 5,
                 scale: 1.02,
-                transition: { duration: 0.2, ease: [0.25, 0.46, 0.45, 0.94] }
+                transition: { duration: 0.2, ease: "easeOut" }
               }}
               style={{ transformStyle: "preserve-3d" }}
             >
