@@ -1,7 +1,10 @@
 {
-  "name": "impact-method",
+  "name": "wyatt-works-impact-method",
   "version": "0.1.0",
   "private": true,
+  "description": "From Idea to Impact: The Wyatt Works Method - Interactive implementation guide",
+  "author": "Wyatt Works",
+  "homepage": "https://impact.wyatt-works.com",
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "next build --turbopack",
