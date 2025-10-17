@@ -219,8 +219,8 @@ export default function AIEducationModal({ isOpen, onClose }: AIEducationModalPr
           {/* Header */}
           <div className="flex items-center justify-between p-6 border-b border-[var(--border)]">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-lg bg-gradient-to-r from-[var(--brand)] to-[var(--gold)] flex items-center justify-center">
-                <Icon className="w-5 h-5 text-white" />
+              <div className="w-12 h-12 rounded-lg bg-gradient-to-r from-[var(--brand)] to-[var(--gold)] flex items-center justify-center">
+                <Icon className="w-6 h-6 text-white" />
               </div>
               <div>
                 <h2 className="text-xl font-bold">{currentSectionData.title}</h2>
@@ -268,15 +268,14 @@ export default function AIEducationModal({ isOpen, onClose }: AIEducationModalPr
             </div>
             
             <div className="flex gap-3">
-              {currentSection > 0 && (
-                <Button
-                  variant="outline"
-                  onClick={prevSection}
-                  className="touch-target"
-                >
-                  Previous
-                </Button>
-              )}
+              <Button
+                variant="outline"
+                onClick={prevSection}
+                disabled={currentSection === 0}
+                className="touch-target"
+              >
+                Previous
+              </Button>
               <Button
                 onClick={nextSection}
                 className="bg-[var(--brand)] text-black hover:opacity-90 touch-target"
