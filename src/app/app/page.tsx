@@ -55,6 +55,8 @@ function AppPageContent() {
   console.log("Active project data:", activeProjectData);
   console.log("Current phase data:", currentPhaseData);
   console.log("Progress data:", progressData);
+  console.log("Is initialized:", isInitialized);
+  console.log("Active phase:", activePhase);
 
   useEffect(() => {
     console.log("Loading blueprint...");
@@ -69,7 +71,7 @@ function AppPageContent() {
     const timer = setTimeout(() => {
       console.log("Setting initialized to true");
       setIsInitialized(true);
-    }, 500);
+    }, 100);
     
     return () => clearTimeout(timer);
   }, [load]);
@@ -128,14 +130,16 @@ function AppPageContent() {
     }
   ];
 
-  // Check if this is first visit and show tour
+  // Check if this is first visit and show tour - DISABLED FOR DEBUGGING
   useEffect(() => {
     try {
-      const hasSeenTour = localStorage.getItem("wwm-app-tour-v1");
-      if (!hasSeenTour) {
-        // Small delay to ensure everything is loaded
-        setTimeout(() => setIsTourOpen(true), 1000);
-      }
+      // Temporarily disable tour to debug interaction issues
+      // const hasSeenTour = localStorage.getItem("wwm-app-tour-v1");
+      // if (!hasSeenTour) {
+      //   // Small delay to ensure everything is loaded
+      //   setTimeout(() => setIsTourOpen(true), 1000);
+      // }
+      console.log("Tour disabled for debugging");
     } catch (error) {
       console.error("Error checking tour status:", error);
     }
@@ -212,7 +216,8 @@ function AppPageContent() {
     }
   };
 
-  if (!isInitialized || !activeProjectData) {
+  // Simplified loading check - only show loading if we're not initialized yet
+  if (!isInitialized) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-[var(--bg)]">
         <div className="text-center">
@@ -223,8 +228,39 @@ function AppPageContent() {
     );
   }
 
+  // If no project data, show a fallback UI that's still interactive
+  if (!activeProjectData) {
+    return (
+      <div className="min-h-screen bg-[var(--bg)]">
+        <TopBar />
+        <div className="flex items-center justify-center h-[calc(100vh-73px)]">
+          <div className="text-center max-w-md mx-auto p-6">
+            <div className="text-[var(--brand)] text-6xl mb-4">📋</div>
+            <h1 className="text-2xl font-bold text-zinc-100 mb-4">No Blueprint Found</h1>
+            <p className="text-zinc-400 mb-6">
+              It looks like there&apos;s no blueprint data available. Let&apos;s create one for you.
+            </p>
+            <Button
+              onClick={() => {
+                try {
+                  useBlueprint.getState().createProject("My Blueprint");
+                  window.location.reload();
+                } catch (error) {
+                  console.error("Error creating project:", error);
+                }
+              }}
+              className="bg-[var(--brand)] text-black hover:opacity-90"
+            >
+              Create New Blueprint
+            </Button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div className="min-h-screen bg-[var(--bg)]">
+    <div className="min-h-screen bg-[var(--bg)]" onClick={() => console.log("Main div clicked")}>
       <TopBar />
       
       <div className="flex h-[calc(100vh-73px)] lg:h-[calc(100vh-73px)]">
