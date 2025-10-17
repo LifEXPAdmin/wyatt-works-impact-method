@@ -1,13 +1,22 @@
 export type PhaseId = 'spark' | 'forge' | 'flow' | 'impact';
 
+export type Subtask = {
+  id: string;
+  title: string;
+  done: boolean;
+  notes?: string;
+  tips?: string[];        // quick hints
+};
+
 export type Task = {
   id: string;
   title: string;
-  description?: string;
+  description?: string;   // one-line summary
   done: boolean;
-  notes?: string;
-  tips?: string[];
-  children?: Task[];
+  notes?: string;         // user notes
+  tips?: string[];        // guidance bullets
+  resources?: { label: string; url: string }[];
+  children?: Subtask[];   // nested bullets
 };
 
 export type Phase = {
@@ -26,9 +35,9 @@ export type Blueprint = {
 };
 
 export type Project = {
-  id: string;           // uuid
-  name: string;         // editable by user
-  blueprint: Blueprint; // core data
+  id: string;
+  name: string;
+  blueprint: Blueprint;
   createdAt: number;
   updatedAt: number;
 };

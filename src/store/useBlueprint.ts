@@ -1,6 +1,7 @@
 import { create } from "zustand";
-import { Project, PhaseId, Task, SaveStatus } from "@/types/blueprint";
+import { Project, PhaseId, Task, Subtask, SaveStatus } from "@/types/blueprint";
 import { sampleBlueprint } from "@/lib/sample-data";
+import { arrayMove } from "@dnd-kit/sortable";
 
 type State = {
   projects: Project[];
@@ -17,13 +18,19 @@ type State = {
   setActiveProject: (id: string) => void;
   
   // Task operations
+  addTask: (phaseId: PhaseId, title?: string) => void;
+  addSubtask: (taskId: string, title?: string) => void;
+  renameTask: (taskId: string, title: string) => void;
+  renameSubtask: (subtaskId: string, title: string) => void;
   toggleTask: (taskId: string) => void;
+  toggleSubtask: (subtaskId: string) => void;
   updateNotes: (taskId: string, notes: string) => void;
-  reorderTasks: (phaseId: PhaseId, fromIndex: number, toIndex: number) => void;
-  addTask: (phaseId: PhaseId, parentTaskId?: string) => void;
-  addSubtask: (parentTaskId: string) => void;
-  duplicateTask: (taskId: string) => void;
   deleteTask: (taskId: string) => void;
+  deleteSubtask: (subtaskId: string) => void;
+  
+  // Drag and drop
+  reorderTasks: (phaseId: PhaseId, activeId: string, overId: string) => void;
+  reorderSubtasks: (taskId: string, activeId: string, overId: string) => void;
   
   // Computed values
   activeProject: () => Project | null;
@@ -45,10 +52,8 @@ export const useBlueprint = create<State>((set, get) => ({
     
     try {
       const raw = localStorage.getItem(KEY);
-      console.log("Raw localStorage data:", raw);
       if (raw) {
         const data = JSON.parse(raw);
-        console.log("Parsed data:", data);
         set({ 
           projects: data.projects || [], 
           activeProjectId: data.activeProjectId || null 
@@ -60,11 +65,8 @@ export const useBlueprint = create<State>((set, get) => ({
     
     // Seed with default project if none exist
     const { projects } = get();
-    console.log("Current projects:", projects);
     if (projects.length === 0) {
-      console.log("Creating default project...");
-      const projectId = get().createProject("My Blueprint");
-      console.log("Created project with ID:", projectId);
+      get().createProject("My Blueprint");
     }
   },
 
@@ -84,7 +86,6 @@ export const useBlueprint = create<State>((set, get) => ({
   },
 
   createProject: (name = "New Project") => {
-    console.log("Creating project:", name);
     const id = generateId();
     const now = Date.now();
     
@@ -101,16 +102,12 @@ export const useBlueprint = create<State>((set, get) => ({
       updatedAt: now,
     };
 
-    console.log("New project created:", newProject);
-
     set(state => ({
       projects: [...state.projects, newProject],
       activeProjectId: id,
     }));
     
-    console.log("Project added to state");
     get().save();
-    console.log("Project saved");
     return id;
   },
 
@@ -144,26 +141,20 @@ export const useBlueprint = create<State>((set, get) => ({
 
     const newId = generateId();
     const now = Date.now();
+    const duplicatedProject: Project = structuredClone(original);
     
-    const duplicated: Project = {
-      ...original,
-      id: newId,
-      name: `${original.name} (Copy)`,
-      createdAt: now,
-      updatedAt: now,
-      blueprint: {
-        ...original.blueprint,
-        id: newId,
-        name: `${original.name} (Copy)`,
-        updatedAt: now,
-      },
-    };
+    duplicatedProject.id = newId;
+    duplicatedProject.name = `${original.name} (Copy)`;
+    duplicatedProject.createdAt = now;
+    duplicatedProject.updatedAt = now;
+    duplicatedProject.blueprint.id = newId;
+    duplicatedProject.blueprint.name = `${original.name} (Copy)`;
+    duplicatedProject.blueprint.updatedAt = now;
 
     set(state => ({
-      projects: [...state.projects, duplicated],
+      projects: [...state.projects, duplicatedProject],
       activeProjectId: newId,
     }));
-    
     get().save();
     return newId;
   },
@@ -173,173 +164,375 @@ export const useBlueprint = create<State>((set, get) => ({
     get().save();
   },
 
-  toggleTask: (taskId: string) => {
-    const activeProject = get().activeProject();
-    if (!activeProject) return;
-
-    const blueprint = structuredClone(activeProject.blueprint);
-    
-    for (const phase of blueprint.phases) {
-      const stack: Task[] = [...phase.tasks];
-      while (stack.length) {
-        const t = stack.pop()!;
-        if (t.id === taskId) {
-          t.done = !t.done;
-        }
-        if (t.children) {
-          stack.push(...t.children);
-        }
-      }
-    }
-    
-    blueprint.updatedAt = Date.now();
-    
+  addTask: (phaseId: PhaseId, title = "New Task") => {
     set(state => ({
-      projects: state.projects.map(p => 
-        p.id === activeProject.id 
-          ? { ...p, blueprint, updatedAt: Date.now() }
-          : p
-      ),
+      projects: state.projects.map(p => {
+        if (p.id !== state.activeProjectId) return p;
+
+        const newTask: Task = {
+          id: generateId(),
+          title,
+          done: false,
+          description: "",
+          notes: "",
+        };
+
+        const updatedPhases = p.blueprint.phases.map(phase => {
+          if (phase.id !== phaseId) return phase;
+          return { ...phase, tasks: [...phase.tasks, newTask] };
+        });
+
+        return { 
+          ...p, 
+          updatedAt: Date.now(),
+          blueprint: { ...p.blueprint, phases: updatedPhases } 
+        };
+      }),
     }));
-    
+    get().save();
+  },
+
+  addSubtask: (taskId: string, title = "New Subtask") => {
+    set(state => ({
+      projects: state.projects.map(p => {
+        if (p.id !== state.activeProjectId) return p;
+
+        const newSubtask: Subtask = {
+          id: generateId(),
+          title,
+          done: false,
+        };
+
+        const addSubtaskRecursive = (tasks: Task[]): Task[] => {
+          return tasks.map(task => {
+            if (task.id === taskId) {
+              return {
+                ...task,
+                children: [...(task.children || []), newSubtask],
+              };
+            }
+            if (task.children) {
+              return {
+                ...task,
+                children: addSubtaskRecursive(task.children),
+              };
+            }
+            return task;
+          });
+        };
+
+        const updatedPhases = p.blueprint.phases.map(phase => ({
+          ...phase,
+          tasks: addSubtaskRecursive(phase.tasks),
+        }));
+
+        return { 
+          ...p, 
+          updatedAt: Date.now(),
+          blueprint: { ...p.blueprint, phases: updatedPhases } 
+        };
+      }),
+    }));
+    get().save();
+  },
+
+  renameTask: (taskId: string, title: string) => {
+    set(state => ({
+      projects: state.projects.map(p => {
+        if (p.id !== state.activeProjectId) return p;
+
+        const renameTaskRecursive = (tasks: Task[]): Task[] => {
+          return tasks.map(task => {
+            if (task.id === taskId) {
+              return { ...task, title };
+            }
+            if (task.children) {
+              return {
+                ...task,
+                children: renameTaskRecursive(task.children),
+              };
+            }
+            return task;
+          });
+        };
+
+        const updatedPhases = p.blueprint.phases.map(phase => ({
+          ...phase,
+          tasks: renameTaskRecursive(phase.tasks),
+        }));
+
+        return { 
+          ...p, 
+          updatedAt: Date.now(),
+          blueprint: { ...p.blueprint, phases: updatedPhases } 
+        };
+      }),
+    }));
+    get().save();
+  },
+
+  renameSubtask: (subtaskId: string, title: string) => {
+    set(state => ({
+      projects: state.projects.map(p => {
+        if (p.id !== state.activeProjectId) return p;
+
+        const renameSubtaskRecursive = (tasks: Task[]): Task[] => {
+          return tasks.map(task => {
+            if (task.children) {
+              return {
+                ...task,
+                children: task.children.map(subtask => 
+                  subtask.id === subtaskId ? { ...subtask, title } : subtask
+                ),
+              };
+            }
+            return task;
+          });
+        };
+
+        const updatedPhases = p.blueprint.phases.map(phase => ({
+          ...phase,
+          tasks: renameSubtaskRecursive(phase.tasks),
+        }));
+
+        return { 
+          ...p, 
+          updatedAt: Date.now(),
+          blueprint: { ...p.blueprint, phases: updatedPhases } 
+        };
+      }),
+    }));
+    get().save();
+  },
+
+  toggleTask: (taskId: string) => {
+    set(state => ({
+      projects: state.projects.map(p => {
+        if (p.id !== state.activeProjectId) return p;
+
+        const toggleTaskRecursive = (tasks: Task[]): Task[] => {
+          return tasks.map(task => {
+            if (task.id === taskId) {
+              return { ...task, done: !task.done };
+            }
+            if (task.children) {
+              return {
+                ...task,
+                children: toggleTaskRecursive(task.children),
+              };
+            }
+            return task;
+          });
+        };
+
+        const updatedPhases = p.blueprint.phases.map(phase => ({
+          ...phase,
+          tasks: toggleTaskRecursive(phase.tasks),
+        }));
+
+        return { 
+          ...p, 
+          updatedAt: Date.now(),
+          blueprint: { ...p.blueprint, phases: updatedPhases } 
+        };
+      }),
+    }));
+    get().save();
+  },
+
+  toggleSubtask: (subtaskId: string) => {
+    set(state => ({
+      projects: state.projects.map(p => {
+        if (p.id !== state.activeProjectId) return p;
+
+        const toggleSubtaskRecursive = (tasks: Task[]): Task[] => {
+          return tasks.map(task => {
+            if (task.children) {
+              return {
+                ...task,
+                children: task.children.map(subtask => 
+                  subtask.id === subtaskId ? { ...subtask, done: !subtask.done } : subtask
+                ),
+              };
+            }
+            return task;
+          });
+        };
+
+        const updatedPhases = p.blueprint.phases.map(phase => ({
+          ...phase,
+          tasks: toggleSubtaskRecursive(phase.tasks),
+        }));
+
+        return { 
+          ...p, 
+          updatedAt: Date.now(),
+          blueprint: { ...p.blueprint, phases: updatedPhases } 
+        };
+      }),
+    }));
     get().save();
   },
 
   updateNotes: (taskId: string, notes: string) => {
-    const activeProject = get().activeProject();
-    if (!activeProject) return;
-
-    const blueprint = structuredClone(activeProject.blueprint);
-    
-    for (const phase of blueprint.phases) {
-      const stack: Task[] = [...phase.tasks];
-      while (stack.length) {
-        const t = stack.pop()!;
-        if (t.id === taskId) {
-          t.notes = notes;
-        }
-        if (t.children) {
-          stack.push(...t.children);
-        }
-      }
-    }
-    
-    blueprint.updatedAt = Date.now();
-    
     set(state => ({
-      projects: state.projects.map(p => 
-        p.id === activeProject.id 
-          ? { ...p, blueprint, updatedAt: Date.now() }
-          : p
-      ),
+      projects: state.projects.map(p => {
+        if (p.id !== state.activeProjectId) return p;
+
+        const updateNotesRecursive = (tasks: Task[]): Task[] => {
+          return tasks.map(task => {
+            if (task.id === taskId) {
+              return { ...task, notes };
+            }
+            if (task.children) {
+              return {
+                ...task,
+                children: updateNotesRecursive(task.children),
+              };
+            }
+            return task;
+          });
+        };
+
+        const updatedPhases = p.blueprint.phases.map(phase => ({
+          ...phase,
+          tasks: updateNotesRecursive(phase.tasks),
+        }));
+
+        return { 
+          ...p, 
+          updatedAt: Date.now(),
+          blueprint: { ...p.blueprint, phases: updatedPhases } 
+        };
+      }),
     }));
-    
     get().save();
-  },
-
-  reorderTasks: (phaseId: PhaseId, fromIndex: number, toIndex: number) => {
-    const activeProject = get().activeProject();
-    if (!activeProject) return;
-
-    const blueprint = structuredClone(activeProject.blueprint);
-    const phase = blueprint.phases.find(p => p.id === phaseId);
-    if (!phase) return;
-
-    const [movedTask] = phase.tasks.splice(fromIndex, 1);
-    phase.tasks.splice(toIndex, 0, movedTask);
-    
-    blueprint.updatedAt = Date.now();
-    
-    set(state => ({
-      projects: state.projects.map(p => 
-        p.id === activeProject.id 
-          ? { ...p, blueprint, updatedAt: Date.now() }
-          : p
-      ),
-    }));
-    
-    get().save();
-  },
-
-  addTask: (phaseId: PhaseId, parentTaskId?: string) => {
-    const activeProject = get().activeProject();
-    if (!activeProject) return;
-
-    const blueprint = structuredClone(activeProject.blueprint);
-    const phase = blueprint.phases.find(p => p.id === phaseId);
-    if (!phase) return;
-
-    const newTask: Task = {
-      id: generateId(),
-      title: "New Task",
-      done: false,
-    };
-
-    if (parentTaskId) {
-      const addToParent = (tasks: Task[]): boolean => {
-        for (const task of tasks) {
-          if (task.id === parentTaskId) {
-            if (!task.children) task.children = [];
-            task.children.push(newTask);
-            return true;
-          }
-          if (task.children && addToParent(task.children)) {
-            return true;
-          }
-        }
-        return false;
-      };
-      addToParent(phase.tasks);
-    } else {
-      phase.tasks.push(newTask);
-    }
-    
-    blueprint.updatedAt = Date.now();
-    
-    set(state => ({
-      projects: state.projects.map(p => 
-        p.id === activeProject.id 
-          ? { ...p, blueprint, updatedAt: Date.now() }
-          : p
-      ),
-    }));
-    
-    get().save();
-  },
-
-  addSubtask: (parentTaskId: string) => {
-    const activeProject = get().activeProject();
-    if (!activeProject) return;
-    
-    // Find which phase contains this task
-    for (const phase of activeProject.blueprint.phases) {
-      const findTask = (tasks: Task[]): Task | null => {
-        for (const task of tasks) {
-          if (task.id === parentTaskId) return task;
-          if (task.children) {
-            const found = findTask(task.children);
-            if (found) return found;
-          }
-        }
-        return null;
-      };
-      
-      const parentTask = findTask(phase.tasks);
-      if (parentTask) {
-        get().addTask(phase.id, parentTaskId);
-        return;
-      }
-    }
-  },
-
-  duplicateTask: (taskId: string) => {
-    // Implementation for duplicating tasks
-    console.log("Duplicate task:", taskId);
   },
 
   deleteTask: (taskId: string) => {
-    // Implementation for deleting tasks
-    console.log("Delete task:", taskId);
+    set(state => ({
+      projects: state.projects.map(p => {
+        if (p.id !== state.activeProjectId) return p;
+
+        const deleteTaskRecursive = (tasks: Task[]): Task[] => {
+          return tasks.filter(task => task.id !== taskId).map(task => {
+            if (task.children) {
+              return {
+                ...task,
+                children: deleteTaskRecursive(task.children),
+              };
+            }
+            return task;
+          });
+        };
+
+        const updatedPhases = p.blueprint.phases.map(phase => ({
+          ...phase,
+          tasks: deleteTaskRecursive(phase.tasks),
+        }));
+
+        return { 
+          ...p, 
+          updatedAt: Date.now(),
+          blueprint: { ...p.blueprint, phases: updatedPhases } 
+        };
+      }),
+    }));
+    get().save();
+  },
+
+  deleteSubtask: (subtaskId: string) => {
+    set(state => ({
+      projects: state.projects.map(p => {
+        if (p.id !== state.activeProjectId) return p;
+
+        const deleteSubtaskRecursive = (tasks: Task[]): Task[] => {
+          return tasks.map(task => {
+            if (task.children) {
+              return {
+                ...task,
+                children: task.children.filter(subtask => subtask.id !== subtaskId),
+              };
+            }
+            return task;
+          });
+        };
+
+        const updatedPhases = p.blueprint.phases.map(phase => ({
+          ...phase,
+          tasks: deleteSubtaskRecursive(phase.tasks),
+        }));
+
+        return { 
+          ...p, 
+          updatedAt: Date.now(),
+          blueprint: { ...p.blueprint, phases: updatedPhases } 
+        };
+      }),
+    }));
+    get().save();
+  },
+
+  reorderTasks: (phaseId: PhaseId, activeId: string, overId: string) => {
+    set(state => ({
+      projects: state.projects.map(p => {
+        if (p.id !== state.activeProjectId) return p;
+
+        const updatedPhases = p.blueprint.phases.map(phase => {
+          if (phase.id !== phaseId) return phase;
+
+          const oldIndex = phase.tasks.findIndex(task => task.id === activeId);
+          const newIndex = phase.tasks.findIndex(task => task.id === overId);
+          
+          if (oldIndex === -1 || newIndex === -1) return phase;
+
+          const newTasks = arrayMove(phase.tasks, oldIndex, newIndex);
+          return { ...phase, tasks: newTasks };
+        });
+
+        return { 
+          ...p, 
+          updatedAt: Date.now(),
+          blueprint: { ...p.blueprint, phases: updatedPhases } 
+        };
+      }),
+    }));
+    get().save();
+  },
+
+  reorderSubtasks: (taskId: string, activeId: string, overId: string) => {
+    set(state => ({
+      projects: state.projects.map(p => {
+        if (p.id !== state.activeProjectId) return p;
+
+        const reorderSubtasksRecursive = (tasks: Task[]): Task[] => {
+          return tasks.map(task => {
+            if (task.id === taskId && task.children) {
+              const oldIndex = task.children.findIndex(subtask => subtask.id === activeId);
+              const newIndex = task.children.findIndex(subtask => subtask.id === overId);
+              
+              if (oldIndex === -1 || newIndex === -1) return task;
+
+              const newChildren = arrayMove(task.children, oldIndex, newIndex);
+              return { ...task, children: newChildren };
+            }
+            return task;
+          });
+        };
+
+        const updatedPhases = p.blueprint.phases.map(phase => ({
+          ...phase,
+          tasks: reorderSubtasksRecursive(phase.tasks),
+        }));
+
+        return { 
+          ...p, 
+          updatedAt: Date.now(),
+          blueprint: { ...p.blueprint, phases: updatedPhases } 
+        };
+      }),
+    }));
+    get().save();
   },
 
   activeProject: () => {
@@ -353,30 +546,35 @@ export const useBlueprint = create<State>((set, get) => ({
       overall: 0, 
       byPhase: { spark: 0, forge: 0, flow: 0, impact: 0 } as Record<PhaseId, number> 
     };
-    
+
     if (!activeProject) return result;
-    
-    let total = 0, done = 0;
-    
-    for (const phase of activeProject.blueprint.phases) {
-      let pTotal = 0, pDone = 0;
-      const stack: Task[] = [...phase.tasks];
-      
-      while (stack.length) {
-        const t = stack.pop()!;
-        pTotal++;
-        if (t.done) pDone++;
-        if (t.children) {
-          stack.push(...t.children);
-        }
-      }
-      
-      result.byPhase[phase.id] = pTotal ? Math.round((pDone / pTotal) * 100) : 0;
-      total += pTotal;
-      done += pDone;
-    }
-    
-    result.overall = total ? Math.round((done / total) * 100) : 0;
+
+    let totalTasks = 0;
+    let completedTasks = 0;
+
+    activeProject.blueprint.phases.forEach(phase => {
+      let phaseTotalTasks = 0;
+      let phaseCompletedTasks = 0;
+
+      const countTasks = (tasks: Task[]) => {
+        tasks.forEach(task => {
+          phaseTotalTasks++;
+          totalTasks++;
+          if (task.done) {
+            phaseCompletedTasks++;
+            completedTasks++;
+          }
+          if (task.children) {
+            countTasks(task.children);
+          }
+        });
+      };
+
+      countTasks(phase.tasks);
+      result.byPhase[phase.id] = phaseTotalTasks > 0 ? Math.round((phaseCompletedTasks / phaseTotalTasks) * 100) : 0;
+    });
+
+    result.overall = totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 0;
     return result;
   },
 
@@ -387,23 +585,31 @@ export const useBlueprint = create<State>((set, get) => ({
     const phase = activeProject.blueprint.phases.find(p => p.id === phaseId);
     if (!phase) return null;
 
-    let totalTasks = 0, tasksCompleted = 0, notesCount = 0;
-    
-    const countTasks = (tasks: Task[]) => {
-      for (const task of tasks) {
+    let totalTasks = 0;
+    let tasksCompleted = 0;
+    let notesCount = 0;
+
+    const countMetrics = (tasks: Task[]) => {
+      tasks.forEach(task => {
         totalTasks++;
-        if (task.done) tasksCompleted++;
-        if (task.notes && task.notes.trim()) notesCount++;
-        if (task.children) countTasks(task.children);
-      }
+        if (task.done) {
+          tasksCompleted++;
+        }
+        if (task.notes && task.notes.trim() !== "") {
+          notesCount++;
+        }
+        if (task.children) {
+          countMetrics(task.children);
+        }
+      });
     };
-    
-    countTasks(phase.tasks);
-    
-    const progress = totalTasks ? Math.round((tasksCompleted / totalTasks) * 100) : 0;
-    
+
+    countMetrics(phase.tasks);
+
+    const progress = totalTasks > 0 ? Math.round((tasksCompleted / totalTasks) * 100) : 0;
+
     return {
-      phase,
+      phase: { ...phase, tasks: phase.tasks },
       progress,
       tasksCompleted,
       totalTasks,

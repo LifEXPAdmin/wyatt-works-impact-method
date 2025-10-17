@@ -1,230 +1,162 @@
 "use client";
-import { useState, useRef, useEffect } from "react";
+import { useState } from "react";
 import { Task, PhaseId } from "@/types/blueprint";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Textarea } from "@/components/ui/textarea";
-import { Button } from "@/components/ui/button";
-import { 
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import { useBlueprint } from "@/store/useBlueprint";
-import { 
-  Plus, 
-  MoreVertical
-} from "lucide-react";
-import { cn } from "@/lib/utils";
+import { motion, AnimatePresence } from "framer-motion";
+import {
+  DndContext,
+  closestCenter,
+  KeyboardSensor,
+  PointerSensor,
+  useSensor,
+  useSensors,
+  DragEndEvent,
+} from "@dnd-kit/core";
+import {
+  SortableContext,
+  sortableKeyboardCoordinates,
+  verticalListSortingStrategy,
+} from "@dnd-kit/sortable";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import TaskItem from "@/components/TaskItem";
+import { Plus } from "lucide-react";
 
 interface TaskListProps {
   tasks: Task[];
-  phaseId?: PhaseId;
-  parentTaskId?: string;
-  level?: number;
+  phaseId: PhaseId;
 }
 
-export default function TaskList({ tasks, phaseId, parentTaskId, level = 0 }: TaskListProps) {
-  const { 
-    toggleTask, 
-    updateNotes, 
-    addTask, 
-    addSubtask,
-    save 
-  } = useBlueprint();
-  
-  const [editingTaskId, setEditingTaskId] = useState<string | null>(null);
-  const textareaRefs = useRef<{ [key: string]: HTMLTextAreaElement | null }>({});
+export default function TaskList({ tasks, phaseId }: TaskListProps) {
+  const { addTask } = useBlueprint();
+  const [isAddingTask, setIsAddingTask] = useState(false);
+  const [newTaskTitle, setNewTaskTitle] = useState("");
 
-  // Auto-resize textareas
-  useEffect(() => {
-    const resizeTextarea = (textarea: HTMLTextAreaElement) => {
-      textarea.style.height = 'auto';
-      textarea.style.height = `${textarea.scrollHeight}px`;
-    };
+  const sensors = useSensors(
+    useSensor(PointerSensor),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    })
+  );
 
-    Object.values(textareaRefs.current).forEach(textarea => {
-      if (textarea) resizeTextarea(textarea);
-    });
-  }, [tasks]);
+  const handleDragEnd = (event: DragEndEvent) => {
+    const { active, over } = event;
 
-  // Keyboard shortcuts
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.metaKey || e.ctrlKey) {
-        switch (e.key) {
-          case 's':
-            e.preventDefault();
-            save();
-            // Show toast notification
-            break;
-          case 'Enter':
-            e.preventDefault();
-            if (editingTaskId) {
-              const textarea = textareaRefs.current[editingTaskId];
-              if (textarea) {
-                const cursorPos = textarea.selectionStart;
-                const text = textarea.value;
-                const newText = text.slice(0, cursorPos) + '\n' + text.slice(cursorPos);
-                updateNotes(editingTaskId, newText);
-              }
-            }
-            break;
-        }
+    if (active.id !== over?.id && over) {
+      const { reorderTasks } = useBlueprint.getState();
+      
+      // Check if we're reordering tasks or subtasks
+      const activeTask = tasks.find(task => task.id === active.id);
+      const overTask = tasks.find(task => task.id === over.id);
+      
+      if (activeTask && overTask) {
+        // Reordering main tasks
+        reorderTasks(phaseId, active.id as string, over.id as string);
       }
-    };
-
-    document.addEventListener('keydown', handleKeyDown);
-    return () => document.removeEventListener('keydown', handleKeyDown);
-  }, [editingTaskId, save, updateNotes]);
-
-  const handleTaskClick = (taskId: string) => {
-    toggleTask(taskId);
-  };
-
-  const handleNotesChange = (taskId: string, notes: string) => {
-    updateNotes(taskId, notes);
-  };
-
-  const handleAddTask = () => {
-    if (phaseId) {
-      addTask(phaseId, parentTaskId);
     }
   };
 
-  const handleAddSubtask = (taskId: string) => {
-    addSubtask(taskId);
+  const handleAddTask = () => {
+    if (newTaskTitle.trim()) {
+      addTask(phaseId, newTaskTitle.trim());
+      setNewTaskTitle("");
+      setIsAddingTask(false);
+    }
   };
 
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      handleAddTask();
+    } else if (e.key === 'Escape') {
+      setIsAddingTask(false);
+      setNewTaskTitle("");
+    }
+  };
 
+  return (
+    <div className="space-y-4">
+      <DndContext
+        sensors={sensors}
+        collisionDetection={closestCenter}
+        onDragEnd={handleDragEnd}
+      >
+        <SortableContext items={tasks.map(task => task.id)} strategy={verticalListSortingStrategy}>
+          <AnimatePresence>
+            {tasks.map((task, index) => (
+              <motion.div
+                key={task.id}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                transition={{ duration: 0.2, delay: index * 0.05 }}
+              >
+                <TaskItem task={task} phaseId={phaseId} />
+              </motion.div>
+            ))}
+          </AnimatePresence>
+        </SortableContext>
+      </DndContext>
 
-      return (
-        <div className="space-y-4">
-          {tasks.map((task) => (
-            <div
-              key={task.id}
-              className={cn(
-                "group rounded-lg border transition-all duration-200",
-                task.done 
-                  ? "border-green-500/30 bg-green-500/5" 
-                  : "border-[var(--border)] bg-[var(--card)] hover:border-[var(--brand)]/50",
-                level > 0 && "ml-6 border-l-2 border-l-[var(--brand)]/30"
-              )}
-            >
-          <div className="p-4">
-            <div className="flex items-start gap-3">
-              {/* Checkbox */}
-              <div>
-                <Checkbox
-                  checked={task.done}
-                  onCheckedChange={() => handleTaskClick(task.id)}
-                  className="mt-1"
-                />
-              </div>
-
-              {/* Content */}
-              <div className="flex-1 min-w-0">
-                {/* Title */}
-                <div
-                  className={cn(
-                    "font-medium transition-all duration-200",
-                    task.done && "line-through text-zinc-500"
-                  )}
-                >
-                  {task.title}
-                </div>
-
-                {/* Description */}
-                {task.description && (
-                  <p className="text-sm text-zinc-400 mt-1">{task.description}</p>
-                )}
-
-                {/* Tips */}
-                {task.tips?.length && !task.done && (
-                  <div className="mt-2 p-2 rounded-lg bg-[var(--brand)]/10 border border-[var(--brand)]/20">
-                    <div className="text-xs font-medium text-[var(--brand)] mb-1">
-                      💡 Try this:
-                    </div>
-                    <div className="text-xs text-zinc-300">
-                      {task.tips.join(" • ")}
-                    </div>
-                  </div>
-                )}
-
-                    {/* Notes Editor */}
-                    {(!task.done || task.notes) && (
-                      <div className="mt-3">
-                        <Textarea
-                          ref={(el) => { textareaRefs.current[task.id] = el; }}
-                          value={task.notes ?? ""}
-                          onChange={(e) => handleNotesChange(task.id, e.target.value)}
-                          onFocus={() => setEditingTaskId(task.id)}
-                          onBlur={() => setEditingTaskId(null)}
-                          placeholder="Add notes..."
-                          className={cn(
-                            "min-h-[60px] resize-none",
-                            task.done && "opacity-50"
-                          )}
-                          disabled={task.done}
-                        />
-                        
-                        {/* Markdown hints */}
-                        {editingTaskId === task.id && (
-                          <div className="mt-2 text-xs text-zinc-500">
-                            <span className="text-zinc-400">Markdown:</span> **bold** *italic* - list
-                          </div>
-                        )}
-                      </div>
-                    )}
-
-                {/* Subtasks */}
-                {task.children?.length ? (
-                  <div className="mt-4">
-                    <TaskList 
-                      tasks={task.children} 
-                      phaseId={phaseId}
-                      parentTaskId={task.id}
-                      level={level + 1}
-                    />
-                  </div>
-                ) : null}
-              </div>
-
-                  {/* Simplified Actions */}
-                  <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                    {/* More menu */}
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" size="sm" className="w-6 h-6 p-0">
-                          <MoreVertical className="w-3 h-3" />
-                        </Button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent className="bg-[var(--card)] border-[var(--border)]">
-                        <DropdownMenuItem onClick={() => handleAddSubtask(task.id)}>
-                          <Plus className="w-4 h-4 mr-2" />
-                          Add Subtask
-                        </DropdownMenuItem>
-                        <DropdownMenuItem onClick={handleAddTask}>
-                          <Plus className="w-4 h-4 mr-2" />
-                          Add Task Below
-                        </DropdownMenuItem>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
-                  </div>
-            </div>
-          </div>
-        </div>
-      ))}
-
-          {/* Add Task Button */}
-          <Button
-            onClick={handleAddTask}
-            variant="outline"
-            className="w-full border-dashed border-[var(--border)] hover:border-[var(--brand)] hover:bg-[var(--brand)]/5"
+      {/* Add Task Section */}
+      <AnimatePresence>
+        {isAddingTask ? (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{ duration: 0.2 }}
+            className="rounded-2xl border border-dashed border-[var(--border)] p-4"
           >
-            <Plus className="w-4 h-4 mr-2" />
-            Add Task
-          </Button>
+            <div className="flex items-center gap-3">
+              <Input
+                value={newTaskTitle}
+                onChange={(e) => setNewTaskTitle(e.target.value)}
+                onKeyDown={handleKeyDown}
+                placeholder="Enter task title..."
+                className="flex-1 bg-transparent border-none p-0 text-lg font-medium focus:ring-0"
+                autoFocus
+              />
+              <div className="flex gap-2">
+                <Button
+                  size="sm"
+                  onClick={handleAddTask}
+                  disabled={!newTaskTitle.trim()}
+                  className="bg-[var(--brand)] text-black hover:opacity-90"
+                >
+                  Add
+                </Button>
+                <Button
+                  size="sm"
+                  variant="outline"
+                  onClick={() => {
+                    setIsAddingTask(false);
+                    setNewTaskTitle("");
+                  }}
+                >
+                  Cancel
+                </Button>
+              </div>
+            </div>
+          </motion.div>
+        ) : (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+          >
+            <Button
+              onClick={() => setIsAddingTask(true)}
+              variant="outline"
+              className="w-full border-dashed border-[var(--border)] hover:border-[var(--brand)] hover:bg-[var(--brand)]/5 rounded-2xl h-12"
+            >
+              <Plus className="w-4 h-4 mr-2" />
+              Add Task
+            </Button>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
