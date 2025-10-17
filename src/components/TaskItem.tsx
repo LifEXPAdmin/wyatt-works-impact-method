@@ -146,7 +146,7 @@ export default function TaskItem({ task, phaseId }: TaskItemProps) {
           {/* Content */}
           <div className="flex-1 min-w-0">
             {/* Title */}
-            <div className="flex items-center gap-2 mb-2">
+            <div className="flex items-start gap-2 mb-2">
               {isEditing ? (
                 <Input
                   value={editTitle}
@@ -159,7 +159,7 @@ export default function TaskItem({ task, phaseId }: TaskItemProps) {
               ) : (
                 <h3
                   className={cn(
-                    "text-lg font-semibold cursor-pointer hover:text-[var(--brand)] transition-colors",
+                    "text-lg font-semibold cursor-pointer hover:text-[var(--brand)] transition-colors break-words",
                     task.done && "line-through text-zinc-500"
                   )}
                   onDoubleClick={() => {
@@ -181,7 +181,7 @@ export default function TaskItem({ task, phaseId }: TaskItemProps) {
 
             {/* Description */}
             {task.description && (
-              <p className="text-sm text-zinc-400 mb-3">{task.description}</p>
+              <p className="text-sm text-zinc-400 mb-3 break-words whitespace-pre-wrap">{task.description}</p>
             )}
 
             {/* Tips */}
@@ -305,9 +305,12 @@ interface SubtaskItemProps {
 }
 
 function SubtaskItem({ subtask }: SubtaskItemProps) {
-  const { toggleSubtask, renameSubtask, deleteSubtask } = useBlueprint();
+  const { toggleSubtask, renameSubtask, deleteSubtask, updateSubtaskNotes } = useBlueprint();
   const [isEditing, setIsEditing] = useState(false);
   const [editTitle, setEditTitle] = useState(subtask.title);
+  const [isExpanded, setIsExpanded] = useState(false);
+  const [showPrompt, setShowPrompt] = useState(false);
+  const notesRef = useRef<HTMLTextAreaElement>(null);
 
   const {
     attributes,
@@ -340,12 +343,45 @@ function SubtaskItem({ subtask }: SubtaskItemProps) {
     }
   };
 
+  // Auto-resize textarea
+  useEffect(() => {
+    if (notesRef.current) {
+      notesRef.current.style.height = 'auto';
+      notesRef.current.style.height = `${notesRef.current.scrollHeight}px`;
+    }
+  }, [subtask.notes]);
+
+  const handleNotesChange = (notes: string) => {
+    updateSubtaskNotes(subtask.id, notes);
+  };
+
+  const copyPromptToClipboard = async (prompt: string) => {
+    try {
+      await navigator.clipboard.writeText(prompt);
+      // You could add a toast notification here
+    } catch (err) {
+      console.error('Failed to copy prompt:', err);
+    }
+  };
+
+  // Get suggested prompt for this subtask
+  const getSuggestedPrompt = () => {
+    const promptMap: Record<string, string> = {
+      "AI brainstorm: Generate 50 creative name options": "Help me brainstorm 50 creative names for [your business type] that [your value proposition]. Focus on names that are memorable, brandable, and hint at the outcome I deliver. Include variations like: descriptive names, made-up words, compound words, and abstract concepts.",
+      "Human filtering: Check domain + social handle availability": "I need to check availability for these business names: [list your top 5 names]. Please help me research: 1) Domain availability (.com preferred), 2) Social media handle availability across major platforms, 3) Trademark conflicts, 4) Similar existing businesses. Prioritize names that are available across all platforms.",
+      "AI tagline creation: Generate 20 taglines for chosen name": "Create 20 compelling taglines for my business '[chosen name]' that [your value proposition]. Focus on taglines that: 1) Are under 8 words, 2) Clearly communicate the transformation I provide, 3) Are memorable and punchy, 4) Work well with my brand name. Include variations like: benefit-focused, problem-solving, and aspirational approaches.",
+      "Human testing: Say out loud and test with others": "Help me create a testing framework for my business name '[chosen name]' and tagline '[chosen tagline]'. I need: 1) Questions to ask potential customers, 2) Ways to test memorability and pronunciation, 3) Methods to gauge emotional response, 4) A scoring system to evaluate feedback. Focus on testing with my target audience of [your target audience].",
+      "AI final polish: Create 3 compelling versions": "Refine my business name '[chosen name]' and tagline '[chosen tagline]' into 3 polished versions. Each version should: 1) Have slight variations in wording, 2) Maintain the core message, 3) Be optimized for different contexts (website, business cards, social media), 4) Include alternative phrasings. Make each version feel complete and professional."
+    };
+    return promptMap[subtask.title] || "Help me with this task: " + subtask.title;
+  };
+
   return (
     <motion.div
       ref={setNodeRef}
       style={style}
       className={cn(
-        "flex items-center gap-3 p-3 rounded-lg border transition-all duration-200",
+        "rounded-lg border transition-all duration-200",
         subtask.done 
           ? "border-green-500/30 bg-green-500/5" 
           : "border-[var(--border)] bg-[var(--bg)] hover:border-[var(--brand)]/50",
@@ -355,69 +391,144 @@ function SubtaskItem({ subtask }: SubtaskItemProps) {
       animate={{ opacity: 1, x: 0 }}
       transition={{ duration: 0.15 }}
     >
-      {/* Drag Handle */}
-      <div
-        {...attributes}
-        {...listeners}
-        className="cursor-grab hover:cursor-grabbing text-zinc-400 hover:text-zinc-300 transition-colors"
-      >
-        <GripVertical className="w-3 h-3" />
-      </div>
-
-      {/* Checkbox */}
-      <Checkbox
-        checked={subtask.done}
-        onCheckedChange={() => toggleSubtask(subtask.id)}
-        className="w-4 h-4"
-      />
-
-      {/* Title */}
-      <div className="flex-1 min-w-0">
-        {isEditing ? (
-          <Input
-            value={editTitle}
-            onChange={(e) => setEditTitle(e.target.value)}
-            onBlur={handleRenameSubtask}
-            onKeyDown={handleKeyDown}
-            className="text-sm bg-transparent border-none p-0 h-auto focus:ring-0"
-            autoFocus
-          />
-        ) : (
-          <span
-            className={cn(
-              "text-sm cursor-pointer hover:text-[var(--brand)] transition-colors",
-              subtask.done && "line-through text-zinc-500"
-            )}
-            onDoubleClick={() => {
-              setIsEditing(true);
-              setEditTitle(subtask.title);
-            }}
+      <div className="p-3">
+        {/* Main Row */}
+        <div className="flex items-start gap-3">
+          {/* Drag Handle */}
+          <div
+            {...attributes}
+            {...listeners}
+            className="mt-1 cursor-grab hover:cursor-grabbing text-zinc-400 hover:text-zinc-300 transition-colors"
           >
-            {subtask.title}
-          </span>
-        )}
-      </div>
+            <GripVertical className="w-3 h-3" />
+          </div>
 
-      {/* Tips Popover */}
-      {subtask.tips?.length && (
-        <div className="flex gap-1">
-          {subtask.tips.map((tip, index) => (
-            <Badge key={index} variant="outline" className="text-xs">
+          {/* Checkbox */}
+          <div className="mt-1">
+            <Checkbox
+              checked={subtask.done}
+              onCheckedChange={() => toggleSubtask(subtask.id)}
+              className="w-4 h-4"
+            />
+          </div>
+
+          {/* Title */}
+          <div className="flex-1 min-w-0">
+            {isEditing ? (
+              <Input
+                value={editTitle}
+                onChange={(e) => setEditTitle(e.target.value)}
+                onBlur={handleRenameSubtask}
+                onKeyDown={handleKeyDown}
+                className="text-sm bg-transparent border-none p-0 h-auto focus:ring-0"
+                autoFocus
+              />
+            ) : (
+              <span
+                className={cn(
+                  "text-sm cursor-pointer hover:text-[var(--brand)] transition-colors break-words",
+                  subtask.done && "line-through text-zinc-500"
+                )}
+                onDoubleClick={() => {
+                  setIsEditing(true);
+                  setEditTitle(subtask.title);
+                }}
+              >
+                {subtask.title}
+              </span>
+            )}
+          </div>
+
+          {/* Action Buttons */}
+          <div className="flex items-center gap-1">
+            {/* Suggested Prompt Button */}
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => setShowPrompt(!showPrompt)}
+              className="w-6 h-6 p-0 text-zinc-400 hover:text-[var(--brand)]"
+              title="Show suggested AI prompt"
+            >
               💡
-            </Badge>
-          ))}
-        </div>
-      )}
+            </Button>
 
-      {/* Delete Button */}
-      <Button
-        variant="ghost"
-        size="sm"
-        onClick={() => deleteSubtask(subtask.id)}
-        className="w-6 h-6 p-0 text-zinc-400 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-opacity"
-      >
-        <X className="w-3 h-3" />
-      </Button>
+            {/* Expand/Collapse Button */}
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => setIsExpanded(!isExpanded)}
+              className="w-6 h-6 p-0 text-zinc-400 hover:text-zinc-300"
+            >
+              {isExpanded ? <ChevronDown className="w-3 h-3" /> : <ChevronRight className="w-3 h-3" />}
+            </Button>
+
+            {/* Delete Button */}
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => deleteSubtask(subtask.id)}
+              className="w-6 h-6 p-0 text-zinc-400 hover:text-red-500"
+            >
+              <X className="w-3 h-3" />
+            </Button>
+          </div>
+        </div>
+
+        {/* Suggested Prompt */}
+        <AnimatePresence>
+          {showPrompt && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: "auto" }}
+              exit={{ opacity: 0, height: 0 }}
+              transition={{ duration: 0.2 }}
+              className="mt-3 p-3 bg-[var(--brand)]/10 border border-[var(--brand)]/20 rounded-lg"
+            >
+              <div className="flex items-start justify-between gap-2 mb-2">
+                <h4 className="text-xs font-semibold text-[var(--brand)]">Suggested AI Prompt</h4>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => copyPromptToClipboard(getSuggestedPrompt())}
+                  className="text-xs h-6 px-2 text-[var(--brand)] hover:bg-[var(--brand)]/20"
+                >
+                  📋 Copy
+                </Button>
+              </div>
+              <p className="text-xs text-zinc-300 mb-2 break-words whitespace-pre-wrap">
+                {getSuggestedPrompt()}
+              </p>
+              <p className="text-xs text-zinc-400 italic">
+                💡 Remember: Copy our prompt as a starting point, then add your own touch and specific details!
+              </p>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        {/* Expanded Content */}
+        <AnimatePresence>
+          {isExpanded && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: "auto" }}
+              exit={{ opacity: 0, height: 0 }}
+              transition={{ duration: 0.2 }}
+              className="mt-3"
+            >
+              {/* Notes Editor */}
+              <div className="mb-3">
+                <Textarea
+                  ref={notesRef}
+                  value={subtask.notes ?? ""}
+                  onChange={(e) => handleNotesChange(e.target.value)}
+                  placeholder="Add notes for this step..."
+                  className="min-h-[60px] resize-none rounded-lg text-xs"
+                />
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
     </motion.div>
   );
 }

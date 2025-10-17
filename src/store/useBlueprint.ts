@@ -25,6 +25,7 @@ type State = {
   toggleTask: (taskId: string) => void;
   toggleSubtask: (subtaskId: string) => void;
   updateNotes: (taskId: string, notes: string) => void;
+  updateSubtaskNotes: (subtaskId: string, notes: string) => void;
   deleteTask: (taskId: string) => void;
   deleteSubtask: (subtaskId: string) => void;
   
@@ -397,6 +398,40 @@ export const useBlueprint = create<State>((set, get) => ({
         const updatedPhases = p.blueprint.phases.map(phase => ({
           ...phase,
           tasks: updateNotesRecursive(phase.tasks),
+        }));
+
+        return { 
+          ...p, 
+          updatedAt: Date.now(),
+          blueprint: { ...p.blueprint, phases: updatedPhases } 
+        };
+      }),
+    }));
+    get().save();
+  },
+
+  updateSubtaskNotes: (subtaskId: string, notes: string) => {
+    set(state => ({
+      projects: state.projects.map(p => {
+        if (p.id !== state.activeProjectId) return p;
+
+        const updateSubtaskNotesRecursive = (tasks: Task[]): Task[] => {
+          return tasks.map(task => {
+            if (task.children) {
+              return {
+                ...task,
+                children: task.children.map(subtask => 
+                  subtask.id === subtaskId ? { ...subtask, notes } : subtask
+                ),
+              };
+            }
+            return task;
+          });
+        };
+
+        const updatedPhases = p.blueprint.phases.map(phase => ({
+          ...phase,
+          tasks: updateSubtaskNotesRecursive(phase.tasks),
         }));
 
         return { 
