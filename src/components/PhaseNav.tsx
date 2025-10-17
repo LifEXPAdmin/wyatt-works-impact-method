@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useBlueprint } from "@/store/useBlueprint";
 import { cn } from "@/lib/utils";
 import { motion, AnimatePresence } from "framer-motion";
@@ -41,12 +41,25 @@ const phases = [
 interface PhaseNavProps {
   active?: string;
   onPhaseChange?: (phaseId: string) => void;
+  onCollapseChange?: (isCollapsed: boolean) => void;
 }
 
-export default function PhaseNav({ active, onPhaseChange }: PhaseNavProps) {
+export default function PhaseNav({ active, onPhaseChange, onCollapseChange }: PhaseNavProps) {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const { getPhase, progress } = useBlueprint();
   const progressData = progress();
+  
+  // Force re-render when phase data changes
+  const [, forceUpdate] = useState({});
+  const forceRerender = () => forceUpdate({});
+  
+  // Listen for store changes
+  useEffect(() => {
+    const unsubscribe = useBlueprint.subscribe(() => {
+      forceRerender();
+    });
+    return unsubscribe;
+  }, []);
 
   const handlePhaseClick = (phaseId: string) => {
     if (onPhaseChange) {
@@ -54,11 +67,19 @@ export default function PhaseNav({ active, onPhaseChange }: PhaseNavProps) {
     }
   };
 
+  const handleCollapseToggle = () => {
+    const newCollapsedState = !isCollapsed;
+    setIsCollapsed(newCollapsedState);
+    if (onCollapseChange) {
+      onCollapseChange(newCollapsedState);
+    }
+  };
+
   return (
     <motion.aside
       className={cn(
         "relative bg-[var(--card)] border border-[var(--border)] rounded-xl transition-all duration-300",
-        isCollapsed ? "w-16" : "w-80"
+        isCollapsed ? "w-16" : "w-full"
       )}
       initial={{ x: -300 }}
       animate={{ x: 0 }}
@@ -68,11 +89,11 @@ export default function PhaseNav({ active, onPhaseChange }: PhaseNavProps) {
       <Button
         variant="ghost"
         size="sm"
-        onClick={() => setIsCollapsed(!isCollapsed)}
-        className="absolute top-4 right-4 z-10 w-8 h-8 p-0 bg-[var(--bg)] border border-[var(--border)] rounded-lg hover:bg-[var(--brand)]/10 hover:border-[var(--brand)]/50 transition-all duration-200"
+        onClick={handleCollapseToggle}
+        className="absolute top-4 right-3 z-10 w-7 h-7 p-0 bg-[var(--bg)] border border-[var(--border)] rounded-lg hover:bg-[var(--brand)]/10 hover:border-[var(--brand)]/50 transition-all duration-200"
         aria-label={isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
       >
-        {isCollapsed ? <ChevronRight className="w-4 h-4" /> : <ChevronLeft className="w-4 h-4" />}
+        {isCollapsed ? <ChevronRight className="w-3 h-3" /> : <ChevronLeft className="w-3 h-3" />}
       </Button>
 
       <div className="p-4">

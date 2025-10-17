@@ -40,7 +40,6 @@ export default function TaskItem({ task, phaseId }: TaskItemProps) {
     updateNotes, 
     addSubtask,
     renameTask,
-    renameSubtask,
     deleteTask
   } = useBlueprint();
   
@@ -106,12 +105,6 @@ export default function TaskItem({ task, phaseId }: TaskItemProps) {
     } else if (e.key === 'Escape') {
       setIsEditing(false);
       setEditTitle(task.title);
-    }
-  };
-
-  const handleRenameSubtask = (subtaskId: string, title: string) => {
-    if (title.trim()) {
-      renameSubtask(subtaskId, title.trim());
     }
   };
 

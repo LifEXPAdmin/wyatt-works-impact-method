@@ -29,14 +29,15 @@ function AppPageContent() {
     progress
   } = useBlueprint();
   
-  const [activePhase, setActivePhase] = useState<string>("spark");
-  const [isCommandPaletteOpen, setIsCommandPaletteOpen] = useState(false);
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [showConfetti, setShowConfetti] = useState(false);
-  const [lastProgress, setLastProgress] = useState(0);
-  const [isTourOpen, setIsTourOpen] = useState(false);
+      const [activePhase, setActivePhase] = useState<string>("spark");
+      const [isCommandPaletteOpen, setIsCommandPaletteOpen] = useState(false);
+      const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+      const [showConfetti, setShowConfetti] = useState(false);
+      const [lastProgress, setLastProgress] = useState(0);
+      const [isTourOpen, setIsTourOpen] = useState(false);
+      const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
 
-  const [isInitialized, setIsInitialized] = useState(false);
+      const [isInitialized, setIsInitialized] = useState(false);
 
   // Get store data with error handling
   let activeProjectData = null;
@@ -168,9 +169,13 @@ function AppPageContent() {
     return () => document.removeEventListener('keydown', handleKeyDown);
   }, []);
 
-  const handlePhaseChange = (phaseId: string) => {
-    setActivePhase(phaseId);
-  };
+      const handlePhaseChange = (phaseId: string) => {
+        setActivePhase(phaseId);
+      };
+
+      const handleSidebarCollapseChange = (isCollapsed: boolean) => {
+        setIsSidebarCollapsed(isCollapsed);
+      };
 
   // Removed handlePromptClick and handleResourceClick - no longer needed
 
@@ -239,27 +244,29 @@ function AppPageContent() {
                 transition={{ type: "spring", damping: 25, stiffness: 200 }}
                 onClick={(e) => e.stopPropagation()}
               >
-                <div className="p-4 pt-16">
-                  <PhaseNav 
-                    active={activePhase} 
-                    onPhaseChange={handlePhaseChange}
-                  />
-                </div>
+                    <div className="p-4 pt-16">
+                      <PhaseNav 
+                        active={activePhase} 
+                        onPhaseChange={handlePhaseChange}
+                        onCollapseChange={handleSidebarCollapseChange}
+                      />
+                    </div>
               </motion.div>
             </motion.div>
           )}
         </AnimatePresence>
 
             {/* Left Sidebar - Phase Navigation */}
-            <div id="phase-nav" className="hidden lg:block lg:w-80 lg:flex-shrink-0 mobile-px pr-6">
+            <div id="phase-nav" className={`hidden lg:block lg:flex-shrink-0 mobile-px pr-8 transition-all duration-300 ${isSidebarCollapsed ? 'lg:w-20' : 'lg:w-80'}`}>
               <PhaseNav 
                 active={activePhase} 
                 onPhaseChange={handlePhaseChange}
+                onCollapseChange={handleSidebarCollapseChange}
               />
             </div>
 
         {/* Main Content */}
-        <div className="flex-1 flex flex-col min-w-0">
+        <div className={`flex-1 flex flex-col min-w-0 transition-all duration-300 ${isSidebarCollapsed ? 'ml-0' : ''}`}>
           {/* Mobile Header */}
           <div className="lg:hidden flex items-center justify-between mobile-px py-4 border-b border-[var(--border)]">
             <Button
@@ -348,13 +355,19 @@ function AppPageContent() {
                 </div>
               </div>
 
-          {/* Simplified Task List */}
-          <div id="task-list" className="flex-1 overflow-y-auto mobile-px py-6">
-            <TaskList 
-              tasks={currentPhaseData?.phase.tasks || []} 
-              phaseId={activePhase as PhaseId}
-            />
-          </div>
+              {/* Simplified Task List with fade effects */}
+              <div id="task-list" className="flex-1 overflow-y-auto mobile-px py-6 relative">
+                {/* Top fade overlay */}
+                <div className="absolute top-0 left-0 right-0 h-8 bg-gradient-to-b from-[var(--bg)] to-transparent z-10 pointer-events-none" />
+                
+                {/* Bottom fade overlay */}
+                <div className="absolute bottom-0 left-0 right-0 h-8 bg-gradient-to-t from-[var(--bg)] to-transparent z-10 pointer-events-none" />
+                
+                <TaskList 
+                  tasks={currentPhaseData?.phase.tasks || []} 
+                  phaseId={activePhase as PhaseId}
+                />
+              </div>
 
               {/* Simplified Footer */}
               <div className="mobile-px py-4 bg-[var(--card)]">
