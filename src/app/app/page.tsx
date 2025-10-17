@@ -4,7 +4,7 @@ import { useBlueprint } from "@/store/useBlueprint";
 import { PhaseId } from "@/types/blueprint";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
-import TopBar from "@/components/TopBar";
+// import TopBar from "@/components/TopBar"; // REMOVED - using NavBar from layout
 import PhaseNav from "@/components/PhaseNav";
 import TaskList from "@/components/TaskList";
 // import RightRail from "@/components/RightRail"; // REMOVED
@@ -190,7 +190,6 @@ function AppPageContent() {
   if (!activeProjectData) {
     return (
       <div className="min-h-screen bg-[var(--bg)]">
-        <TopBar />
         <div className="flex items-center justify-center h-[calc(100vh-73px)]">
           <div className="text-center max-w-md mx-auto p-6">
             <div className="text-[var(--brand)] text-6xl mb-4">📋</div>
@@ -219,7 +218,7 @@ function AppPageContent() {
 
   return (
     <div className="min-h-screen bg-[var(--bg)]" onClick={() => console.log("Main div clicked")}>
-      <TopBar />
+      {/* TopBar removed - using NavBar from layout instead */}
       
       <div className="flex h-[calc(100vh-73px)] lg:h-[calc(100vh-73px)]">
         {/* Mobile Menu Overlay */}
@@ -296,7 +295,7 @@ function AppPageContent() {
           </div>
 
               {/* Simplified Phase Header */}
-              <div className="mobile-px py-6 border-b border-[var(--border)]">
+              <div className="mobile-px py-6">
                 <div className="flex items-center justify-between">
                   <div>
                     <h1 className="text-2xl font-bold">{currentPhaseData?.phase.title}</h1>
@@ -347,8 +346,8 @@ function AppPageContent() {
             />
           </div>
 
-          {/* Simplified Footer */}
-          <div className="border-t border-[var(--border)] mobile-px py-4 bg-[var(--card)]">
+              {/* Simplified Footer */}
+              <div className="mobile-px py-4 bg-[var(--card)]">
             <div className="flex items-center justify-between">
               <div className="text-sm text-zinc-400">
                 {currentPhaseData?.tasksCompleted || 0} of {currentPhaseData?.totalTasks || 0} tasks completed
