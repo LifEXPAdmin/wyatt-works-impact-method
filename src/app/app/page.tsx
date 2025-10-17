@@ -12,7 +12,6 @@ import CommandPalette from "@/components/CommandPalette";
 import Confetti from "@/components/Confetti";
 import Tour, { Step } from "@/components/Tour";
 import ErrorBoundary from "@/components/ErrorBoundary";
-import AIEducationModal from "@/components/AIEducationModal";
 import OnboardingModal from "@/components/OnboardingModal";
 import { 
   Menu, 
@@ -38,7 +37,6 @@ function AppPageContent() {
       const [lastProgress, setLastProgress] = useState(0);
       const [isTourOpen, setIsTourOpen] = useState(false);
       const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
-      const [isAIEducationOpen, setIsAIEducationOpen] = useState(false);
       const [showPhaseBreakdown, setShowPhaseBreakdown] = useState(false);
 
       const [isInitialized, setIsInitialized] = useState(false);
@@ -127,21 +125,17 @@ function AppPageContent() {
     }
   ];
 
-      // Check if this is first visit and show AI education
+      // Check if this is first visit to blueprint and show phase breakdown
       useEffect(() => {
         try {
-          const hasSeenAIEducation = localStorage.getItem("wwm-ai-education-seen");
           const hasSeenOnboarding = localStorage.getItem("wwm-onboarding-seen");
           
-          if (!hasSeenAIEducation) {
-            // Show AI Education first
-            setTimeout(() => setIsAIEducationOpen(true), 1500);
-          } else if (!hasSeenOnboarding) {
-            // Show phase breakdown after AI Education
-            setTimeout(() => setShowPhaseBreakdown(true), 500);
+          if (!hasSeenOnboarding) {
+            // Show phase breakdown when first visiting blueprint
+            setTimeout(() => setShowPhaseBreakdown(true), 1000);
           }
         } catch (error) {
-          console.error("Error checking education status:", error);
+          console.error("Error checking onboarding status:", error);
         }
       }, []);
 
@@ -184,10 +178,6 @@ function AppPageContent() {
         setIsSidebarCollapsed(isCollapsed);
       };
 
-      const handleAIEducationComplete = () => {
-        // After AI Education is complete, show phase breakdown
-        setTimeout(() => setShowPhaseBreakdown(true), 500);
-      };
 
   // Removed handlePromptClick and handleResourceClick - no longer needed
 
@@ -439,13 +429,6 @@ function AppPageContent() {
               console.log("Tour completed!");
             }}
             storageKey="wwm-app-tour-v1"
-          />
-
-          {/* AI Education Modal */}
-          <AIEducationModal
-            isOpen={isAIEducationOpen}
-            onClose={() => setIsAIEducationOpen(false)}
-            onComplete={handleAIEducationComplete}
           />
 
           {/* Phase Breakdown Modal */}
