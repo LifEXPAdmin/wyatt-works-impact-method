@@ -13,7 +13,6 @@ import Confetti from "@/components/Confetti";
 import Tour, { Step } from "@/components/Tour";
 import { 
   Menu, 
-  CheckCircle, 
   ArrowRight,
   Sparkles,
   Hammer,
@@ -39,6 +38,15 @@ export default function AppPage() {
 
   const [isInitialized, setIsInitialized] = useState(false);
 
+  // Get store data first
+  const activeProjectData = activeProject();
+  const currentPhaseData = getPhase(activePhase as PhaseId);
+  const progressData = progress();
+
+  console.log("Active project data:", activeProjectData);
+  console.log("Current phase data:", currentPhaseData);
+  console.log("Progress data:", progressData);
+
   useEffect(() => {
     console.log("Loading blueprint...");
     load();
@@ -57,7 +65,7 @@ export default function AppPage() {
   useEffect(() => {
     if (isInitialized && !activeProjectData) {
       console.log("Store is empty, forcing initialization...");
-      const { projects, activeProjectId } = useBlueprint.getState();
+      const { projects } = useBlueprint.getState();
       if (projects.length === 0) {
         console.log("No projects found, creating default...");
         useBlueprint.getState().createProject("My Blueprint");
@@ -134,14 +142,6 @@ export default function AppPage() {
     document.addEventListener('keydown', handleKeyDown);
     return () => document.removeEventListener('keydown', handleKeyDown);
   }, []);
-
-  const activeProjectData = activeProject();
-  const currentPhaseData = getPhase(activePhase as PhaseId);
-  const progressData = progress();
-
-  console.log("Active project data:", activeProjectData);
-  console.log("Current phase data:", currentPhaseData);
-  console.log("Progress data:", progressData);
 
   const handlePhaseChange = (phaseId: string) => {
     setActivePhase(phaseId);

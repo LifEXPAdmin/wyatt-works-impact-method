@@ -8,7 +8,6 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useBlueprint } from "@/store/useBlueprint";
@@ -101,7 +100,7 @@ export default function TaskList({ tasks, phaseId, parentTaskId, level = 0 }: Ta
 
       return (
         <div className="space-y-4">
-          {tasks.map((task, index) => (
+          {tasks.map((task) => (
             <div
               key={task.id}
               className={cn(
