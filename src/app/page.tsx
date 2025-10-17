@@ -339,7 +339,7 @@ export default function Home() {
               transition={{ type: "spring", stiffness: 400, damping: 17 }}
             >
               <Button asChild variant="outline" className="shadow-lg">
-                <Link href="/stories">See it in action</Link>
+                <Link href="/stories">How This Could Transform Your Business</Link>
               </Button>
             </motion.div>
 
