@@ -1,6 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -18,6 +19,10 @@ const navLinks = [
 export default function NavBar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const pathname = usePathname();
+  
+  // Hide CTA button when on blueprint page
+  const isBlueprintPage = pathname === "/app";
 
   useEffect(() => {
     const handleScroll = () => {
@@ -69,12 +74,14 @@ export default function NavBar() {
               ))}
             </div>
 
-            {/* Desktop CTA */}
-            <div className="hidden md:block">
-              <Button asChild className="bg-[var(--brand)] text-black hover:opacity-90 shadow-lg">
-                <Link href="/app">Start Free Blueprint</Link>
-              </Button>
-            </div>
+            {/* Desktop CTA - Hidden on blueprint page */}
+            {!isBlueprintPage && (
+              <div className="hidden md:block">
+                <Button asChild className="bg-[var(--brand)] text-black hover:opacity-90 shadow-lg">
+                  <Link href="/app">Start Free Blueprint</Link>
+                </Button>
+              </div>
+            )}
 
             {/* Mobile Menu Button */}
             <button
@@ -124,14 +131,16 @@ export default function NavBar() {
                   ))}
                 </div>
 
-                {/* Mobile CTA */}
-                <Button
-                  asChild
-                  className="w-full bg-[var(--brand)] text-black hover:opacity-90 touch-target mobile-text-base"
-                  onClick={toggleMobileMenu}
-                >
-                  <Link href="/app">Start Free Blueprint</Link>
-                </Button>
+                {/* Mobile CTA - Hidden on blueprint page */}
+                {!isBlueprintPage && (
+                  <Button
+                    asChild
+                    className="w-full bg-[var(--brand)] text-black hover:opacity-90 touch-target mobile-text-base"
+                    onClick={toggleMobileMenu}
+                  >
+                    <Link href="/app">Start Free Blueprint</Link>
+                  </Button>
+                )}
               </div>
             </motion.div>
           </>

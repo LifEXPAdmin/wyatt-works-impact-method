@@ -307,10 +307,15 @@ function AppPageContent() {
                     <Button
                       onClick={async () => {
                         try {
+                          console.log("Export button clicked");
                           const { exportPDF } = await import("@/lib/export");
+                          console.log("Export function imported");
                           const project = activeProjectData;
+                          console.log("Project data:", project);
                           if (project) {
+                            console.log("Starting PDF export...");
                             const bytes = await exportPDF(project.blueprint);
+                            console.log("PDF generated, bytes:", bytes);
                             const blob = new Blob([bytes as BlobPart], { type: "application/pdf" });
                             const url = URL.createObjectURL(blob);
                             const a = document.createElement("a");
@@ -318,9 +323,14 @@ function AppPageContent() {
                             a.download = `${project.name}-blueprint.pdf`;
                             a.click();
                             URL.revokeObjectURL(url);
+                            console.log("PDF download initiated");
+                          } else {
+                            console.error("No project data available for export");
+                            alert("No project data available for export");
                           }
                         } catch (error) {
                           console.error("PDF export failed:", error);
+                          alert(`Export failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
                         }
                       }}
                       className="bg-[var(--brand)] text-black hover:opacity-90"
