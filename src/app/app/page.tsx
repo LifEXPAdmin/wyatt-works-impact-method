@@ -48,10 +48,22 @@ export default function AppPage() {
     const timer = setTimeout(() => {
       console.log("Setting initialized to true");
       setIsInitialized(true);
-    }, 200);
+    }, 500);
     
     return () => clearTimeout(timer);
   }, [load]);
+
+  // Force initialization if store is still empty
+  useEffect(() => {
+    if (isInitialized && !activeProjectData) {
+      console.log("Store is empty, forcing initialization...");
+      const { projects, activeProjectId } = useBlueprint.getState();
+      if (projects.length === 0) {
+        console.log("No projects found, creating default...");
+        useBlueprint.getState().createProject("My Blueprint");
+      }
+    }
+  }, [isInitialized, activeProjectData]);
 
   // Additional effect to monitor store changes
   useEffect(() => {
@@ -252,99 +264,55 @@ export default function AppPage() {
             </Button>
           </div>
 
-          {/* Phase Header */}
-          <motion.div
-            className="mobile-px mobile-py border-b border-[var(--border)]"
-            key={activePhase}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.3 }}
-          >
-            <div className="flex items-center justify-between mb-4">
+          {/* Simplified Phase Header */}
+          <div className="mobile-px py-6 border-b border-[var(--border)]">
+            <div className="flex items-center justify-between">
               <div>
-                <h1 className="mobile-text-2xl font-bold">{currentPhaseData?.phase.title}</h1>
-                <p className="mobile-text-sm text-zinc-400 mt-1">{currentPhaseData?.phase.summary}</p>
+                <h1 className="text-2xl font-bold">{currentPhaseData?.phase.title}</h1>
+                <p className="text-zinc-400 mt-1">{currentPhaseData?.phase.summary}</p>
               </div>
               
               <div className="text-right">
-                <div className="text-sm text-zinc-400">Phase Progress</div>
-                <div className="text-2xl font-bold text-[var(--brand)]">
+                <div className="text-sm text-zinc-400">Progress</div>
+                <div className="text-xl font-bold text-[var(--brand)]">
                   {currentPhaseData?.progress || 0}%
                 </div>
               </div>
             </div>
-
-            {/* Mini Metrics */}
-            <div className="mobile-grid grid-cols-3 gap-4">
-              <div className="bg-[var(--bg)] rounded-lg p-3">
-                <div className="text-sm text-zinc-400">Tasks</div>
-                <div className="text-lg font-semibold">
-                  {currentPhaseData?.tasksCompleted || 0}/{currentPhaseData?.totalTasks || 0}
-                </div>
-              </div>
-              <div className="bg-[var(--bg)] rounded-lg p-3">
-                <div className="text-sm text-zinc-400">Notes</div>
-                <div className="text-lg font-semibold">
-                  {currentPhaseData?.notesCount || 0}
-                </div>
-              </div>
-              <div className="bg-[var(--bg)] rounded-lg p-3">
-                <div className="text-sm text-zinc-400">Overall</div>
-                <div className="text-lg font-semibold text-[var(--brand)]">
-                  {progressData.overall}%
-                </div>
-              </div>
-            </div>
-          </motion.div>
-
-          {/* Task List */}
-          <div id="task-list" className="flex-1 overflow-y-auto mobile-px mobile-py smooth-scroll hide-scrollbar">
-            <motion.div
-              key={activePhase}
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.3 }}
-            >
-              <TaskList 
-                tasks={currentPhaseData?.phase.tasks || []} 
-                phaseId={activePhase as PhaseId}
-              />
-            </motion.div>
           </div>
 
-          {/* Sticky Footer */}
+          {/* Simplified Task List */}
+          <div id="task-list" className="flex-1 overflow-y-auto mobile-px py-6">
+            <TaskList 
+              tasks={currentPhaseData?.phase.tasks || []} 
+              phaseId={activePhase as PhaseId}
+            />
+          </div>
+
+          {/* Simplified Footer */}
           <div className="border-t border-[var(--border)] mobile-px py-4 bg-[var(--card)]">
             <div className="flex items-center justify-between">
               <div className="text-sm text-zinc-400">
                 {currentPhaseData?.tasksCompleted || 0} of {currentPhaseData?.totalTasks || 0} tasks completed
               </div>
               
-              <div className="flex gap-2">
-                {currentPhaseData?.progress === 100 && (
-                  <div className="flex items-center gap-2 text-green-500">
-                    <CheckCircle className="w-4 h-4" />
-                    <span className="text-sm font-medium">Phase Complete!</span>
-                  </div>
-                )}
-                
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => {
-                    // Go to next phase
-                    const phases = ['spark', 'forge', 'flow', 'impact'];
-                    const currentIndex = phases.indexOf(activePhase);
-                    if (currentIndex < phases.length - 1) {
-                      setActivePhase(phases[currentIndex + 1]);
-                    }
-                  }}
-                  disabled={activePhase === 'impact'}
-                  className="touch-target"
-                >
-                  Next Phase
-                  <ArrowRight className="w-4 h-4 ml-2" />
-                </Button>
-              </div>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => {
+                  // Go to next phase
+                  const phases = ['spark', 'forge', 'flow', 'impact'];
+                  const currentIndex = phases.indexOf(activePhase);
+                  if (currentIndex < phases.length - 1) {
+                    setActivePhase(phases[currentIndex + 1]);
+                  }
+                }}
+                disabled={activePhase === 'impact'}
+                className="touch-target"
+              >
+                Next Phase
+                <ArrowRight className="w-4 h-4 ml-2" />
+              </Button>
             </div>
           </div>
         </div>

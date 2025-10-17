@@ -12,14 +12,9 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useBlueprint } from "@/store/useBlueprint";
-import { motion, AnimatePresence } from "framer-motion";
 import { 
   Plus, 
-  MoreVertical, 
-  ChevronUp, 
-  ChevronDown, 
-  Copy, 
-  Trash2
+  MoreVertical
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -35,10 +30,7 @@ export default function TaskList({ tasks, phaseId, parentTaskId, level = 0 }: Ta
     toggleTask, 
     updateNotes, 
     addTask, 
-    addSubtask, 
-    duplicateTask, 
-    deleteTask,
-    reorderTasks,
+    addSubtask,
     save 
   } = useBlueprint();
   
@@ -105,72 +97,43 @@ export default function TaskList({ tasks, phaseId, parentTaskId, level = 0 }: Ta
     addSubtask(taskId);
   };
 
-  const handleDuplicateTask = (taskId: string) => {
-    duplicateTask(taskId);
-  };
-
-  const handleDeleteTask = (taskId: string) => {
-    if (confirm("Delete this task? This action cannot be undone.")) {
-      deleteTask(taskId);
-    }
-  };
-
-  const handleMoveTask = (index: number, direction: 'up' | 'down') => {
-    if (!phaseId) return;
-    
-    const newIndex = direction === 'up' ? index - 1 : index + 1;
-    if (newIndex >= 0 && newIndex < tasks.length) {
-      reorderTasks(phaseId, index, newIndex);
-    }
-  };
 
 
-  return (
-    <div className="space-y-3">
-      {tasks.map((task, index) => (
-        <motion.div
-          key={task.id}
-          initial={{ opacity: 0, y: 8 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -8 }}
-          transition={{ duration: 0.2 }}
-          className={cn(
-            "group rounded-xl border transition-all duration-200",
-            task.done 
-              ? "border-green-500/30 bg-green-500/5" 
-              : "border-[var(--border)] bg-[var(--card)] hover:border-[var(--brand)]/50",
-            level > 0 && "ml-6 border-l-2 border-l-[var(--brand)]/30"
-          )}
-        >
+      return (
+        <div className="space-y-4">
+          {tasks.map((task, index) => (
+            <div
+              key={task.id}
+              className={cn(
+                "group rounded-lg border transition-all duration-200",
+                task.done 
+                  ? "border-green-500/30 bg-green-500/5" 
+                  : "border-[var(--border)] bg-[var(--card)] hover:border-[var(--brand)]/50",
+                level > 0 && "ml-6 border-l-2 border-l-[var(--brand)]/30"
+              )}
+            >
           <div className="p-4">
             <div className="flex items-start gap-3">
               {/* Checkbox */}
-              <motion.div
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.9 }}
-              >
+              <div>
                 <Checkbox
                   checked={task.done}
                   onCheckedChange={() => handleTaskClick(task.id)}
                   className="mt-1"
                 />
-              </motion.div>
+              </div>
 
               {/* Content */}
               <div className="flex-1 min-w-0">
                 {/* Title */}
-                <motion.div
+                <div
                   className={cn(
                     "font-medium transition-all duration-200",
                     task.done && "line-through text-zinc-500"
                   )}
-                  animate={{ 
-                    textDecoration: task.done ? "line-through" : "none",
-                    opacity: task.done ? 0.7 : 1
-                  }}
                 >
                   {task.title}
-                </motion.div>
+                </div>
 
                 {/* Description */}
                 {task.description && (
@@ -189,39 +152,31 @@ export default function TaskList({ tasks, phaseId, parentTaskId, level = 0 }: Ta
                   </div>
                 )}
 
-                {/* Notes Editor */}
-                <AnimatePresence>
-                  {(!task.done || task.notes) && (
-                    <motion.div
-                      initial={{ opacity: 0, height: 0 }}
-                      animate={{ opacity: 1, height: "auto" }}
-                      exit={{ opacity: 0, height: 0 }}
-                      transition={{ duration: 0.2 }}
-                      className="mt-3"
-                    >
-                      <Textarea
-                        ref={(el) => { textareaRefs.current[task.id] = el; }}
-                        value={task.notes ?? ""}
-                        onChange={(e) => handleNotesChange(task.id, e.target.value)}
-                        onFocus={() => setEditingTaskId(task.id)}
-                        onBlur={() => setEditingTaskId(null)}
-                        placeholder="Add notes (supports **bold**, *italic*, - lists)..."
-                        className={cn(
-                          "min-h-[60px] resize-none transition-all duration-200",
-                          task.done && "opacity-50"
+                    {/* Notes Editor */}
+                    {(!task.done || task.notes) && (
+                      <div className="mt-3">
+                        <Textarea
+                          ref={(el) => { textareaRefs.current[task.id] = el; }}
+                          value={task.notes ?? ""}
+                          onChange={(e) => handleNotesChange(task.id, e.target.value)}
+                          onFocus={() => setEditingTaskId(task.id)}
+                          onBlur={() => setEditingTaskId(null)}
+                          placeholder="Add notes..."
+                          className={cn(
+                            "min-h-[60px] resize-none",
+                            task.done && "opacity-50"
+                          )}
+                          disabled={task.done}
+                        />
+                        
+                        {/* Markdown hints */}
+                        {editingTaskId === task.id && (
+                          <div className="mt-2 text-xs text-zinc-500">
+                            <span className="text-zinc-400">Markdown:</span> **bold** *italic* - list
+                          </div>
                         )}
-                        disabled={task.done}
-                      />
-                      
-                      {/* Markdown hints */}
-                      {editingTaskId === task.id && (
-                        <div className="mt-2 text-xs text-zinc-500">
-                          <span className="text-zinc-400">Markdown:</span> **bold** *italic* - list
-                        </div>
-                      )}
-                    </motion.div>
-                  )}
-                </AnimatePresence>
+                      </div>
+                    )}
 
                 {/* Subtasks */}
                 {task.children?.length ? (
@@ -236,83 +191,41 @@ export default function TaskList({ tasks, phaseId, parentTaskId, level = 0 }: Ta
                 ) : null}
               </div>
 
-              {/* Actions */}
-              <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                {/* Reorder buttons */}
-                {level === 0 && (
-                  <>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => handleMoveTask(index, 'up')}
-                      disabled={index === 0}
-                      className="w-6 h-6 p-0"
-                    >
-                      <ChevronUp className="w-3 h-3" />
-                    </Button>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => handleMoveTask(index, 'down')}
-                      disabled={index === tasks.length - 1}
-                      className="w-6 h-6 p-0"
-                    >
-                      <ChevronDown className="w-3 h-3" />
-                    </Button>
-                  </>
-                )}
-
-                {/* More menu */}
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button variant="ghost" size="sm" className="w-6 h-6 p-0">
-                      <MoreVertical className="w-3 h-3" />
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent className="bg-[var(--card)] border-[var(--border)]">
-                    <DropdownMenuItem onClick={() => handleAddSubtask(task.id)}>
-                      <Plus className="w-4 h-4 mr-2" />
-                      Add Subtask
-                    </DropdownMenuItem>
-                    <DropdownMenuItem onClick={handleAddTask}>
-                      <Plus className="w-4 h-4 mr-2" />
-                      Add Task Below
-                    </DropdownMenuItem>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuItem onClick={() => handleDuplicateTask(task.id)}>
-                      <Copy className="w-4 h-4 mr-2" />
-                      Duplicate
-                    </DropdownMenuItem>
-                    <DropdownMenuItem 
-                      onClick={() => handleDeleteTask(task.id)}
-                      className="text-red-500 hover:text-red-600"
-                    >
-                      <Trash2 className="w-4 h-4 mr-2" />
-                      Delete
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              </div>
+                  {/* Simplified Actions */}
+                  <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                    {/* More menu */}
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button variant="ghost" size="sm" className="w-6 h-6 p-0">
+                          <MoreVertical className="w-3 h-3" />
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent className="bg-[var(--card)] border-[var(--border)]">
+                        <DropdownMenuItem onClick={() => handleAddSubtask(task.id)}>
+                          <Plus className="w-4 h-4 mr-2" />
+                          Add Subtask
+                        </DropdownMenuItem>
+                        <DropdownMenuItem onClick={handleAddTask}>
+                          <Plus className="w-4 h-4 mr-2" />
+                          Add Task Below
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  </div>
             </div>
           </div>
-        </motion.div>
+        </div>
       ))}
 
-      {/* Add Task Button */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 0.1 }}
-      >
-        <Button
-          onClick={handleAddTask}
-          variant="outline"
-          className="w-full border-dashed border-[var(--border)] hover:border-[var(--brand)] hover:bg-[var(--brand)]/5"
-        >
-          <Plus className="w-4 h-4 mr-2" />
-          Add Task
-        </Button>
-      </motion.div>
+          {/* Add Task Button */}
+          <Button
+            onClick={handleAddTask}
+            variant="outline"
+            className="w-full border-dashed border-[var(--border)] hover:border-[var(--brand)] hover:bg-[var(--brand)]/5"
+          >
+            <Plus className="w-4 h-4 mr-2" />
+            Add Task
+          </Button>
     </div>
   );
 }
