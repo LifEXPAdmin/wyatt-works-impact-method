@@ -2,6 +2,8 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { motion, type Variants } from "framer-motion";
+import EnhancedPhaseCard from "@/components/EnhancedPhaseCard";
+import { Sparkles, Hammer, Zap, Target } from "lucide-react";
 
 export default function Home() {
   const containerVariants: Variants = {
@@ -40,10 +42,30 @@ export default function Home() {
   };
 
   const phases = [
-    { title: "The Spark", description: "Clarify your vision and target audience" },
-    { title: "The Forge", description: "Build your brand foundation and content" },
-    { title: "The Flow", description: "Create consistent momentum and engagement" },
-    { title: "The Impact", description: "Launch offers and scale with partnerships" },
+    { 
+      title: "The Spark", 
+      description: "Clarify your vision and define your target audience. This is where great ideas take shape.",
+      icon: <Sparkles size={32} />,
+      href: "/app?phase=spark"
+    },
+    { 
+      title: "The Forge", 
+      description: "Build your brand foundation with domain, design, and content. Make your idea real.",
+      icon: <Hammer size={32} />,
+      href: "/app?phase=forge"
+    },
+    { 
+      title: "The Flow", 
+      description: "Create consistent momentum through regular content and audience engagement.",
+      icon: <Zap size={32} />,
+      href: "/app?phase=flow"
+    },
+    { 
+      title: "The Impact", 
+      description: "Launch offers, build partnerships, and scale your system for maximum impact.",
+      icon: <Target size={32} />,
+      href: "/app?phase=impact"
+    },
   ];
 
   return (
@@ -116,23 +138,14 @@ export default function Home() {
           {phases.map((phase, i) => (
             <motion.div
               key={i}
-              className="group relative"
               variants={cardVariants}
-              whileHover={{ 
-                rotateY: 5,
-                rotateX: 5,
-                scale: 1.02,
-                transition: { duration: 0.2, ease: "easeOut" }
-              }}
-              style={{ transformStyle: "preserve-3d" }}
             >
-              <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-[var(--brand)]/10 to-[var(--gold)]/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 blur-xl" />
-              <div className="relative rounded-2xl border border-[var(--border)] p-6 bg-[var(--card)] group-hover:border-[var(--brand)] transition-all duration-300 shadow-lg group-hover:shadow-xl group-hover:shadow-[var(--brand)]/10 backdrop-blur-sm">
-                <div className="text-lg font-semibold mb-2">{phase.title}</div>
-                <p className="text-sm text-zinc-400 leading-relaxed">
-                  {phase.description}
-                </p>
-              </div>
+              <EnhancedPhaseCard
+                title={phase.title}
+                description={phase.description}
+                icon={phase.icon}
+                href={phase.href}
+              />
             </motion.div>
           ))}
         </motion.section>

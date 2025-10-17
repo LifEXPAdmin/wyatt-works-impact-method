@@ -1,6 +1,10 @@
 import "./globals.css";
 import { cn } from "@/lib/utils";
 import { Inter } from "next/font/google";
+import NavBar from "@/components/NavBar";
+import Footer from "@/components/Footer";
+import ScrollProgress from "@/components/ScrollProgress";
+import OnboardingModal from "@/components/OnboardingModal";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -14,7 +18,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" className="bg-[#0B0E14] text-zinc-100">
       <body className={cn(inter.className, "min-h-screen antialiased")}>
-        {children}
+        <ScrollProgress />
+        <NavBar />
+        <main className="pt-16">
+          {children}
+        </main>
+        <Footer />
+        <OnboardingModal />
         <script
           dangerouslySetInnerHTML={{
             __html: `
