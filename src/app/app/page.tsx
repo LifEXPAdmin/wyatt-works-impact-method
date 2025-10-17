@@ -12,6 +12,7 @@ import CommandPalette from "@/components/CommandPalette";
 import Confetti from "@/components/Confetti";
 import Tour, { Step } from "@/components/Tour";
 import ErrorBoundary from "@/components/ErrorBoundary";
+import AIEducationModal from "@/components/AIEducationModal";
 import { 
   Menu, 
   ArrowRight,
@@ -36,6 +37,7 @@ function AppPageContent() {
       const [lastProgress, setLastProgress] = useState(0);
       const [isTourOpen, setIsTourOpen] = useState(false);
       const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
+      const [isAIEducationOpen, setIsAIEducationOpen] = useState(false);
 
       const [isInitialized, setIsInitialized] = useState(false);
 
@@ -123,20 +125,20 @@ function AppPageContent() {
     }
   ];
 
-  // Check if this is first visit and show tour - DISABLED FOR DEBUGGING
-  useEffect(() => {
-    try {
-      // Temporarily disable tour to debug interaction issues
-      // const hasSeenTour = localStorage.getItem("wwm-app-tour-v1");
-      // if (!hasSeenTour) {
-      //   // Small delay to ensure everything is loaded
-      //   setTimeout(() => setIsTourOpen(true), 1000);
-      // }
-      console.log("Tour disabled for debugging");
-    } catch (error) {
-      console.error("Error checking tour status:", error);
-    }
-  }, []);
+      // Check if this is first visit and show AI education - DISABLED FOR DEBUGGING
+      useEffect(() => {
+        try {
+          // Temporarily disable AI education to debug interaction issues
+          // const hasSeenAIEducation = localStorage.getItem("wwm-ai-education-seen");
+          // if (!hasSeenAIEducation) {
+          //   // Small delay to ensure everything is loaded
+          //   setTimeout(() => setIsAIEducationOpen(true), 1500);
+          // }
+          console.log("AI Education disabled for debugging");
+        } catch (error) {
+          console.error("Error checking AI education status:", error);
+        }
+      }, []);
 
   // Handle phase completion celebrations
   useEffect(() => {
@@ -418,16 +420,22 @@ function AppPageContent() {
         onComplete={() => setShowConfetti(false)}
       />
 
-      {/* Guided Tour */}
-      <Tour
-        steps={tourSteps}
-        isOpen={isTourOpen}
-        onClose={() => setIsTourOpen(false)}
-        onFinish={() => {
-          console.log("Tour completed!");
-        }}
-        storageKey="wwm-app-tour-v1"
-      />
+          {/* Guided Tour */}
+          <Tour
+            steps={tourSteps}
+            isOpen={isTourOpen}
+            onClose={() => setIsTourOpen(false)}
+            onFinish={() => {
+              console.log("Tour completed!");
+            }}
+            storageKey="wwm-app-tour-v1"
+          />
+
+          {/* AI Education Modal */}
+          <AIEducationModal
+            isOpen={isAIEducationOpen}
+            onClose={() => setIsAIEducationOpen(false)}
+          />
     </div>
   );
 }

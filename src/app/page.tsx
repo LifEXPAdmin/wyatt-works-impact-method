@@ -3,7 +3,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { motion, type Variants } from "framer-motion";
 import EnhancedPhaseCard from "@/components/EnhancedPhaseCard";
-import { Sparkles, Hammer, Zap, Target } from "lucide-react";
+import { Sparkles, Hammer, Zap, Target, Brain, Lightbulb } from "lucide-react";
 
 export default function Home() {
   const containerVariants: Variants = {
@@ -150,12 +150,120 @@ export default function Home() {
           ))}
         </motion.section>
 
+        {/* AI Education Section */}
+        <motion.section 
+          className="mt-16"
+          variants={containerVariants}
+          initial="hidden"
+          animate="visible"
+          transition={{ delay: 0.4 }}
+        >
+          <motion.div 
+            className="text-center mb-8"
+            variants={itemVariants}
+          >
+            <h2 className="text-3xl font-bold mb-4">
+              <span className="bg-gradient-to-r from-[var(--brand)] to-[var(--gold)] bg-clip-text text-transparent">
+                AI-Amplified Creation
+              </span>
+            </h2>
+            <p className="text-lg text-zinc-300 max-w-3xl mx-auto">
+              This blueprint combines human creativity with AI intelligence to help you create something truly remarkable. 
+              Learn how to use AI as your expert consultant, not your replacement.
+            </p>
+          </motion.div>
+
+          <motion.div 
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6"
+            variants={containerVariants}
+            initial="hidden"
+            animate="visible"
+            transition={{ delay: 0.5 }}
+          >
+            <motion.div
+              variants={cardVariants}
+              className="bg-[var(--card)] border border-[var(--border)] rounded-xl p-6 hover:border-[var(--brand)]/50 transition-colors"
+            >
+              <div className="w-12 h-12 rounded-lg bg-gradient-to-r from-[var(--brand)] to-[var(--gold)] flex items-center justify-center mb-4">
+                <Brain className="w-6 h-6 text-white" />
+              </div>
+              <h3 className="font-semibold text-lg mb-2">Expert Consultant</h3>
+              <p className="text-sm text-zinc-400">
+                Use AI to analyze your market, competitors, and opportunities like you would a business consultant.
+              </p>
+            </motion.div>
+
+            <motion.div
+              variants={cardVariants}
+              className="bg-[var(--card)] border border-[var(--border)] rounded-xl p-6 hover:border-[var(--brand)]/50 transition-colors"
+            >
+              <div className="w-12 h-12 rounded-lg bg-gradient-to-r from-[var(--brand)] to-[var(--gold)] flex items-center justify-center mb-4">
+                <Zap className="w-6 h-6 text-white" />
+              </div>
+              <h3 className="font-semibold text-lg mb-2">Brainstorming Partner</h3>
+              <p className="text-sm text-zinc-400">
+                Generate 20 options, then YOU choose the best ones and add your personal touch.
+              </p>
+            </motion.div>
+
+            <motion.div
+              variants={cardVariants}
+              className="bg-[var(--card)] border border-[var(--border)] rounded-xl p-6 hover:border-[var(--brand)]/50 transition-colors"
+            >
+              <div className="w-12 h-12 rounded-lg bg-gradient-to-r from-[var(--brand)] to-[var(--gold)] flex items-center justify-center mb-4">
+                <Target className="w-6 h-6 text-white" />
+              </div>
+              <h3 className="font-semibold text-lg mb-2">Quality Checker</h3>
+              <p className="text-sm text-zinc-400">
+                Use AI to review your work for clarity, engagement, and effectiveness.
+              </p>
+            </motion.div>
+
+            <motion.div
+              variants={cardVariants}
+              className="bg-[var(--card)] border border-[var(--border)] rounded-xl p-6 hover:border-[var(--brand)]/50 transition-colors"
+            >
+              <div className="w-12 h-12 rounded-lg bg-gradient-to-r from-[var(--brand)] to-[var(--gold)] flex items-center justify-center mb-4">
+                <Lightbulb className="w-6 h-6 text-white" />
+              </div>
+              <h3 className="font-semibold text-lg mb-2">Research Assistant</h3>
+              <p className="text-sm text-zinc-400">
+                Get insights faster, but always validate with real people and real data.
+              </p>
+            </motion.div>
+          </motion.div>
+
+          <motion.div 
+            className="mt-8 text-center"
+            variants={itemVariants}
+          >
+            <div className="bg-[var(--brand)]/10 border border-[var(--brand)]/20 rounded-xl p-6 max-w-4xl mx-auto">
+              <h3 className="font-semibold text-lg mb-3 text-[var(--brand)]">
+                Ready to Learn AI-Assisted Creation?
+              </h3>
+              <p className="text-zinc-300 mb-4">
+                When you start your blueprint, you&apos;ll get a comprehensive AI education that teaches you how to prompt effectively, 
+                use different AI tools, and maintain your authentic voice while leveraging AI intelligence.
+              </p>
+              <motion.div
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                transition={{ type: "spring", stiffness: 400, damping: 17 }}
+              >
+                <Button asChild className="bg-[var(--brand)] text-black hover:opacity-90 shadow-lg">
+                  <Link href="/app">Start with AI Education</Link>
+                </Button>
+              </motion.div>
+            </div>
+          </motion.div>
+        </motion.section>
+
         <motion.section 
           className="mt-16 text-center"
           variants={containerVariants}
           initial="hidden"
           animate="visible"
-          transition={{ delay: 0.5 }}
+          transition={{ delay: 0.6 }}
         >
           <motion.div 
             className="relative inline-block"

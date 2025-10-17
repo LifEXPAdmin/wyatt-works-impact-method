@@ -11,78 +11,121 @@ export const sampleBlueprint: Blueprint = {
       title: "The Spark",
       summary: "Clarify vision & target.",
       tasks: [
-        {
-          id: "sp-purpose",
-          title: "Define your one-sentence purpose",
-          description: "Who you serve + transformation they get.",
-          done: false,
-          tips: [
-            "Format: I help [who] go from [now] to [after].",
-            "Keep it concrete; avoid buzzwords."
-          ],
-          children: [
-            { id: "sp-purpose-1", title: "Write 5 rough versions", done: false, tips: ["Aim for short, punchy lines"] },
-            { id: "sp-purpose-2", title: "Pick the strongest & refine to ≤ 14 words", done: false },
-            { id: "sp-purpose-3", title: "Gut-check with 2 friends in your audience", done: false }
-          ]
-        },
-        {
-          id: "sp-name",
-          title: "Name + tagline draft",
-          description: "Memorable name that hints at outcome.",
-          done: false,
-          tips: ["Say it out loud", "Check domain + socials", "Avoid hard spellings"],
-          children: [
-            { id: "sp-name-1", title: "Brainstorm 20 names", done: false },
-            { id: "sp-name-2", title: "Check domain + social handle availability", done: false },
-            { id: "sp-name-3", title: "Write a 5-word tagline", done: false }
-          ]
-        },
-        {
-          id: "sp-icp",
-          title: "Identify your ideal customer",
-          description: "Who needs this most urgently.",
-          done: false,
-          tips: ["Demographics + psychographics", "Jobs-to-be-done", "Where they hang out"],
-          children: [
-            { id: "sp-icp-1", title: "List 3 core pains", done: false },
-            { id: "sp-icp-2", title: "List 3 desired outcomes", done: false },
-            { id: "sp-icp-3", title: "List 3 watering holes (YouTube, Reddit…)", done: false }
-          ]
-        },
-        {
-          id: "sp-problem",
-          title: "Write the problem statement",
-          description: "Plain language, no jargon.",
-          done: false,
-          tips: ["Start with: People like [X] struggle to [Y] because [Z]."],
-          children: [
-            { id: "sp-problem-1", title: "Draft 3 versions", done: false },
-            { id: "sp-problem-2", title: "Pick the clearest one", done: false }
-          ]
-        },
-        {
-          id: "sp-value-prop",
-          title: "Craft your value proposition",
-          description: "Why your approach is different & better.",
-          done: false,
-          tips: ["Unique mechanism", "Social proof later"],
-          children: [
-            { id: "sp-value-1", title: "Unique mechanism (1 sentence)", done: false },
-            { id: "sp-value-2", title: "3 proof points you can back up", done: false }
-          ]
-        },
-        {
-          id: "sp-success",
-          title: "Define success metrics",
-          description: "What 'working' looks like in 90 days.",
-          done: false,
-          tips: ["Pick 3: email list, watch time, first sale, retention"],
-          children: [
-            { id: "sp-success-1", title: "Choose 3 metrics", done: false },
-            { id: "sp-success-2", title: "Set weekly targets", done: false }
-          ]
-        }
+            {
+              id: "sp-purpose",
+              title: "Define your one-sentence purpose",
+              description: "Who you serve + transformation they get. Use AI to brainstorm options, then choose what feels authentic.",
+              done: false,
+              tips: [
+                "AI Prompt: 'I want to help [general audience] with [general problem]. Give me 20 different ways to phrase my one-sentence purpose, focusing on the transformation I create.'",
+                "Format: I help [who] go from [now] to [after].",
+                "Keep it concrete; avoid buzzwords.",
+                "Use AI to generate options, but YOU choose what feels authentic."
+              ],
+              children: [
+                { id: "sp-purpose-1", title: "AI brainstorm: Get 20 purpose statement options", done: false, tips: ["Be specific about your audience and problem"] },
+                { id: "sp-purpose-2", title: "Human selection: Pick your top 5 favorites", done: false, tips: ["Add your personal voice and authentic elements"] },
+                { id: "sp-purpose-3", title: "AI refinement: Optimize strongest to ≤ 14 words", done: false, tips: ["Ask AI to help avoid buzzwords and generic language"] },
+                { id: "sp-purpose-4", title: "Human testing: Share with 2 people in your audience", done: false, tips: ["Get real feedback on emotional impact"] },
+                { id: "sp-purpose-5", title: "AI final polish: Create 3 compelling versions", done: false, tips: ["Based on feedback, create final options"] }
+              ]
+            },
+            {
+              id: "sp-name",
+              title: "Name + tagline draft",
+              description: "Memorable name that hints at outcome. Use AI to generate creative options you might not think of.",
+              done: false,
+              tips: [
+                "AI Prompt: 'Help me brainstorm 50 creative names for [your business type] that [your value proposition]. Focus on names that are memorable, brandable, and hint at the outcome I deliver.'",
+                "Say it out loud",
+                "Check domain + socials",
+                "Avoid hard spellings",
+                "Use AI to generate creative options you might not think of"
+              ],
+              children: [
+                { id: "sp-name-1", title: "AI brainstorm: Generate 50 creative name options", done: false, tips: ["Be specific about your business type and value proposition"] },
+                { id: "sp-name-2", title: "Human filtering: Check domain + social handle availability", done: false, tips: ["Test pronunciation and spelling"] },
+                { id: "sp-name-3", title: "AI tagline creation: Generate 20 taglines for chosen name", done: false, tips: ["Focus on key benefits and outcomes"] },
+                { id: "sp-name-4", title: "Human testing: Say out loud and test with others", done: false, tips: ["Get feedback on memorability and clarity"] },
+                { id: "sp-name-5", title: "AI final polish: Refine name + tagline combination", done: false, tips: ["Make it more memorable and impactful"] }
+              ]
+            },
+            {
+              id: "sp-icp",
+              title: "Identify your ideal customer",
+              description: "Who needs this most urgently. Use AI to think deeper about your audience than you might on your own.",
+              done: false,
+              tips: [
+                "AI Prompt: 'I want to help [your purpose]. What are the 5 most common types of people who need this help? Give me detailed profiles including demographics, psychographics, and pain points.'",
+                "Demographics + psychographics",
+                "Jobs-to-be-done",
+                "Where they hang out",
+                "Use AI to think deeper about your audience than you might on your own"
+              ],
+              children: [
+                { id: "sp-icp-1", title: "AI research: Get 5 detailed audience profiles", done: false, tips: ["Include demographics, psychographics, and pain points"] },
+                { id: "sp-icp-2", title: "Human selection: Pick the one that resonates most", done: false, tips: ["Add personal insights and observations"] },
+                { id: "sp-icp-3", title: "AI deep dive: Create detailed avatar with daily routines", done: false, tips: ["Include fears, aspirations, and language they use"] },
+                { id: "sp-icp-4", title: "Human validation: Find 3 real people who match", done: false, tips: ["Test your avatar against real examples"] },
+                { id: "sp-icp-5", title: "AI refinement: Make avatar more specific and actionable", done: false, tips: ["Based on real examples, refine the details"] }
+              ]
+            },
+            {
+              id: "sp-problem",
+              title: "Write the problem statement",
+              description: "Plain language, no jargon. Use AI to see the problem from multiple angles.",
+              done: false,
+              tips: [
+                "AI Prompt: 'Help me understand the deeper problems behind [surface problem]. What are the root causes, emotional costs, and hidden consequences?'",
+                "Start with: People like [X] struggle to [Y] because [Z].",
+                "Make it emotional, not just logical",
+                "Use AI to see the problem from multiple angles"
+              ],
+              children: [
+                { id: "sp-problem-1", title: "AI exploration: Understand deeper problems and root causes", done: false, tips: ["Include emotional costs and hidden consequences"] },
+                { id: "sp-problem-2", title: "Human prioritization: Rank by urgency and emotional impact", done: false, tips: ["Focus on the most pressing problems"] },
+                { id: "sp-problem-3", title: "AI statement crafting: Write 5 different problem statements", done: false, tips: ["Make them emotional, specific, and compelling"] },
+                { id: "sp-problem-4", title: "Human testing: Share with your avatar to see which hits hardest", done: false, tips: ["Get feedback on emotional impact"] },
+                { id: "sp-problem-5", title: "AI final version: Refine to be more emotionally compelling", done: false, tips: ["Make it specific and personal"] }
+              ]
+            },
+            {
+              id: "sp-value-prop",
+              title: "Craft your value proposition",
+              description: "Why your approach is different & better. Use AI to find your unique angle.",
+              done: false,
+              tips: [
+                "AI Prompt: 'Help me analyze how others solve [your problem]. What are the common approaches, and where are the gaps?'",
+                "Unique mechanism",
+                "Social proof later",
+                "Use AI to find your unique angle"
+              ],
+              children: [
+                { id: "sp-value-1", title: "AI competitive analysis: Analyze how others solve the problem", done: false, tips: ["Identify common approaches and gaps"] },
+                { id: "sp-value-2", title: "Human differentiation: Identify what makes you different", done: false, tips: ["Focus on your unique approach"] },
+                { id: "sp-value-3", title: "AI value crafting: Create 5 different value propositions", done: false, tips: ["Highlight your unique approach"] },
+                { id: "sp-value-4", title: "Human testing: Test with your avatar", done: false, tips: ["Get feedback on believability and appeal"] },
+                { id: "sp-value-5", title: "AI final version: Refine to be more compelling and believable", done: false, tips: ["Make it specific and achievable"] }
+              ]
+            },
+            {
+              id: "sp-success",
+              title: "Define success metrics",
+              description: "What 'working' looks like in 90 days. Use AI to think about metrics you might miss.",
+              done: false,
+              tips: [
+                "AI Prompt: 'For a [your business type] that [your purpose], what are the most important metrics to track? Include both leading and lagging indicators.'",
+                "Pick 3: email list, watch time, first sale, retention",
+                "Use AI to think about metrics you might miss"
+              ],
+              children: [
+                { id: "sp-success-1", title: "AI metric brainstorming: Get comprehensive metric suggestions", done: false, tips: ["Include both leading and lagging indicators"] },
+                { id: "sp-success-2", title: "Human prioritization: Pick your top 3 metrics", done: false, tips: ["Choose metrics that matter to your business"] },
+                { id: "sp-success-3", title: "AI target setting: Set realistic 90-day targets", done: false, tips: ["Break down by month with achievable milestones"] },
+                { id: "sp-success-4", title: "Human system setup: Create your tracking system", done: false, tips: ["Set up tools and processes to measure"] },
+                { id: "sp-success-5", title: "AI review process: Create weekly review system", done: false, tips: ["Plan how to track and adjust regularly"] }
+              ]
+            }
       ]
     },
 
