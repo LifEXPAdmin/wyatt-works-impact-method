@@ -35,7 +35,7 @@ type State = {
   // Computed values
   activeProject: () => Project | null;
   progress: () => { overall: number; byPhase: Record<PhaseId, number> };
-  getPhase: (phaseId: PhaseId) => { phase: { id: PhaseId; title: string; summary: string; tasks: Task[] }; progress: number; tasksCompleted: number; totalTasks: number; notesCount: number } | null;
+  getPhase: (phaseId: PhaseId) => { phase: { id: PhaseId; title: string; summary: string; tasks: Task[] }; progress: number; tasksCompleted: number; totalTasks: number; notesCount: number; subtasksCompleted: number; totalSubtasks: number } | null;
 };
 
 const KEY = "wwm-projects-v1";
@@ -585,35 +585,51 @@ export const useBlueprint = create<State>((set, get) => ({
     const phase = activeProject.blueprint.phases.find(p => p.id === phaseId);
     if (!phase) return null;
 
-    let totalTasks = 0;
-    let tasksCompleted = 0;
+    let mainTasksTotal = 0;
+    let mainTasksCompleted = 0;
+    let subtasksTotal = 0;
+    let subtasksCompleted = 0;
     let notesCount = 0;
 
     const countMetrics = (tasks: Task[]) => {
       tasks.forEach(task => {
-        totalTasks++;
+        // Count main tasks
+        mainTasksTotal++;
         if (task.done) {
-          tasksCompleted++;
+          mainTasksCompleted++;
         }
         if (task.notes && task.notes.trim() !== "") {
           notesCount++;
         }
+        
+        // Count subtasks
         if (task.children) {
-          countMetrics(task.children);
+          task.children.forEach(subtask => {
+            subtasksTotal++;
+            if (subtask.done) {
+              subtasksCompleted++;
+            }
+            if (subtask.notes && subtask.notes.trim() !== "") {
+              notesCount++;
+            }
+          });
         }
       });
     };
 
     countMetrics(phase.tasks);
 
-    const progress = totalTasks > 0 ? Math.round((tasksCompleted / totalTasks) * 100) : 0;
+    // Calculate progress based on main tasks only
+    const progress = mainTasksTotal > 0 ? Math.round((mainTasksCompleted / mainTasksTotal) * 100) : 0;
 
     return {
       phase: { ...phase, tasks: phase.tasks },
       progress,
-      tasksCompleted,
-      totalTasks,
+      tasksCompleted: mainTasksCompleted,
+      totalTasks: mainTasksTotal,
       notesCount,
+      subtasksCompleted,
+      totalSubtasks: subtasksTotal,
     };
   },
 }));

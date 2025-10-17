@@ -139,7 +139,8 @@ export default function PhaseNav({ active, onPhaseChange, onCollapseChange }: Ph
                           <div className="flex-1 min-w-0">
                             <div className="font-medium text-sm">{phase.title}</div>
                             <div className="text-xs text-zinc-400 truncate">
-                              {phaseData?.tasksCompleted || 0}/{phaseData?.totalTasks || 0} tasks
+                              {phaseData?.tasksCompleted || 0}/{phaseData?.totalTasks || 0} main tasks
+                              {phaseData?.totalSubtasks ? ` • ${phaseData.subtasksCompleted || 0}/${phaseData.totalSubtasks} subtasks` : ''}
                             </div>
                           </div>
                           <div className="text-xs font-medium text-[var(--brand)]">

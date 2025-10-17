@@ -309,6 +309,23 @@ function AppPageContent() {
                   <div>
                     <h1 className="text-2xl font-bold">{currentPhaseData?.phase.title}</h1>
                     <p className="text-zinc-400 mt-1">{currentPhaseData?.phase.summary}</p>
+                    
+                    {/* Progress Dots for 4 Phases */}
+                    <div className="flex gap-2 mt-3">
+                      {['spark', 'forge', 'flow', 'impact'].map((phaseId) => (
+                        <div
+                          key={phaseId}
+                          className={`w-3 h-3 rounded-full border-2 transition-colors ${
+                            phaseId === activePhase 
+                              ? "bg-[var(--brand)] border-[var(--brand)]" 
+                              : getPhase(phaseId as PhaseId)?.progress === 100
+                              ? "bg-[var(--gold)] border-[var(--gold)]" 
+                              : "bg-transparent border-[var(--brand)]"
+                          }`}
+                          title={`${phaseId.charAt(0).toUpperCase() + phaseId.slice(1)} Phase`}
+                        />
+                      ))}
+                    </div>
                   </div>
                   
                   <div className="flex items-center gap-4">
@@ -373,10 +390,11 @@ function AppPageContent() {
 
               {/* Simplified Footer */}
               <div className="mobile-px py-4 bg-[var(--card)]">
-            <div className="flex items-center justify-between">
-              <div className="text-sm text-zinc-400">
-                {currentPhaseData?.tasksCompleted || 0} of {currentPhaseData?.totalTasks || 0} tasks completed
-              </div>
+                <div className="flex items-center justify-between">
+                  <div className="text-sm text-zinc-400">
+                    {currentPhaseData?.tasksCompleted || 0} of {currentPhaseData?.totalTasks || 0} main tasks completed
+                    {currentPhaseData?.totalSubtasks ? ` • ${currentPhaseData.subtasksCompleted || 0} of ${currentPhaseData.totalSubtasks} subtasks completed` : ''}
+                  </div>
               
               <Button
                 variant="outline"
