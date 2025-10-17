@@ -19,7 +19,18 @@ export type Phase = {
 
 export type Blueprint = {
   id: string;
+  name: string;
   phases: Phase[];
   updatedAt: number;
   version: number;
 };
+
+export type Project = {
+  id: string;           // uuid
+  name: string;         // editable by user
+  blueprint: Blueprint; // core data
+  createdAt: number;
+  updatedAt: number;
+};
+
+export type SaveStatus = 'saved' | 'saving' | 'error' | 'syncing';

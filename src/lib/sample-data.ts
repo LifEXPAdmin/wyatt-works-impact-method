@@ -2,6 +2,7 @@ import { Blueprint } from "@/types/blueprint";
 
 export const sampleBlueprint: Blueprint = {
   id: "default",
+  name: "Sample Blueprint",
   updatedAt: Date.now(),
   version: 1,
   phases: [

@@ -1,191 +1,255 @@
-import { Blueprint } from "@/types/blueprint";
-import { PDFDocument, StandardFonts, rgb } from "pdf-lib";
+import { PDFDocument, rgb, StandardFonts } from "pdf-lib";
+import { Blueprint, Task } from "@/types/blueprint";
 
-export async function exportMarkdown(bp: Blueprint): Promise<string> {
-  const lines: string[] = ["# Wyatt Works Method Blueprint", ""];
+export async function exportPDF(blueprint: Blueprint): Promise<Uint8Array> {
+  const doc = await PDFDocument.create();
+  const font = await doc.embedFont(StandardFonts.Helvetica);
+  const boldFont = await doc.embedFont(StandardFonts.HelveticaBold);
+  const italicFont = await doc.embedFont(StandardFonts.HelveticaOblique);
   
-  for (const p of bp.phases) {
-    lines.push(`## ${p.title}`, p.summary, "");
-    
-    const stack = [...p.tasks];
-    while (stack.length) {
-      const t = stack.shift()!;
-      lines.push(`- [${t.done ? "x" : " "}] ${t.title}`);
-      
-      if (t.description) {
-        lines.push(`  - ${t.description}`);
-      }
-      
-      if (t.tips && t.tips.length > 0) {
-        lines.push(`  - Tips: ${t.tips.join(", ")}`);
-      }
-      
-      if (t.notes) {
-        lines.push(`  - Notes: ${t.notes}`);
-      }
-      
-      if (t.children && t.children.length > 0) {
-        stack.unshift(...t.children);
-      }
-    }
-    
-    lines.push("");
-  }
+  // Brand colors
+  const brandColor = rgb(0.2, 0.6, 1); // Blue
+  const textColor = rgb(0.1, 0.1, 0.1);
+  const mutedColor = rgb(0.4, 0.4, 0.4);
   
-  return lines.join("\n");
-}
-
-export async function exportPDF(bp: Blueprint): Promise<Uint8Array> {
-  const pdf = await PDFDocument.create();
-  const font = await pdf.embedFont(StandardFonts.Helvetica);
-  const boldFont = await pdf.embedFont(StandardFonts.HelveticaBold);
+  let page = doc.addPage([595, 842]); // A4
+  let y = 750;
   
-  let page = pdf.addPage([612, 792]);
-  const { height } = page.getSize();
-  let y = height - 40;
-  
-  // Title
-  page.drawText("Wyatt Works Method Blueprint", {
-    x: 40,
-    y,
-    size: 18,
-    font: boldFont,
-    color: rgb(0.18, 0.66, 1)
+  // Header
+  page.drawText("Wyatt Works Method", { 
+    x: 50, y, 
+    font: boldFont, size: 20, 
+    color: brandColor 
   });
-  y -= 28;
+  y -= 30;
   
-  for (const p of bp.phases) {
+  page.drawText(blueprint.name, { 
+    x: 50, y, 
+    font: boldFont, size: 24, 
+    color: textColor 
+  });
+  y -= 40;
+  
+  // Metadata
+  const updatedDate = new Date(blueprint.updatedAt).toLocaleDateString();
+  page.drawText(`Updated: ${updatedDate}`, { 
+    x: 50, y, 
+    font: font, size: 10, 
+    color: mutedColor 
+  });
+  y -= 60;
+  
+  for (const phase of blueprint.phases) {
     // Check if we need a new page
-    if (y < 100) {
-      page = pdf.addPage([612, 792]);
-      y = height - 40;
+    if (y < 150) {
+      page = doc.addPage([595, 842]);
+      y = 750;
     }
     
-    // Phase title
-    page.drawText(p.title, {
-      x: 40,
-      y,
-      size: 14,
-      font: boldFont,
-      color: rgb(0.95, 0.77, 0.26)
+    // Phase title with background
+    page.drawRectangle({
+      x: 45,
+      y: y - 25,
+      width: 505,
+      height: 30,
+      color: brandColor,
+      opacity: 0.1
     });
-    y -= 20;
+    
+    page.drawText(phase.title, { 
+      x: 55, y: y - 5, 
+      font: boldFont, size: 16, 
+      color: brandColor 
+    });
+    y -= 45;
     
     // Phase summary
-    page.drawText(p.summary, {
-      x: 52,
-      y,
-      size: 10,
-      font,
-      color: rgb(0.7, 0.7, 0.7)
-    });
-    y -= 20;
+    if (phase.summary) {
+      page.drawText(phase.summary, { 
+        x: 55, y, 
+        font: italicFont, size: 11, 
+        color: mutedColor 
+      });
+      y -= 25;
+    }
     
     // Tasks
-    const stack = [...p.tasks];
-    while (stack.length) {
-      const t = stack.shift()!;
-      
-      // Check if we need a new page
-      if (y < 60) {
-        page = pdf.addPage([612, 792]);
-        y = height - 40;
-      }
-      
-      const prefix = t.done ? "[x]" : "[ ]";
-      page.drawText(`${prefix} ${t.title}`, {
-        x: 52,
-        y,
-        size: 10,
-        font,
-        color: rgb(0.9, 0.9, 0.9)
-      });
-      y -= 14;
-      
-      if (t.description) {
-        const descLines = wrapText(t.description, 70);
-        for (const line of descLines) {
-          if (y < 60) {
-            page = pdf.addPage([612, 792]);
-            y = height - 40;
-          }
-          page.drawText(`  ${line}`, {
-            x: 64,
-            y,
-            size: 9,
-            font,
-            color: rgb(0.7, 0.7, 0.7)
-          });
-          y -= 12;
+    const renderTasks = (tasks: Task[], depth: number = 0) => {
+      for (const task of tasks) {
+        // Check if we need a new page
+        if (y < 100) {
+          page = doc.addPage([595, 842]);
+          y = 750;
         }
-      }
-      
-      if (t.tips && t.tips.length > 0) {
-        if (y < 60) {
-          page = pdf.addPage([612, 792]);
-          y = height - 40;
-        }
-        page.drawText(`  Tips: ${t.tips.join(", ")}`, {
-          x: 64,
-          y,
-          size: 9,
-          font,
-          color: rgb(0.6, 0.8, 1)
+        
+        const indent = 55 + (depth * 20);
+        const prefix = task.done ? "✓" : "○";
+        const taskColor = task.done ? mutedColor : textColor;
+        
+        // Task title
+        page.drawText(`${prefix} ${task.title}`, { 
+          x: indent, y, 
+          font: task.done ? italicFont : font, 
+          size: 12, 
+          color: taskColor 
         });
-        y -= 12;
-      }
-      
-      if (t.notes) {
-        const notesLines = wrapText(t.notes, 70);
-        for (const line of notesLines) {
-          if (y < 60) {
-            page = pdf.addPage([612, 792]);
-            y = height - 40;
-          }
-          page.drawText(`  Notes: ${line}`, {
-            x: 64,
-            y,
-            size: 9,
-            font,
-            color: rgb(0.5, 0.7, 0.5)
+        y -= 20;
+        
+        // Task description
+        if (task.description) {
+          page.drawText(task.description, { 
+            x: indent + 20, y, 
+            font: italicFont, size: 10, 
+            color: mutedColor 
           });
-          y -= 12;
+          y -= 15;
         }
+        
+        // Task notes
+        if (task.notes) {
+          const lines = task.notes.split("\n");
+          for (const line of lines.slice(0, 10)) { // Limit notes length
+            if (y < 80) {
+              page = doc.addPage([595, 842]);
+              y = 750;
+            }
+            
+            const formattedLine = formatMarkdownLine(line);
+            page.drawText(`  ${formattedLine}`, { 
+              x: indent + 20, y, 
+              font: font, size: 9, 
+              color: rgb(0.3, 0.3, 0.3) 
+            });
+            y -= 12;
+          }
+          y -= 5;
+        }
+        
+        // Render subtasks
+        if (task.children && task.children.length > 0) {
+          renderTasks(task.children, depth + 1);
+        }
+        
+        y -= 5;
       }
-      
-      if (t.children && t.children.length > 0) {
-        stack.unshift(...t.children);
-      }
-      
-      y -= 8;
-    }
+    };
     
-    y -= 16;
+    renderTasks(phase.tasks);
+    y -= 20;
   }
   
-  const bytes = await pdf.save();
-  return bytes;
+  // Footer on each page
+  const pages = doc.getPages();
+  for (let i = 0; i < pages.length; i++) {
+    const currentPage = pages[i];
+    currentPage.drawText("method.wyatt-works.com", {
+      x: 50,
+      y: 30,
+      font: font,
+      size: 8,
+      color: mutedColor
+    });
+    currentPage.drawText(`Page ${i + 1} of ${pages.length}`, {
+      x: 500,
+      y: 30,
+      font: font,
+      size: 8,
+      color: mutedColor
+    });
+  }
+  
+  return doc.save();
 }
 
-function wrapText(text: string, maxLength: number): string[] {
-  const words = text.split(' ');
-  const lines: string[] = [];
-  let currentLine = '';
+function formatMarkdownLine(text: string): string {
+  // Simple markdown formatting for PDF
+  return text
+    .replace(/\*\*(.*?)\*\*/g, '$1') // Remove bold markers
+    .replace(/\*(.*?)\*/g, '$1') // Remove italic markers
+    .replace(/^- (.*$)/gm, '• $1') // Convert list items
+    .substring(0, 80); // Limit line length
+}
+
+export async function exportMarkdown(blueprint: Blueprint): Promise<string> {
+  let md = `# ${blueprint.name}\n\n`;
+  md += `> Generated from Wyatt Works Method on ${new Date(blueprint.updatedAt).toLocaleDateString()}\n\n`;
+  md += `---\n\n`;
   
-  for (const word of words) {
-    if (currentLine.length + word.length + 1 <= maxLength) {
-      currentLine += (currentLine ? ' ' : '') + word;
-    } else {
-      if (currentLine) {
-        lines.push(currentLine);
-      }
-      currentLine = word;
+  for (const phase of blueprint.phases) {
+    md += `## ${phase.title}\n\n`;
+    
+    if (phase.summary) {
+      md += `*${phase.summary}*\n\n`;
     }
+    
+    const renderTasks = (tasks: Task[], depth: number = 0) => {
+      for (const task of tasks) {
+        const indent = "  ".repeat(depth);
+        const prefix = task.done ? "- [x]" : "- [ ]";
+        md += `${indent}${prefix} ${task.title}\n`;
+        
+        if (task.description) {
+          md += `${indent}  *${task.description}*\n`;
+        }
+        
+        if (task.notes && task.notes.trim()) {
+          const notes = task.notes
+            .split('\n')
+            .map(line => `${indent}  ${line}`)
+            .join('\n');
+          md += `${notes}\n\n`;
+        }
+        
+        if (task.children && task.children.length > 0) {
+          renderTasks(task.children, depth + 1);
+        }
+      }
+    };
+    
+    renderTasks(phase.tasks);
+    md += "\n---\n\n";
   }
   
-  if (currentLine) {
-    lines.push(currentLine);
+  md += `## Progress Summary\n\n`;
+  
+  // Calculate progress
+  let totalTasks = 0;
+  let completedTasks = 0;
+  
+  for (const phase of blueprint.phases) {
+    const countTasks = (tasks: Task[]) => {
+      for (const task of tasks) {
+        totalTasks++;
+        if (task.done) completedTasks++;
+        if (task.children) countTasks(task.children);
+      }
+    };
+    countTasks(phase.tasks);
   }
   
-  return lines;
+  const progress = totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 0;
+  
+  md += `- **Overall Progress**: ${completedTasks}/${totalTasks} tasks (${progress}%)\n`;
+  
+  for (const phase of blueprint.phases) {
+    let phaseTotal = 0;
+    let phaseCompleted = 0;
+    
+    const countPhaseTasks = (tasks: Task[]) => {
+      for (const task of tasks) {
+        phaseTotal++;
+        if (task.done) phaseCompleted++;
+        if (task.children) countPhaseTasks(task.children);
+      }
+    };
+    countPhaseTasks(phase.tasks);
+    
+    const phaseProgress = phaseTotal > 0 ? Math.round((phaseCompleted / phaseTotal) * 100) : 0;
+    md += `- **${phase.title}**: ${phaseCompleted}/${phaseTotal} tasks (${phaseProgress}%)\n`;
+  }
+  
+  md += `\n---\n\n`;
+  md += `*This blueprint was created using the [Wyatt Works Method](https://method.wyatt-works.com) - a systematic approach to building impactful brands.*\n`;
+  
+  return md;
 }
