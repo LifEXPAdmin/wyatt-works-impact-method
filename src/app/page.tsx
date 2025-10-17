@@ -598,8 +598,12 @@ export default function Home() {
                     {sections.map((_, index) => (
                       <div
                         key={index}
-                        className={`w-2 h-2 rounded-full transition-colors ${
-                          index === currentSection ? "bg-[var(--brand)]" : "bg-[var(--border)]"
+                        className={`w-3 h-3 rounded-full border-2 transition-colors ${
+                          index < currentSection 
+                            ? "bg-[var(--gold)] border-[var(--gold)]" 
+                            : index === currentSection 
+                            ? "bg-[var(--brand)] border-[var(--brand)]" 
+                            : "bg-transparent border-[var(--brand)]"
                         }`}
                       />
                     ))}

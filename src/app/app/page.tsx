@@ -434,7 +434,10 @@ function AppPageContent() {
           {/* Phase Breakdown Modal */}
           <OnboardingModal 
             isOpen={showPhaseBreakdown}
-            onClose={() => setShowPhaseBreakdown(false)}
+            onClose={() => {
+              setShowPhaseBreakdown(false);
+              localStorage.setItem("wwm-onboarding-seen", "true");
+            }}
           />
     </div>
   );

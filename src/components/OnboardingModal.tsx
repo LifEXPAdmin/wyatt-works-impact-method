@@ -142,12 +142,12 @@ export default function OnboardingModal({ isOpen: propIsOpen, onClose: propOnClo
                     {steps.map((_, index) => (
                       <div
                         key={index}
-                        className={`w-2 h-2 rounded-full transition-all duration-300 ${
-                          index === currentStep
-                            ? "bg-[var(--brand)] scale-125"
-                            : index < currentStep
-                            ? "bg-[var(--gold)]"
-                            : "bg-[var(--border)]"
+                        className={`w-3 h-3 rounded-full border-2 transition-all duration-300 ${
+                          index < currentStep 
+                            ? "bg-[var(--gold)] border-[var(--gold)]" 
+                            : index === currentStep 
+                            ? "bg-[var(--brand)] border-[var(--brand)]" 
+                            : "bg-transparent border-[var(--brand)]"
                         }`}
                       />
                     ))}
