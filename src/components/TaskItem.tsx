@@ -46,6 +46,7 @@ export default function TaskItem({ task, phaseId }: TaskItemProps) {
   const [isEditing, setIsEditing] = useState(false);
   const [editTitle, setEditTitle] = useState(task.title);
   const [isExpanded, setIsExpanded] = useState(true);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   const {
@@ -285,7 +286,7 @@ export default function TaskItem({ task, phaseId }: TaskItemProps) {
                 <Edit2 className="w-4 h-4 mr-2" />
                 Rename Task
               </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => deleteTask(task.id)} className="text-red-500">
+              <DropdownMenuItem onClick={() => setShowDeleteConfirm(true)} className="text-red-500">
                 <Trash2 className="w-4 h-4 mr-2" />
                 Delete Task
               </DropdownMenuItem>
@@ -293,6 +294,51 @@ export default function TaskItem({ task, phaseId }: TaskItemProps) {
           </DropdownMenu>
         </div>
       </div>
+
+      {/* Delete Confirmation Dialog */}
+      <AnimatePresence>
+        {showDeleteConfirm && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+            onClick={() => setShowDeleteConfirm(false)}
+          >
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              className="bg-[var(--card)] border border-[var(--border)] rounded-xl p-6 max-w-md w-full"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <h3 className="text-lg font-semibold mb-2">Delete Task?</h3>
+              <p className="text-zinc-400 mb-4">
+                Are you sure you want to delete &quot;{task.title}&quot;? This will also delete all subtasks and notes. This action cannot be undone.
+              </p>
+              <div className="flex gap-3 justify-end">
+                <Button
+                  variant="outline"
+                  onClick={() => setShowDeleteConfirm(false)}
+                  className="touch-target"
+                >
+                  Cancel
+                </Button>
+                <Button
+                  variant="destructive"
+                  onClick={() => {
+                    deleteTask(task.id);
+                    setShowDeleteConfirm(false);
+                  }}
+                  className="touch-target"
+                >
+                  Delete
+                </Button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </motion.div>
   );
 }
@@ -308,8 +354,9 @@ function SubtaskItem({ subtask }: SubtaskItemProps) {
   const { toggleSubtask, renameSubtask, deleteSubtask, updateSubtaskNotes } = useBlueprint();
   const [isEditing, setIsEditing] = useState(false);
   const [editTitle, setEditTitle] = useState(subtask.title);
-  const [isExpanded, setIsExpanded] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(true); // Expanded by default
   const [showPrompt, setShowPrompt] = useState(false);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const notesRef = useRef<HTMLTextAreaElement>(null);
 
   const {
@@ -367,11 +414,15 @@ function SubtaskItem({ subtask }: SubtaskItemProps) {
   // Get suggested prompt for this subtask
   const getSuggestedPrompt = () => {
     const promptMap: Record<string, string> = {
-      "AI brainstorm: Generate 50 creative name options": "Help me brainstorm 50 creative names for [your business type] that [your value proposition]. Focus on names that are memorable, brandable, and hint at the outcome I deliver. Include variations like: descriptive names, made-up words, compound words, and abstract concepts.",
-      "Human filtering: Check domain + social handle availability": "I need to check availability for these business names: [list your top 5 names]. Please help me research: 1) Domain availability (.com preferred), 2) Social media handle availability across major platforms, 3) Trademark conflicts, 4) Similar existing businesses. Prioritize names that are available across all platforms.",
-      "AI tagline creation: Generate 20 taglines for chosen name": "Create 20 compelling taglines for my business '[chosen name]' that [your value proposition]. Focus on taglines that: 1) Are under 8 words, 2) Clearly communicate the transformation I provide, 3) Are memorable and punchy, 4) Work well with my brand name. Include variations like: benefit-focused, problem-solving, and aspirational approaches.",
-      "Human testing: Say out loud and test with others": "Help me create a testing framework for my business name '[chosen name]' and tagline '[chosen tagline]'. I need: 1) Questions to ask potential customers, 2) Ways to test memorability and pronunciation, 3) Methods to gauge emotional response, 4) A scoring system to evaluate feedback. Focus on testing with my target audience of [your target audience].",
-      "AI final polish: Create 3 compelling versions": "Refine my business name '[chosen name]' and tagline '[chosen tagline]' into 3 polished versions. Each version should: 1) Have slight variations in wording, 2) Maintain the core message, 3) Be optimized for different contexts (website, business cards, social media), 4) Include alternative phrasings. Make each version feel complete and professional."
+      "AI brainstorm: Get 20 purpose statement options": "I'm building a business that helps [your target audience] with [their main problem]. I need 20 different ways to phrase my one-sentence purpose statement that clearly communicates the transformation I create. \n\nPlease generate options that:\n- Focus on the specific outcome/transformation\n- Are under 14 words\n- Avoid generic buzzwords\n- Use concrete, specific language\n- Include variations like 'I help [who] go from [current state] to [desired state]'\n\nMake each option feel authentic and specific to my unique value proposition.",
+      
+      "Human selection: Pick your top 5 favorites": "I've generated 20 purpose statement options and need help narrowing down to my top 5. Here are the options: [paste your 20 options]\n\nPlease help me:\n- Identify which ones feel most authentic to my voice\n- Spot any that sound generic or buzzword-heavy\n- Choose ones that clearly communicate my unique value\n- Consider how each would resonate with my target audience\n- Rank them from strongest to weakest\n\nI want to pick the ones that feel most 'me' while being clear about the transformation I provide.",
+      
+      "AI refinement: Optimize strongest to ≤ 14 words": "I've chosen my strongest purpose statement: '[your chosen statement]'\n\nPlease help me refine it to be:\n- Exactly 14 words or fewer\n- More specific and concrete\n- Clearer about the transformation\n- More memorable and punchy\n- Less generic sounding\n\nGenerate 5 refined versions that maintain the core message but make it more compelling and specific. Focus on replacing vague words with concrete ones.",
+      
+      "Human testing: Share with 2 people in your audience": "I need to test my purpose statement with real people in my target audience. My statement is: '[your refined statement]'\n\nPlease help me create:\n- 3-5 specific questions to ask them\n- A simple way to test memorability (can they repeat it back?)\n- Methods to gauge emotional response\n- A scoring system to evaluate feedback\n- Follow-up questions based on their responses\n\nFocus on testing with [your specific target audience] to see if it resonates and is clear.",
+      
+      "AI final polish: Create 3 compelling versions": "Based on feedback from testing, I need to create 3 final versions of my purpose statement. My current version is: '[your tested statement]'\n\nPlease create 3 polished versions that:\n- Incorporate the feedback I received\n- Each has a slightly different angle/emphasis\n- Are optimized for different contexts (website, elevator pitch, social media)\n- Maintain authenticity while being more compelling\n- Are ready to use professionally\n\nMake each version complete and polished, ready for different uses."
     };
     return promptMap[subtask.title] || "Help me with this task: " + subtask.title;
   };
@@ -466,7 +517,7 @@ function SubtaskItem({ subtask }: SubtaskItemProps) {
             <Button
               variant="ghost"
               size="sm"
-              onClick={() => deleteSubtask(subtask.id)}
+              onClick={() => setShowDeleteConfirm(true)}
               className="w-6 h-6 p-0 text-zinc-400 hover:text-red-500"
             >
               <X className="w-3 h-3" />
@@ -485,21 +536,21 @@ function SubtaskItem({ subtask }: SubtaskItemProps) {
               className="mt-3 p-3 bg-[var(--brand)]/10 border border-[var(--brand)]/20 rounded-lg"
             >
               <div className="flex items-start justify-between gap-2 mb-2">
-                <h4 className="text-xs font-semibold text-[var(--brand)]">Suggested AI Prompt</h4>
+                <h4 className="text-xs font-semibold text-[var(--brand)]">💡 AI Prompt</h4>
                 <Button
                   variant="ghost"
                   size="sm"
                   onClick={() => copyPromptToClipboard(getSuggestedPrompt())}
                   className="text-xs h-6 px-2 text-[var(--brand)] hover:bg-[var(--brand)]/20"
                 >
-                  📋 Copy
+                  📋 Copy Prompt
                 </Button>
               </div>
               <p className="text-xs text-zinc-300 mb-2 break-words whitespace-pre-wrap">
                 {getSuggestedPrompt()}
               </p>
               <p className="text-xs text-zinc-400 italic">
-                💡 Remember: Copy our prompt as a starting point, then add your own touch and specific details!
+                ⚠️ Important: Use this prompt as a starting point, then customize it with your specific details and personal touch. Don&apos;t just copy-paste - make it yours!
               </p>
             </motion.div>
           )}
@@ -525,6 +576,51 @@ function SubtaskItem({ subtask }: SubtaskItemProps) {
                   className="min-h-[60px] resize-none rounded-lg text-xs"
                 />
               </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        {/* Delete Confirmation Dialog */}
+        <AnimatePresence>
+          {showDeleteConfirm && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+              onClick={() => setShowDeleteConfirm(false)}
+            >
+              <motion.div
+                initial={{ scale: 0.9, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                exit={{ scale: 0.9, opacity: 0 }}
+                className="bg-[var(--card)] border border-[var(--border)] rounded-xl p-6 max-w-md w-full"
+                onClick={(e) => e.stopPropagation()}
+              >
+                <h3 className="text-lg font-semibold mb-2">Delete Subtask?</h3>
+                <p className="text-zinc-400 mb-4">
+                  Are you sure you want to delete &quot;{subtask.title}&quot;? This action cannot be undone.
+                </p>
+                <div className="flex gap-3 justify-end">
+                  <Button
+                    variant="outline"
+                    onClick={() => setShowDeleteConfirm(false)}
+                    className="touch-target"
+                  >
+                    Cancel
+                  </Button>
+                  <Button
+                    variant="destructive"
+                    onClick={() => {
+                      deleteSubtask(subtask.id);
+                      setShowDeleteConfirm(false);
+                    }}
+                    className="touch-target"
+                  >
+                    Delete
+                  </Button>
+                </div>
+              </motion.div>
             </motion.div>
           )}
         </AnimatePresence>
