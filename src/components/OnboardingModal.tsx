@@ -123,13 +123,11 @@ export default function OnboardingModal({ isOpen: propIsOpen, onClose: propOnClo
                     transition={{ duration: 0.5 }}
                     className="mb-6"
                   >
-                    <div className={`w-20 h-20 mx-auto mb-4 rounded-full bg-gradient-to-r ${currentStepData.color} p-1`}>
-                      <div className="w-full h-full rounded-full bg-[var(--card)] flex items-center justify-center">
-                        <currentStepData.icon 
-                          size={32} 
-                          className={`bg-gradient-to-r ${currentStepData.color} bg-clip-text text-transparent`}
-                        />
-                      </div>
+                    <div className={`w-20 h-20 mx-auto mb-4 rounded-full bg-gradient-to-r ${currentStepData.color} flex items-center justify-center`}>
+                      <currentStepData.icon 
+                        size={32} 
+                        className="text-white"
+                      />
                     </div>
                     <h3 className="text-xl font-semibold mb-2">{currentStepData.title}</h3>
                     <p className="text-zinc-400 leading-relaxed">
@@ -160,7 +158,7 @@ export default function OnboardingModal({ isOpen: propIsOpen, onClose: propOnClo
                     variant="outline"
                     onClick={handlePrev}
                     disabled={currentStep === 0}
-                    className="opacity-0"
+                    className="touch-target"
                   >
                     Previous
                   </Button>
