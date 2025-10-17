@@ -10,7 +10,7 @@ import TaskList from "@/components/TaskList";
 import RightRail from "@/components/RightRail";
 import CommandPalette from "@/components/CommandPalette";
 import Confetti from "@/components/Confetti";
-import AppOnboardingTour from "@/components/AppOnboardingTour";
+import Tour, { Step } from "@/components/Tour";
 import { 
   Menu, 
   CheckCircle, 
@@ -35,10 +35,45 @@ export default function AppPage() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [showConfetti, setShowConfetti] = useState(false);
   const [lastProgress, setLastProgress] = useState(0);
+  const [isTourOpen, setIsTourOpen] = useState(false);
 
   useEffect(() => {
     load();
   }, [load]);
+
+  // Tour steps definition
+  const tourSteps: Step[] = [
+    {
+      id: "phase",
+      target: "#phase-nav",
+      title: "Pick a Phase",
+      body: "Choose Spark, Forge, Flow, or Impact to focus your work. Each phase builds on the previous one.",
+      placement: "right"
+    },
+    {
+      id: "tasks",
+      target: "#task-list",
+      title: "Check tasks & add notes",
+      body: "Tick off steps and capture decisions. Everything autosaves locally—no login needed.",
+      placement: "bottom"
+    },
+    {
+      id: "export",
+      target: "#right-rail",
+      title: "Export or continue later",
+      body: "Download PDF/Markdown or just come back—your progress is saved automatically.",
+      placement: "left"
+    }
+  ];
+
+  // Check if this is first visit and show tour
+  useEffect(() => {
+    const hasSeenTour = localStorage.getItem("wwm-app-tour-v1");
+    if (!hasSeenTour) {
+      // Small delay to ensure everything is loaded
+      setTimeout(() => setIsTourOpen(true), 1000);
+    }
+  }, []);
 
   // Handle phase completion celebrations
   useEffect(() => {
@@ -149,7 +184,7 @@ export default function AppPage() {
         </AnimatePresence>
 
         {/* Left Sidebar - Phase Navigation */}
-        <div className="hidden lg:block lg:w-80 lg:flex-shrink-0 p-4">
+        <div id="phase-nav" className="hidden lg:block lg:w-80 lg:flex-shrink-0 p-4">
           <PhaseNav 
             active={activePhase} 
             onPhaseChange={handlePhaseChange}
@@ -236,7 +271,7 @@ export default function AppPage() {
           </motion.div>
 
           {/* Task List */}
-          <div className="flex-1 overflow-y-auto p-6">
+          <div id="task-list" className="flex-1 overflow-y-auto p-6">
             <motion.div
               key={activePhase}
               initial={{ opacity: 0, x: 20 }}
@@ -287,7 +322,7 @@ export default function AppPage() {
         </div>
 
         {/* Right Rail - Desktop Only */}
-        <div className="hidden xl:block xl:w-80 xl:flex-shrink-0 p-4">
+        <div id="right-rail" className="hidden xl:block xl:w-80 xl:flex-shrink-0 p-4">
           <RightRail 
             onPromptClick={handlePromptClick}
             onResourceClick={handleResourceClick}
@@ -307,8 +342,16 @@ export default function AppPage() {
         onComplete={() => setShowConfetti(false)}
       />
 
-      {/* Onboarding Tour */}
-      <AppOnboardingTour />
+      {/* Guided Tour */}
+      <Tour
+        steps={tourSteps}
+        isOpen={isTourOpen}
+        onClose={() => setIsTourOpen(false)}
+        onFinish={() => {
+          console.log("Tour completed!");
+        }}
+        storageKey="wwm-app-tour-v1"
+      />
     </div>
   );
 }

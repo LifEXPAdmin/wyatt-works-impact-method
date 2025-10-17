@@ -103,3 +103,75 @@
     color: var(--fg);
   }
 }
+
+/* Tour Spotlight Effect */
+.tour-spotlight {
+  --rx: 0px; 
+  --ry: 0px; 
+  --rw: 0px; 
+  --rh: 0px; 
+  --r: 14px;
+  
+  /* Fallback for browsers without mask-composite support */
+  mask: 
+    radial-gradient(12px 12px at calc(var(--rx) + var(--rw)/2) calc(var(--ry) + var(--rh)/2), transparent 98%, black 99%);
+  -webkit-mask:
+    radial-gradient(12px 12px at calc(var(--rx) + var(--rw)/2) calc(var(--ry) + var(--rh)/2), transparent 98%, black 99%);
+}
+
+/* Modern browsers with mask-composite support */
+@supports (mask-composite: exclude) {
+  .tour-spotlight {
+    mask: 
+      radial-gradient(100% 100% at 50% 50%, black 99%, transparent),
+      linear-gradient(black, black);
+    -webkit-mask: 
+      radial-gradient(100% 100% at 50% 50%, black 99%, transparent),
+      linear-gradient(black, black);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+  }
+}
+
+/* Tour tooltip arrow styles */
+.tour-arrow {
+  position: absolute;
+  width: 0;
+  height: 0;
+}
+
+.tour-arrow-top {
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border-left: 8px solid transparent;
+  border-right: 8px solid transparent;
+  border-bottom: 8px solid var(--border);
+}
+
+.tour-arrow-bottom {
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border-left: 8px solid transparent;
+  border-right: 8px solid transparent;
+  border-top: 8px solid var(--border);
+}
+
+.tour-arrow-left {
+  right: 100%;
+  top: 50%;
+  transform: translateY(-50%);
+  border-top: 8px solid transparent;
+  border-bottom: 8px solid transparent;
+  border-right: 8px solid var(--border);
+}
+
+.tour-arrow-right {
+  left: 100%;
+  top: 50%;
+  transform: translateY(-50%);
+  border-top: 8px solid transparent;
+  border-bottom: 8px solid transparent;
+  border-left: 8px solid var(--border);
+}
