@@ -3,7 +3,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { motion, type Variants } from "framer-motion";
 import EnhancedPhaseCard from "@/components/EnhancedPhaseCard";
-import { Sparkles, Hammer, Zap, Target, Brain, Lightbulb } from "lucide-react";
+import { Sparkles, Hammer, Zap, Target, Brain, Lightbulb, RotateCcw } from "lucide-react";
 
 export default function Home() {
   const containerVariants: Variants = {
@@ -39,6 +39,17 @@ export default function Home() {
         ease: "easeOut",
       },
     },
+  };
+
+  const handleResetData = () => {
+    // Clear all localStorage data
+    localStorage.removeItem("wwm-projects-v1");
+    localStorage.removeItem("wwm-app-tour-v1");
+    localStorage.removeItem("wwm-ai-education-seen");
+    localStorage.removeItem("wwm-onboarding-seen");
+    
+    // Reload the page to trigger fresh state
+    window.location.reload();
   };
 
   const phases = [
@@ -123,6 +134,22 @@ export default function Home() {
             >
               <Button asChild variant="outline" className="shadow-lg">
                 <Link href="/stories">See it in action</Link>
+              </Button>
+            </motion.div>
+
+            {/* Temporary Reset Button for Development */}
+            <motion.div
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              transition={{ type: "spring", stiffness: 400, damping: 17 }}
+            >
+              <Button 
+                onClick={handleResetData}
+                variant="outline" 
+                className="shadow-lg border-red-500/50 text-red-400 hover:bg-red-500/10 hover:border-red-500"
+              >
+                <RotateCcw className="w-4 h-4 mr-2" />
+                Reset Data (Dev)
               </Button>
             </motion.div>
           </motion.div>

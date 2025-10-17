@@ -125,6 +125,101 @@ export const sampleBlueprint: Blueprint = {
                 { id: "sp-success-4", title: "Human system setup: Create your tracking system", done: false, tips: ["Set up tools and processes to measure"] },
                 { id: "sp-success-5", title: "AI review process: Create weekly review system", done: false, tips: ["Plan how to track and adjust regularly"] }
               ]
+            },
+            {
+              id: "sp-competitors",
+              title: "Research competitor landscape",
+              description: "Understand what's already out there to find your unique angle. Use AI to analyze competitors more thoroughly.",
+              done: false,
+              tips: [
+                "AI Prompt: 'Help me identify 10 competitors for [your business type] that [your purpose]. Include both direct and indirect competitors.'",
+                "Analyze their messaging",
+                "Identify gaps in the market",
+                "Use AI to analyze competitors more thoroughly"
+              ],
+              children: [
+                { id: "sp-competitors-1", title: "AI competitor identification: Get 10 competitor profiles", done: false, tips: ["Include both direct and indirect competitors"] },
+                { id: "sp-competitors-2", title: "Human analysis: Study their messaging and content", done: false, tips: ["Look at their value propositions and positioning"] },
+                { id: "sp-competitors-3", title: "AI gap analysis: Find what competitors are missing", done: false, tips: ["Identify gaps and underserved niches"] },
+                { id: "sp-competitors-4", title: "Human positioning: Find your unique angle", done: false, tips: ["Focus on what makes you different"] },
+                { id: "sp-competitors-5", title: "AI strategy: Create differentiation strategy", done: false, tips: ["Position yourself against competitors"] }
+              ]
+            },
+            {
+              id: "sp-content-pillars",
+              title: "Create your content pillars",
+              description: "Know what you'll talk about before you start creating content. Use AI to think about content from your audience's perspective.",
+              done: false,
+              tips: [
+                "AI Prompt: 'Help me brainstorm 30 content ideas for [your avatar] who [your problem]. What do they need to know, understand, and feel?'",
+                "Answer top questions",
+                "Mix formats",
+                "Use AI to think about content from your audience's perspective"
+              ],
+              children: [
+                { id: "sp-content-1", title: "AI content brainstorming: Generate 30 content ideas", done: false, tips: ["Focus on what your avatar needs to know"] },
+                { id: "sp-content-2", title: "Human grouping: Organize into 3-5 content pillars", done: false, tips: ["Each pillar should serve a different purpose"] },
+                { id: "sp-content-3", title: "AI pillar refinement: Make pillars more specific", done: false, tips: ["Define what each pillar achieves"] },
+                { id: "sp-content-4", title: "Human calendar: Create 30-day content calendar", done: false, tips: ["Plan your content mix"] },
+                { id: "sp-content-5", title: "AI optimization: Optimize for maximum engagement", done: false, tips: ["Balance education, inspiration, and entertainment"] }
+              ]
+            },
+            {
+              id: "sp-foundation-systems",
+              title: "Set up your foundation systems",
+              description: "Basic systems in place before you start creating content. Use AI to think about systems you might need.",
+              done: false,
+              tips: [
+                "AI Prompt: 'For a [your business type] that [your purpose], what systems and tools do I need to set up? Include content creation, distribution, and tracking.'",
+                "Choose your primary platform",
+                "Set up basic profiles",
+                "Use AI to think about systems you might need"
+              ],
+              children: [
+                { id: "sp-systems-1", title: "AI system planning: Get comprehensive system recommendations", done: false, tips: ["Include content creation, distribution, and tracking"] },
+                { id: "sp-systems-2", title: "Human selection: Choose your tools and platforms", done: false, tips: ["Start with one platform, master it, then expand"] },
+                { id: "sp-systems-3", title: "AI workflow creation: Create content workflow", done: false, tips: ["Include creation, review, and distribution"] },
+                { id: "sp-systems-4", title: "Human setup: Set up your systems", done: false, tips: ["Keep branding consistent across platforms"] },
+                { id: "sp-systems-5", title: "AI optimization: Optimize workflow for efficiency", done: false, tips: ["Create templates to save time"] }
+              ]
+            },
+            {
+              id: "sp-first-content",
+              title: "Create your first content piece",
+              description: "Proof of concept - can you actually deliver on your promise? Use AI to create something truly remarkable.",
+              done: false,
+              tips: [
+                "AI Prompt: 'Help me plan my first [content type] about [your topic]. What should the structure be? What key points should I cover?'",
+                "Start simple, don't overcomplicate",
+                "Focus on value, not perfection",
+                "Use AI to create something truly remarkable"
+              ],
+              children: [
+                { id: "sp-first-1", title: "AI content planning: Plan structure and key points", done: false, tips: ["Define the format and main topics"] },
+                { id: "sp-first-2", title: "Human creation: Create content with AI guidance", done: false, tips: ["Focus on value delivery"] },
+                { id: "sp-first-3", title: "AI review: Review for clarity and engagement", done: false, tips: ["Get feedback on structure and flow"] },
+                { id: "sp-first-4", title: "Human refinement: Make improvements based on feedback", done: false, tips: ["Add your personal touch"] },
+                { id: "sp-first-5", title: "AI distribution: Create distribution plan", done: false, tips: ["Plan how to reach your avatar effectively"] }
+              ]
+            },
+            {
+              id: "sp-brand-voice",
+              title: "Define your brand voice & tone",
+              description: "How you communicate should reflect your values and resonate with your audience. Use AI to explore different voice options.",
+              done: false,
+              tips: [
+                "AI Prompt: 'Help me define 5 different brand voices for [your business type] that serves [your avatar]. Include tone, personality traits, and communication style.'",
+                "Reflect your values",
+                "Resonate with your audience",
+                "Use AI to explore different voice options"
+              ],
+              children: [
+                { id: "sp-voice-1", title: "AI voice exploration: Generate 5 different brand voices", done: false, tips: ["Include tone, personality, and communication style"] },
+                { id: "sp-voice-2", title: "Human selection: Pick the voice that feels authentic", done: false, tips: ["Choose what reflects your values"] },
+                { id: "sp-voice-3", title: "AI refinement: Develop detailed voice guidelines", done: false, tips: ["Create specific examples and guidelines"] },
+                { id: "sp-voice-4", title: "Human testing: Test with your avatar", done: false, tips: ["Get feedback on resonance and clarity"] },
+                { id: "sp-voice-5", title: "AI documentation: Create voice style guide", done: false, tips: ["Document examples and guidelines for consistency"] }
+              ]
             }
       ]
     },

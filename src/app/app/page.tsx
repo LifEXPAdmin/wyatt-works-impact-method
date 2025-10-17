@@ -125,16 +125,14 @@ function AppPageContent() {
     }
   ];
 
-      // Check if this is first visit and show AI education - DISABLED FOR DEBUGGING
+      // Check if this is first visit and show AI education
       useEffect(() => {
         try {
-          // Temporarily disable AI education to debug interaction issues
-          // const hasSeenAIEducation = localStorage.getItem("wwm-ai-education-seen");
-          // if (!hasSeenAIEducation) {
-          //   // Small delay to ensure everything is loaded
-          //   setTimeout(() => setIsAIEducationOpen(true), 1500);
-          // }
-          console.log("AI Education disabled for debugging");
+          const hasSeenAIEducation = localStorage.getItem("wwm-ai-education-seen");
+          if (!hasSeenAIEducation) {
+            // Small delay to ensure everything is loaded
+            setTimeout(() => setIsAIEducationOpen(true), 1500);
+          }
         } catch (error) {
           console.error("Error checking AI education status:", error);
         }
