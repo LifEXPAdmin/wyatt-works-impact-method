@@ -153,7 +153,7 @@ export default function AppPage() {
     <div className="min-h-screen bg-[var(--bg)]">
       <TopBar />
       
-      <div className="flex h-[calc(100vh-73px)]">
+      <div className="flex h-[calc(100vh-73px)] lg:h-[calc(100vh-73px)]">
         {/* Mobile Menu Overlay */}
         <AnimatePresence>
           {isMobileMenuOpen && (
@@ -184,7 +184,7 @@ export default function AppPage() {
         </AnimatePresence>
 
         {/* Left Sidebar - Phase Navigation */}
-        <div id="phase-nav" className="hidden lg:block lg:w-80 lg:flex-shrink-0 p-4">
+        <div id="phase-nav" className="hidden lg:block lg:w-80 lg:flex-shrink-0 mobile-px">
           <PhaseNav 
             active={activePhase} 
             onPhaseChange={handlePhaseChange}
@@ -194,11 +194,12 @@ export default function AppPage() {
         {/* Main Content */}
         <div className="flex-1 flex flex-col min-w-0">
           {/* Mobile Header */}
-          <div className="lg:hidden flex items-center justify-between p-4 border-b border-[var(--border)]">
+          <div className="lg:hidden flex items-center justify-between mobile-px py-4 border-b border-[var(--border)]">
             <Button
               variant="outline"
               size="sm"
               onClick={() => setIsMobileMenuOpen(true)}
+              className="touch-target"
             >
               <Menu className="w-4 h-4 mr-2" />
               Phases
@@ -220,6 +221,7 @@ export default function AppPage() {
               variant="outline"
               size="sm"
               onClick={() => setIsCommandPaletteOpen(true)}
+              className="touch-target"
             >
               ⌘K
             </Button>
@@ -227,7 +229,7 @@ export default function AppPage() {
 
           {/* Phase Header */}
           <motion.div
-            className="p-6 border-b border-[var(--border)]"
+            className="mobile-px mobile-py border-b border-[var(--border)]"
             key={activePhase}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -235,8 +237,8 @@ export default function AppPage() {
           >
             <div className="flex items-center justify-between mb-4">
               <div>
-                <h1 className="text-2xl font-bold">{currentPhaseData?.phase.title}</h1>
-                <p className="text-zinc-400 mt-1">{currentPhaseData?.phase.summary}</p>
+                <h1 className="mobile-text-2xl font-bold">{currentPhaseData?.phase.title}</h1>
+                <p className="mobile-text-sm text-zinc-400 mt-1">{currentPhaseData?.phase.summary}</p>
               </div>
               
               <div className="text-right">
@@ -248,7 +250,7 @@ export default function AppPage() {
             </div>
 
             {/* Mini Metrics */}
-            <div className="grid grid-cols-3 gap-4">
+            <div className="mobile-grid grid-cols-3 gap-4">
               <div className="bg-[var(--bg)] rounded-lg p-3">
                 <div className="text-sm text-zinc-400">Tasks</div>
                 <div className="text-lg font-semibold">
@@ -271,7 +273,7 @@ export default function AppPage() {
           </motion.div>
 
           {/* Task List */}
-          <div id="task-list" className="flex-1 overflow-y-auto p-6">
+          <div id="task-list" className="flex-1 overflow-y-auto mobile-px mobile-py smooth-scroll hide-scrollbar">
             <motion.div
               key={activePhase}
               initial={{ opacity: 0, x: 20 }}
@@ -286,7 +288,7 @@ export default function AppPage() {
           </div>
 
           {/* Sticky Footer */}
-          <div className="border-t border-[var(--border)] p-4 bg-[var(--card)]">
+          <div className="border-t border-[var(--border)] mobile-px py-4 bg-[var(--card)]">
             <div className="flex items-center justify-between">
               <div className="text-sm text-zinc-400">
                 {currentPhaseData?.tasksCompleted || 0} of {currentPhaseData?.totalTasks || 0} tasks completed
@@ -312,6 +314,7 @@ export default function AppPage() {
                     }
                   }}
                   disabled={activePhase === 'impact'}
+                  className="touch-target"
                 >
                   Next Phase
                   <ArrowRight className="w-4 h-4 ml-2" />
@@ -322,7 +325,7 @@ export default function AppPage() {
         </div>
 
         {/* Right Rail - Desktop Only */}
-        <div id="right-rail" className="hidden xl:block xl:w-80 xl:flex-shrink-0 p-4">
+        <div id="right-rail" className="hidden xl:block xl:w-80 xl:flex-shrink-0 mobile-px">
           <RightRail 
             onPromptClick={handlePromptClick}
             onResourceClick={handleResourceClick}

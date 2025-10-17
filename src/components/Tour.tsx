@@ -197,7 +197,7 @@ export default function Tour({
 
   if (!isOpen || !currentStepData) return null;
 
-  const isMobile = window.innerWidth < 640;
+  const isMobile = typeof window !== 'undefined' && window.innerWidth < 640;
   const progress = ((currentStep + 1) / steps.length) * 100;
 
   return (
@@ -231,7 +231,7 @@ export default function Tour({
           exit={{ opacity: 0, y: 8 }}
           transition={{ duration: 0.2 }}
           className={cn(
-            "absolute z-[60] rounded-xl border border-[var(--border)] bg-[var(--card)]/95 shadow-2xl backdrop-blur px-4 py-3",
+            "absolute z-[60] rounded-xl border border-[var(--border)] bg-[var(--card)]/95 shadow-2xl backdrop-blur mobile-px py-3",
             isMobile ? "w-[calc(100vw-32px)] max-w-sm" : "w-80"
           )}
           style={{
@@ -273,7 +273,7 @@ export default function Tour({
               variant="ghost"
               size="sm"
               onClick={handleSkip}
-              className="w-6 h-6 p-0 hover:bg-[var(--border)]"
+              className="w-6 h-6 p-0 hover:bg-[var(--border)] touch-target"
             >
               <X className="w-4 h-4" />
             </Button>
@@ -281,10 +281,10 @@ export default function Tour({
 
           {/* Content */}
           <div ref={focusTrapRef} className="space-y-3">
-            <h3 id="tour-title" className="text-base md:text-lg font-semibold text-[var(--fg)]">
+            <h3 id="tour-title" className="mobile-text-base font-semibold text-[var(--fg)]">
               {currentStepData.title}
             </h3>
-            <p id="tour-body" className="text-sm md:text-[15px] text-zinc-200">
+            <p id="tour-body" className="mobile-text-sm text-zinc-200">
               {currentStepData.body}
             </p>
 
@@ -307,7 +307,7 @@ export default function Tour({
                     variant="outline"
                     size="sm"
                     onClick={handlePrevious}
-                    className="flex items-center gap-1"
+                    className="flex items-center gap-1 touch-target"
                   >
                     <ChevronLeft className="w-4 h-4" />
                     Previous
@@ -317,7 +317,7 @@ export default function Tour({
                   variant="outline"
                   size="sm"
                   onClick={handleSkip}
-                  className={cn(isMobile && "flex-1")}
+                  className={cn(isMobile && "flex-1", "touch-target")}
                 >
                   Skip Tour
                 </Button>
@@ -325,7 +325,7 @@ export default function Tour({
               <Button
                 onClick={handleNext}
                 className={cn(
-                  "bg-[var(--brand)] text-black hover:opacity-90 flex items-center gap-1",
+                  "bg-[var(--brand)] text-black hover:opacity-90 flex items-center gap-1 touch-target",
                   isMobile && "flex-1 order-1"
                 )}
               >

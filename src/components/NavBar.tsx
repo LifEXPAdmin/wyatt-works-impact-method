@@ -45,7 +45,7 @@ export default function NavBar() {
         animate={{ y: 0 }}
         transition={{ duration: 0.5, ease: "easeOut" }}
       >
-        <div className="mx-auto max-w-7xl px-4">
+        <div className="mx-auto max-w-7xl mobile-px">
           <div className="flex items-center justify-between">
             {/* Logo */}
             <Link
@@ -79,7 +79,7 @@ export default function NavBar() {
             {/* Mobile Menu Button */}
             <button
               onClick={toggleMobileMenu}
-              className="md:hidden p-2 text-zinc-300 hover:text-white transition-colors"
+              className="md:hidden touch-target p-2 text-zinc-300 hover:text-white transition-colors no-zoom"
               aria-label="Toggle mobile menu"
             >
               {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
@@ -111,12 +111,12 @@ export default function NavBar() {
             >
               <div className="p-6 pt-20">
                 {/* Mobile Navigation Links */}
-                <div className="space-y-4 mb-8">
+                <div className="space-y-2 mb-8">
                   {navLinks.map((link) => (
                     <Link
                       key={link.href}
                       href={link.href}
-                      className="block text-lg font-medium text-zinc-300 hover:text-[var(--brand)] transition-colors"
+                      className="block mobile-text-lg font-medium text-zinc-300 hover:text-[var(--brand)] transition-colors touch-target py-2"
                       onClick={toggleMobileMenu}
                     >
                       {link.label}
@@ -127,7 +127,7 @@ export default function NavBar() {
                 {/* Mobile CTA */}
                 <Button
                   asChild
-                  className="w-full bg-[var(--brand)] text-black hover:opacity-90"
+                  className="w-full bg-[var(--brand)] text-black hover:opacity-90 touch-target mobile-text-base"
                   onClick={toggleMobileMenu}
                 >
                   <Link href="/app">Start Free Blueprint</Link>

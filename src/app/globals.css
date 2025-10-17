@@ -97,10 +97,59 @@
   * {
     @apply border-border outline-ring/50;
   }
+  
+  html {
+    /* Prevent zoom on iOS Safari */
+    -webkit-text-size-adjust: 100%;
+    /* Improve touch scrolling on iOS */
+    -webkit-overflow-scrolling: touch;
+    /* Prevent horizontal scroll on mobile */
+    overflow-x: hidden;
+  }
+  
   body {
     @apply bg-background text-foreground;
     background: var(--bg);
     color: var(--fg);
+    /* Prevent overscroll bounce on iOS */
+    overscroll-behavior: none;
+    /* Improve touch scrolling */
+    -webkit-overflow-scrolling: touch;
+    /* Prevent text selection on UI elements */
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+  }
+  
+  /* Allow text selection in content areas */
+  p, h1, h2, h3, h4, h5, h6, span, div[contenteditable], textarea, input {
+    -webkit-user-select: text;
+    -moz-user-select: text;
+    -ms-user-select: text;
+    user-select: text;
+  }
+  
+  /* Improve button touch targets */
+  button, [role="button"] {
+    min-height: 44px;
+    min-width: 44px;
+    /* Prevent double-tap zoom on buttons */
+    touch-action: manipulation;
+  }
+  
+  /* Improve form element touch targets */
+  input, textarea, select {
+    min-height: 44px;
+    /* Prevent zoom on focus in iOS Safari */
+    font-size: 16px;
+  }
+  
+  /* Fix iOS Safari input zoom */
+  @media screen and (max-width: 767px) {
+    input, textarea, select {
+      font-size: 16px !important;
+    }
   }
 }
 
@@ -174,4 +223,119 @@
   border-top: 8px solid transparent;
   border-bottom: 8px solid transparent;
   border-left: 8px solid var(--border);
+}
+
+/* Mobile-specific improvements */
+@layer utilities {
+  
+  /* Mobile-friendly spacing */
+  .mobile-px {
+    @apply px-4 sm:px-6 lg:px-8;
+  }
+  
+  .mobile-py {
+    @apply py-4 sm:py-6 lg:py-8;
+  }
+  
+  /* Touch-friendly interactions */
+  .touch-target {
+    min-height: 44px;
+    min-width: 44px;
+    touch-action: manipulation;
+  }
+  
+  /* Prevent text selection on UI elements */
+  .no-select {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+  }
+  
+  /* Allow text selection */
+  .select-text {
+    -webkit-user-select: text;
+    -moz-user-select: text;
+    -ms-user-select: text;
+    user-select: text;
+  }
+  
+  /* Smooth scrolling */
+  .smooth-scroll {
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  /* Hide scrollbars on mobile */
+  .hide-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  
+  .hide-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  
+  /* Mobile-optimized shadows */
+  .mobile-shadow {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  }
+  
+  .mobile-shadow-lg {
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+  }
+  
+  /* Prevent zoom on double-tap */
+  .no-zoom {
+    touch-action: manipulation;
+  }
+  
+  /* Mobile-friendly transitions */
+  .mobile-transition {
+    transition: all 0.2s ease-in-out;
+  }
+  
+  /* Responsive text sizes */
+  .mobile-text-sm {
+    @apply text-sm sm:text-base;
+  }
+  
+  .mobile-text-base {
+    @apply text-base sm:text-lg;
+  }
+  
+  .mobile-text-lg {
+    @apply text-lg sm:text-xl;
+  }
+  
+  .mobile-text-xl {
+    @apply text-xl sm:text-2xl;
+  }
+  
+  .mobile-text-2xl {
+    @apply text-2xl sm:text-3xl;
+  }
+  
+  /* Mobile grid layouts */
+  .mobile-grid {
+    @apply grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4;
+  }
+  
+  .mobile-flex-col {
+    @apply flex flex-col sm:flex-row;
+  }
+  
+  /* Mobile navigation improvements */
+  .mobile-nav {
+    @apply fixed bottom-0 left-0 right-0 bg-[var(--card)] border-t border-[var(--border)];
+  }
+  
+  /* Mobile modal improvements */
+  .mobile-modal {
+    @apply fixed inset-0 z-50 bg-black/50 backdrop-blur-sm;
+  }
+  
+  .mobile-modal-content {
+    @apply fixed bottom-0 left-0 right-0 bg-[var(--card)] rounded-t-xl;
+  }
 }

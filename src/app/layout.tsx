@@ -22,12 +22,40 @@ export const metadata = {
       { url: "/apple-touch-icon.svg", sizes: "180x180", type: "image/svg+xml" },
     ],
   },
+  other: {
+    "mobile-web-app-capable": "yes",
+    "apple-mobile-web-app-capable": "yes",
+    "apple-mobile-web-app-status-bar-style": "black-translucent",
+    "apple-mobile-web-app-title": "Wyatt Works Method",
+    "msapplication-TileColor": "#0B0E14",
+    "msapplication-config": "/browserconfig.xml",
+  },
+};
+
+export const viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
+  viewportFit: "cover",
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#2EA8FF" },
+    { media: "(prefers-color-scheme: dark)", color: "#0B0E14" },
+  ],
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className="bg-[#0B0E14] text-zinc-100">
-      <body className={cn(inter.className, "min-h-screen antialiased")}>
+      <body 
+        className={cn(inter.className, "min-h-screen antialiased")}
+        style={{
+          paddingTop: 'env(safe-area-inset-top, 0)',
+          paddingBottom: 'env(safe-area-inset-bottom, 0)',
+          paddingLeft: 'env(safe-area-inset-left, 0)',
+          paddingRight: 'env(safe-area-inset-right, 0)',
+        }}
+      >
         <ScrollProgress />
         <NavBar />
         <main className="pt-16">
