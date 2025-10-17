@@ -37,9 +37,30 @@ export default function AppPage() {
   const [lastProgress, setLastProgress] = useState(0);
   const [isTourOpen, setIsTourOpen] = useState(false);
 
+  const [isInitialized, setIsInitialized] = useState(false);
+
   useEffect(() => {
+    console.log("Loading blueprint...");
     load();
+    console.log("Blueprint loaded");
+    
+    // Force a re-render after a short delay to ensure store is updated
+    const timer = setTimeout(() => {
+      console.log("Setting initialized to true");
+      setIsInitialized(true);
+    }, 200);
+    
+    return () => clearTimeout(timer);
   }, [load]);
+
+  // Additional effect to monitor store changes
+  useEffect(() => {
+    if (isInitialized) {
+      console.log("App initialized, checking store state...");
+      console.log("Projects:", useBlueprint.getState().projects);
+      console.log("Active project ID:", useBlueprint.getState().activeProjectId);
+    }
+  }, [isInitialized]);
 
   // Tour steps definition
   const tourSteps: Step[] = [
@@ -106,6 +127,10 @@ export default function AppPage() {
   const currentPhaseData = getPhase(activePhase as PhaseId);
   const progressData = progress();
 
+  console.log("Active project data:", activeProjectData);
+  console.log("Current phase data:", currentPhaseData);
+  console.log("Progress data:", progressData);
+
   const handlePhaseChange = (phaseId: string) => {
     setActivePhase(phaseId);
   };
@@ -138,9 +163,9 @@ export default function AppPage() {
     handlePromptClick(citation);
   };
 
-  if (!activeProjectData) {
+  if (!isInitialized || !activeProjectData) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center bg-[var(--bg)]">
         <div className="text-center">
           <div className="animate-spin w-8 h-8 border-2 border-[var(--brand)] border-t-transparent rounded-full mx-auto mb-4" />
           <p className="text-zinc-400">Loading your blueprint...</p>

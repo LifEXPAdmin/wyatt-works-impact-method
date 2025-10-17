@@ -45,8 +45,10 @@ export const useBlueprint = create<State>((set, get) => ({
     
     try {
       const raw = localStorage.getItem(KEY);
+      console.log("Raw localStorage data:", raw);
       if (raw) {
         const data = JSON.parse(raw);
+        console.log("Parsed data:", data);
         set({ 
           projects: data.projects || [], 
           activeProjectId: data.activeProjectId || null 
@@ -58,8 +60,11 @@ export const useBlueprint = create<State>((set, get) => ({
     
     // Seed with default project if none exist
     const { projects } = get();
+    console.log("Current projects:", projects);
     if (projects.length === 0) {
-      get().createProject("My Blueprint");
+      console.log("Creating default project...");
+      const projectId = get().createProject("My Blueprint");
+      console.log("Created project with ID:", projectId);
     }
   },
 
@@ -79,6 +84,7 @@ export const useBlueprint = create<State>((set, get) => ({
   },
 
   createProject: (name = "New Project") => {
+    console.log("Creating project:", name);
     const id = generateId();
     const now = Date.now();
     
@@ -95,12 +101,16 @@ export const useBlueprint = create<State>((set, get) => ({
       updatedAt: now,
     };
 
+    console.log("New project created:", newProject);
+
     set(state => ({
       projects: [...state.projects, newProject],
       activeProjectId: id,
     }));
     
+    console.log("Project added to state");
     get().save();
+    console.log("Project saved");
     return id;
   },
 
