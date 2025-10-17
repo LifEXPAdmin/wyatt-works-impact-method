@@ -13,6 +13,7 @@ import Confetti from "@/components/Confetti";
 import Tour, { Step } from "@/components/Tour";
 import ErrorBoundary from "@/components/ErrorBoundary";
 import AIEducationModal from "@/components/AIEducationModal";
+import OnboardingModal from "@/components/OnboardingModal";
 import { 
   Menu, 
   ArrowRight,
@@ -38,6 +39,7 @@ function AppPageContent() {
       const [isTourOpen, setIsTourOpen] = useState(false);
       const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
       const [isAIEducationOpen, setIsAIEducationOpen] = useState(false);
+      const [showPhaseBreakdown, setShowPhaseBreakdown] = useState(false);
 
       const [isInitialized, setIsInitialized] = useState(false);
 
@@ -129,12 +131,17 @@ function AppPageContent() {
       useEffect(() => {
         try {
           const hasSeenAIEducation = localStorage.getItem("wwm-ai-education-seen");
+          const hasSeenOnboarding = localStorage.getItem("wwm-onboarding-seen");
+          
           if (!hasSeenAIEducation) {
-            // Small delay to ensure everything is loaded
+            // Show AI Education first
             setTimeout(() => setIsAIEducationOpen(true), 1500);
+          } else if (!hasSeenOnboarding) {
+            // Show phase breakdown after AI Education
+            setTimeout(() => setShowPhaseBreakdown(true), 500);
           }
         } catch (error) {
-          console.error("Error checking AI education status:", error);
+          console.error("Error checking education status:", error);
         }
       }, []);
 
@@ -175,6 +182,11 @@ function AppPageContent() {
 
       const handleSidebarCollapseChange = (isCollapsed: boolean) => {
         setIsSidebarCollapsed(isCollapsed);
+      };
+
+      const handleAIEducationComplete = () => {
+        // After AI Education is complete, show phase breakdown
+        setTimeout(() => setShowPhaseBreakdown(true), 500);
       };
 
   // Removed handlePromptClick and handleResourceClick - no longer needed
@@ -433,6 +445,13 @@ function AppPageContent() {
           <AIEducationModal
             isOpen={isAIEducationOpen}
             onClose={() => setIsAIEducationOpen(false)}
+            onComplete={handleAIEducationComplete}
+          />
+
+          {/* Phase Breakdown Modal */}
+          <OnboardingModal 
+            isOpen={showPhaseBreakdown}
+            onClose={() => setShowPhaseBreakdown(false)}
           />
     </div>
   );

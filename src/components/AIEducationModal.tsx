@@ -7,14 +7,23 @@ import { X, Brain, Zap, Target, Lightbulb, AlertTriangle, CheckCircle } from "lu
 interface AIEducationModalProps {
   isOpen: boolean;
   onClose: () => void;
+  onComplete?: () => void;
 }
 
-export default function AIEducationModal({ isOpen, onClose }: AIEducationModalProps) {
+export default function AIEducationModal({ isOpen, onClose, onComplete }: AIEducationModalProps) {
   const [currentSection, setCurrentSection] = useState(0);
 
   const handleClose = () => {
     localStorage.setItem("wwm-ai-education-seen", "true");
     onClose();
+  };
+
+  const handleComplete = () => {
+    localStorage.setItem("wwm-ai-education-seen", "true");
+    onClose();
+    if (onComplete) {
+      onComplete();
+    }
   };
 
   const sections = [
@@ -183,7 +192,7 @@ export default function AIEducationModal({ isOpen, onClose }: AIEducationModalPr
     if (currentSection < sections.length - 1) {
       setCurrentSection(currentSection + 1);
     } else {
-      handleClose();
+      handleComplete();
     }
   };
 

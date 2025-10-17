@@ -31,21 +31,31 @@ const steps = [
   },
 ];
 
-export default function OnboardingModal() {
+interface OnboardingModalProps {
+  isOpen?: boolean;
+  onClose?: () => void;
+}
+
+export default function OnboardingModal({ isOpen: propIsOpen, onClose: propOnClose }: OnboardingModalProps = {}) {
   const [isOpen, setIsOpen] = useState(false);
   const [currentStep, setCurrentStep] = useState(0);
 
-  useEffect(() => {
-    const hasSeenOnboarding = localStorage.getItem("wwm-onboarding-seen");
-    if (!hasSeenOnboarding) {
-      setIsOpen(true);
-    }
-  }, []);
-
-  const handleClose = () => {
+  // Use prop values if provided, otherwise use internal state
+  const modalIsOpen = propIsOpen !== undefined ? propIsOpen : isOpen;
+  const handleClose = propOnClose || (() => {
     setIsOpen(false);
     localStorage.setItem("wwm-onboarding-seen", "true");
-  };
+  });
+
+  useEffect(() => {
+    // Only auto-show if no props are provided (backward compatibility)
+    if (propIsOpen === undefined) {
+      const hasSeenOnboarding = localStorage.getItem("wwm-onboarding-seen");
+      if (!hasSeenOnboarding) {
+        setIsOpen(true);
+      }
+    }
+  }, [propIsOpen]);
 
   const handleNext = () => {
     if (currentStep < steps.length - 1) {
@@ -65,7 +75,7 @@ export default function OnboardingModal() {
 
   return (
     <AnimatePresence>
-      {isOpen && (
+      {modalIsOpen && (
         <>
           {/* Backdrop */}
           <motion.div
