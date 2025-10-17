@@ -48,8 +48,8 @@ export default function Home() {
     localStorage.removeItem("wwm-ai-education-seen");
     localStorage.removeItem("wwm-onboarding-seen");
     
-    // Reload the page to trigger fresh state
-    window.location.reload();
+    // Redirect to /app to trigger AI Education Modal
+    window.location.href = "/app";
   };
 
   const phases = [
