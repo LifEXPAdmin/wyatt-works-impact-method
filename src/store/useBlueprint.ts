@@ -53,7 +53,7 @@ export const useBlueprint = create<State>((set, get) => ({
     
     try {
       const raw = localStorage.getItem(KEY);
-      if (raw) {
+    if (raw) {
         const data = JSON.parse(raw);
         set({ 
           projects: data.projects || [], 
@@ -80,7 +80,7 @@ export const useBlueprint = create<State>((set, get) => ({
       const { projects, activeProjectId } = get();
       localStorage.setItem(KEY, JSON.stringify({ projects, activeProjectId }));
       set({ saveStatus: 'saved' });
-    } catch (error) {
+      } catch (error) {
       console.error("Failed to save projects to localStorage:", error);
       set({ saveStatus: 'error' });
     }
@@ -581,7 +581,7 @@ export const useBlueprint = create<State>((set, get) => ({
       overall: 0, 
       byPhase: { spark: 0, forge: 0, flow: 0, impact: 0 } as Record<PhaseId, number> 
     };
-
+    
     if (!activeProject) return result;
 
     let totalTasks = 0;
