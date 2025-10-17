@@ -1,13 +1,13 @@
 "use client";
 import { useEffect, useState } from "react";
 import { useBlueprint } from "@/store/useBlueprint";
-import { Task, PhaseId } from "@/types/blueprint";
+import { PhaseId } from "@/types/blueprint";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import TopBar from "@/components/TopBar";
 import PhaseNav from "@/components/PhaseNav";
 import TaskList from "@/components/TaskList";
-import RightRail from "@/components/RightRail";
+// import RightRail from "@/components/RightRail"; // REMOVED
 import CommandPalette from "@/components/CommandPalette";
 import Confetti from "@/components/Confetti";
 import Tour, { Step } from "@/components/Tour";
@@ -26,8 +26,7 @@ function AppPageContent() {
     load, 
     activeProject, 
     getPhase, 
-    progress,
-    updateNotes
+    progress
   } = useBlueprint();
   
   const [activePhase, setActivePhase] = useState<string>("spark");
@@ -120,13 +119,6 @@ function AppPageContent() {
       title: "Check tasks & add notes",
       body: "Tick off steps and capture decisions. Everything autosaves locally—no login needed.",
       placement: "bottom"
-    },
-    {
-      id: "export",
-      target: "#right-rail",
-      title: "Export or continue later",
-      body: "Download PDF/Markdown or just come back—your progress is saved automatically.",
-      placement: "left"
     }
   ];
 
@@ -180,41 +172,7 @@ function AppPageContent() {
     setActivePhase(phaseId);
   };
 
-  const handlePromptClick = (prompt: string) => {
-    try {
-      // Find the first task with notes in the current phase
-      const phase = activeProjectData?.blueprint.phases.find(p => p.id === activePhase);
-      if (phase) {
-        const findTaskWithNotes = (tasks: Task[]): Task | null => {
-          for (const task of tasks) {
-            if (task.notes) return task;
-            if (task.children) {
-              const found = findTaskWithNotes(task.children);
-              if (found) return found;
-            }
-          }
-          return null;
-        };
-        
-        const taskWithNotes = findTaskWithNotes(phase.tasks);
-        if (taskWithNotes) {
-          updateNotes(taskWithNotes.id, `${taskWithNotes.notes}\n\n${prompt}`);
-        }
-      }
-    } catch (error) {
-      console.error("Error handling prompt click:", error);
-    }
-  };
-
-  const handleResourceClick = (resource: { title: string; description: string }) => {
-    try {
-      // Add resource to notes
-      const citation = `\n\n**Resource**: ${resource.title} - ${resource.description}`;
-      handlePromptClick(citation);
-    } catch (error) {
-      console.error("Error handling resource click:", error);
-    }
-  };
+  // Removed handlePromptClick and handleResourceClick - no longer needed
 
   // Simplified loading check - only show loading if we're not initialized yet
   if (!isInitialized) {
@@ -293,13 +251,13 @@ function AppPageContent() {
           )}
         </AnimatePresence>
 
-        {/* Left Sidebar - Phase Navigation */}
-        <div id="phase-nav" className="hidden lg:block lg:w-80 lg:flex-shrink-0 mobile-px">
-          <PhaseNav 
-            active={activePhase} 
-            onPhaseChange={handlePhaseChange}
-          />
-        </div>
+            {/* Left Sidebar - Phase Navigation */}
+            <div id="phase-nav" className="hidden lg:block lg:w-80 lg:flex-shrink-0 mobile-px pr-6">
+              <PhaseNav 
+                active={activePhase} 
+                onPhaseChange={handlePhaseChange}
+              />
+            </div>
 
         {/* Main Content */}
         <div className="flex-1 flex flex-col min-w-0">
@@ -337,22 +295,49 @@ function AppPageContent() {
             </Button>
           </div>
 
-          {/* Simplified Phase Header */}
-          <div className="mobile-px py-6 border-b border-[var(--border)]">
-            <div className="flex items-center justify-between">
-              <div>
-                <h1 className="text-2xl font-bold">{currentPhaseData?.phase.title}</h1>
-                <p className="text-zinc-400 mt-1">{currentPhaseData?.phase.summary}</p>
-              </div>
-              
-              <div className="text-right">
-                <div className="text-sm text-zinc-400">Progress</div>
-                <div className="text-xl font-bold text-[var(--brand)]">
-                  {currentPhaseData?.progress || 0}%
+              {/* Simplified Phase Header */}
+              <div className="mobile-px py-6 border-b border-[var(--border)]">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <h1 className="text-2xl font-bold">{currentPhaseData?.phase.title}</h1>
+                    <p className="text-zinc-400 mt-1">{currentPhaseData?.phase.summary}</p>
+                  </div>
+                  
+                  <div className="flex items-center gap-4">
+                    {/* Export Button */}
+                    <Button
+                      onClick={async () => {
+                        try {
+                          const { exportPDF } = await import("@/lib/export");
+                          const project = activeProjectData;
+                          if (project) {
+                            const bytes = await exportPDF(project.blueprint);
+                            const blob = new Blob([bytes as BlobPart], { type: "application/pdf" });
+                            const url = URL.createObjectURL(blob);
+                            const a = document.createElement("a");
+                            a.href = url;
+                            a.download = `${project.name}-blueprint.pdf`;
+                            a.click();
+                            URL.revokeObjectURL(url);
+                          }
+                        } catch (error) {
+                          console.error("PDF export failed:", error);
+                        }
+                      }}
+                      className="bg-[var(--brand)] text-black hover:opacity-90"
+                    >
+                      Export PDF
+                    </Button>
+                    
+                    <div className="text-right">
+                      <div className="text-sm text-zinc-400">Progress</div>
+                      <div className="text-xl font-bold text-[var(--brand)]">
+                        {currentPhaseData?.progress || 0}%
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
-            </div>
-          </div>
 
           {/* Simplified Task List */}
           <div id="task-list" className="flex-1 overflow-y-auto mobile-px py-6">
@@ -390,13 +375,13 @@ function AppPageContent() {
           </div>
         </div>
 
-        {/* Right Rail - Desktop Only */}
-        <div id="right-rail" className="hidden xl:block xl:w-80 xl:flex-shrink-0 mobile-px">
-          <RightRail 
-            onPromptClick={handlePromptClick}
-            onResourceClick={handleResourceClick}
-          />
-        </div>
+            {/* Right Rail - REMOVED */}
+            {/* <div id="right-rail" className="hidden xl:block xl:w-80 xl:flex-shrink-0 mobile-px">
+              <RightRail 
+                onPromptClick={handlePromptClick}
+                onResourceClick={handleResourceClick}
+              />
+            </div> */}
       </div>
 
       {/* Command Palette */}
