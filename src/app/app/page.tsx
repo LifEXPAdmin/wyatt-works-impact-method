@@ -11,6 +11,7 @@ import RightRail from "@/components/RightRail";
 import CommandPalette from "@/components/CommandPalette";
 import Confetti from "@/components/Confetti";
 import Tour, { Step } from "@/components/Tour";
+import ErrorBoundary from "@/components/ErrorBoundary";
 import { 
   Menu, 
   ArrowRight,
@@ -20,7 +21,7 @@ import {
   Target
 } from "lucide-react";
 
-export default function AppPage() {
+function AppPageContent() {
   const { 
     load, 
     activeProject, 
@@ -38,10 +39,18 @@ export default function AppPage() {
 
   const [isInitialized, setIsInitialized] = useState(false);
 
-  // Get store data first
-  const activeProjectData = activeProject();
-  const currentPhaseData = getPhase(activePhase as PhaseId);
-  const progressData = progress();
+  // Get store data with error handling
+  let activeProjectData = null;
+  let currentPhaseData = null;
+  let progressData = { overall: 0, byPhase: { spark: 0, forge: 0, flow: 0, impact: 0 } };
+
+  try {
+    activeProjectData = activeProject();
+    currentPhaseData = getPhase(activePhase as PhaseId);
+    progressData = progress();
+  } catch (error) {
+    console.error("Error getting store data:", error);
+  }
 
   console.log("Active project data:", activeProjectData);
   console.log("Current phase data:", currentPhaseData);
@@ -49,8 +58,12 @@ export default function AppPage() {
 
   useEffect(() => {
     console.log("Loading blueprint...");
-    load();
-    console.log("Blueprint loaded");
+    try {
+      load();
+      console.log("Blueprint loaded");
+    } catch (error) {
+      console.error("Error loading blueprint:", error);
+    }
     
     // Force a re-render after a short delay to ensure store is updated
     const timer = setTimeout(() => {
@@ -65,10 +78,14 @@ export default function AppPage() {
   useEffect(() => {
     if (isInitialized && !activeProjectData) {
       console.log("Store is empty, forcing initialization...");
-      const { projects } = useBlueprint.getState();
-      if (projects.length === 0) {
-        console.log("No projects found, creating default...");
-        useBlueprint.getState().createProject("My Blueprint");
+      try {
+        const { projects } = useBlueprint.getState();
+        if (projects.length === 0) {
+          console.log("No projects found, creating default...");
+          useBlueprint.getState().createProject("My Blueprint");
+        }
+      } catch (error) {
+        console.error("Error forcing initialization:", error);
       }
     }
   }, [isInitialized, activeProjectData]);
@@ -77,8 +94,12 @@ export default function AppPage() {
   useEffect(() => {
     if (isInitialized) {
       console.log("App initialized, checking store state...");
-      console.log("Projects:", useBlueprint.getState().projects);
-      console.log("Active project ID:", useBlueprint.getState().activeProjectId);
+      try {
+        console.log("Projects:", useBlueprint.getState().projects);
+        console.log("Active project ID:", useBlueprint.getState().activeProjectId);
+      } catch (error) {
+        console.error("Error monitoring store:", error);
+      }
     }
   }, [isInitialized]);
 
@@ -109,21 +130,29 @@ export default function AppPage() {
 
   // Check if this is first visit and show tour
   useEffect(() => {
-    const hasSeenTour = localStorage.getItem("wwm-app-tour-v1");
-    if (!hasSeenTour) {
-      // Small delay to ensure everything is loaded
-      setTimeout(() => setIsTourOpen(true), 1000);
+    try {
+      const hasSeenTour = localStorage.getItem("wwm-app-tour-v1");
+      if (!hasSeenTour) {
+        // Small delay to ensure everything is loaded
+        setTimeout(() => setIsTourOpen(true), 1000);
+      }
+    } catch (error) {
+      console.error("Error checking tour status:", error);
     }
   }, []);
 
   // Handle phase completion celebrations
   useEffect(() => {
-    const currentProgress = progress().overall;
-    if (currentProgress === 100 && lastProgress < 100) {
-      setShowConfetti(true);
-      setTimeout(() => setShowConfetti(false), 3000);
+    try {
+      const currentProgress = progress().overall;
+      if (currentProgress === 100 && lastProgress < 100) {
+        setShowConfetti(true);
+        setTimeout(() => setShowConfetti(false), 3000);
+      }
+      setLastProgress(currentProgress);
+    } catch (error) {
+      console.error("Error handling progress:", error);
     }
-    setLastProgress(currentProgress);
   }, [progress, lastProgress]);
 
   // Keyboard shortcuts
@@ -148,31 +177,39 @@ export default function AppPage() {
   };
 
   const handlePromptClick = (prompt: string) => {
-    // Find the first task with notes in the current phase
-    const phase = activeProjectData?.blueprint.phases.find(p => p.id === activePhase);
-    if (phase) {
-      const findTaskWithNotes = (tasks: Task[]): Task | null => {
-        for (const task of tasks) {
-          if (task.notes) return task;
-          if (task.children) {
-            const found = findTaskWithNotes(task.children);
-            if (found) return found;
+    try {
+      // Find the first task with notes in the current phase
+      const phase = activeProjectData?.blueprint.phases.find(p => p.id === activePhase);
+      if (phase) {
+        const findTaskWithNotes = (tasks: Task[]): Task | null => {
+          for (const task of tasks) {
+            if (task.notes) return task;
+            if (task.children) {
+              const found = findTaskWithNotes(task.children);
+              if (found) return found;
+            }
           }
+          return null;
+        };
+        
+        const taskWithNotes = findTaskWithNotes(phase.tasks);
+        if (taskWithNotes) {
+          updateNotes(taskWithNotes.id, `${taskWithNotes.notes}\n\n${prompt}`);
         }
-        return null;
-      };
-      
-      const taskWithNotes = findTaskWithNotes(phase.tasks);
-      if (taskWithNotes) {
-        updateNotes(taskWithNotes.id, `${taskWithNotes.notes}\n\n${prompt}`);
       }
+    } catch (error) {
+      console.error("Error handling prompt click:", error);
     }
   };
 
   const handleResourceClick = (resource: { title: string; description: string }) => {
-    // Add resource to notes
-    const citation = `\n\n**Resource**: ${resource.title} - ${resource.description}`;
-    handlePromptClick(citation);
+    try {
+      // Add resource to notes
+      const citation = `\n\n**Resource**: ${resource.title} - ${resource.description}`;
+      handlePromptClick(citation);
+    } catch (error) {
+      console.error("Error handling resource click:", error);
+    }
   };
 
   if (!isInitialized || !activeProjectData) {
@@ -349,5 +386,13 @@ export default function AppPage() {
         storageKey="wwm-app-tour-v1"
       />
     </div>
+  );
+}
+
+export default function AppPage() {
+  return (
+    <ErrorBoundary>
+      <AppPageContent />
+    </ErrorBoundary>
   );
 }
