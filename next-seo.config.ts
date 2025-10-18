@@ -77,3 +77,4 @@ const config: DefaultSeoProps = {
 };
 
 export default config;
+
