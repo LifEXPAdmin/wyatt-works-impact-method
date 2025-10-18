@@ -65,6 +65,19 @@ function AppPageContent() {
   if (currentPhaseData) {
     console.log("Phase tasks:", currentPhaseData.phase.tasks);
     console.log("Tasks length:", currentPhaseData.phase.tasks?.length || 0);
+    console.log("Task IDs:", currentPhaseData.phase.tasks?.map(t => t.id) || []);
+    console.log("Task titles:", currentPhaseData.phase.tasks?.map(t => t.title) || []);
+    
+    // Debug subtasks
+    currentPhaseData.phase.tasks?.forEach((task, index) => {
+      console.log(`Task ${index + 1} (${task.id}): ${task.title}`);
+      console.log(`  Subtasks: ${task.children?.length || 0}`);
+      if (task.children) {
+        task.children.forEach((subtask, subIndex) => {
+          console.log(`    Subtask ${subIndex + 1}: ${subtask.title}`);
+        });
+      }
+    });
   }
 
   useEffect(() => {
@@ -103,12 +116,15 @@ function AppPageContent() {
             console.log("Active project found:", activeProject.name);
             console.log("Active project phases:", activeProject.blueprint.phases.length);
             
-            // Check if Spark phase has tasks
+            // Check if Spark phase has all tasks (should be 10)
             const sparkPhase = activeProject.blueprint.phases.find(p => p.id === 'spark');
             if (sparkPhase) {
               console.log("Spark phase tasks:", sparkPhase.tasks.length);
-              if (sparkPhase.tasks.length === 0) {
-                console.log("Spark phase has no tasks, recreating project with sample data...");
+              console.log("Expected: 10 tasks");
+              if (sparkPhase.tasks.length < 10) {
+                console.log(`Spark phase has only ${sparkPhase.tasks.length} tasks, recreating project with complete sample data...`);
+                // Delete the current project and create a new one
+                useBlueprint.getState().deleteProject(activeProjectId);
                 useBlueprint.getState().createProject("My Blueprint");
               }
             }
@@ -424,15 +440,6 @@ function AppPageContent() {
                 {currentPhaseData?.phase.title}
               </span>
             </div>
-            
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => setIsMobileMenuOpen(true)}
-              className="touch-target"
-            >
-              <Menu className="w-4 h-4" />
-            </Button>
           </div>
 
               {/* Simplified Phase Header */}
@@ -513,9 +520,34 @@ function AppPageContent() {
                   <div className="mb-4 p-3 bg-yellow-500/10 border border-yellow-500/20 rounded-lg text-xs">
                     <div>Debug Info:</div>
                     <div>Active Phase: {activePhase}</div>
-                    <div>Tasks Count: {currentPhaseData?.phase.tasks?.length || 0}</div>
+                    <div>Tasks Count: {currentPhaseData?.phase.tasks?.length || 0} (Expected: 10)</div>
+                    <div>Subtasks Count: {currentPhaseData?.phase.tasks?.reduce((sum, task) => sum + (task.children?.length || 0), 0) || 0} (Expected: 50)</div>
                     <div>Project ID: {activeProjectData?.id}</div>
                     <div>Project Name: {activeProjectData?.name}</div>
+                    <div className="mt-2 space-x-2">
+                      <button 
+                        onClick={() => {
+                          console.log("Force recreating project...");
+                          if (activeProjectData?.id) {
+                            useBlueprint.getState().deleteProject(activeProjectData.id);
+                          }
+                          useBlueprint.getState().createProject("My Blueprint");
+                        }}
+                        className="px-2 py-1 bg-red-500 text-white rounded text-xs"
+                      >
+                        Force Recreate Project
+                      </button>
+                      <button 
+                        onClick={() => {
+                          console.log("Clearing localStorage and reloading...");
+                          localStorage.removeItem("wwm-projects-v1");
+                          window.location.reload();
+                        }}
+                        className="px-2 py-1 bg-orange-500 text-white rounded text-xs"
+                      >
+                        Clear Storage & Reload
+                      </button>
+                    </div>
                   </div>
                 )}
                 
