@@ -19,7 +19,8 @@ import {
   Sparkles,
   Hammer,
   Zap,
-  Target
+  Target,
+  X
 } from "lucide-react";
 
 function AppPageContent() {
@@ -59,6 +60,12 @@ function AppPageContent() {
   console.log("Progress data:", progressData);
   console.log("Is initialized:", isInitialized);
   console.log("Active phase:", activePhase);
+  
+  // Debug task data
+  if (currentPhaseData) {
+    console.log("Phase tasks:", currentPhaseData.phase.tasks);
+    console.log("Tasks length:", currentPhaseData.phase.tasks?.length || 0);
+  }
 
   useEffect(() => {
     console.log("Loading blueprint...");
@@ -84,9 +91,14 @@ function AppPageContent() {
       console.log("Store is empty, forcing initialization...");
       try {
         const { projects } = useBlueprint.getState();
+        console.log("Current projects:", projects);
         if (projects.length === 0) {
           console.log("No projects found, creating default...");
-          useBlueprint.getState().createProject("My Blueprint");
+          const projectId = useBlueprint.getState().createProject("My Blueprint");
+          console.log("Created project with ID:", projectId);
+        } else {
+          console.log("Projects exist, setting active project to first one");
+          useBlueprint.getState().setActiveProject(projects[0].id);
         }
       } catch (error) {
         console.error("Error forcing initialization:", error);
@@ -207,13 +219,17 @@ function AppPageContent() {
             <Button
               onClick={() => {
                 try {
-                  useBlueprint.getState().createProject("My Blueprint");
-                  window.location.reload();
+                  const projectId = useBlueprint.getState().createProject("My Blueprint");
+                  console.log("Created project:", projectId);
+                  // Force a re-render instead of reload
+                  setTimeout(() => {
+                    window.location.reload();
+                  }, 100);
                 } catch (error) {
                   console.error("Error creating project:", error);
                 }
               }}
-              className="bg-[var(--brand)] text-black hover:opacity-90"
+              className="bg-[var(--brand)] text-black hover:opacity-90 touch-target"
             >
               Create New Blueprint
             </Button>
@@ -232,27 +248,42 @@ function AppPageContent() {
         <AnimatePresence>
           {isMobileMenuOpen && (
             <motion.div
-              className="fixed inset-0 bg-black/50 backdrop-blur-sm z-30 lg:hidden"
+              className="mobile-overlay-fix bg-black/50 backdrop-blur-sm lg:hidden mobile-backdrop-z"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setIsMobileMenuOpen(false)}
             >
               <motion.div
-                className="fixed top-0 left-0 h-full w-80 max-w-[90vw] bg-[var(--card)] border-r border-[var(--border)] z-40"
+                className="mobile-nav-fix w-80 max-w-[90vw] bg-[var(--card)] border-r border-[var(--border)] mobile-modal-z"
                 initial={{ x: "-100%" }}
                 animate={{ x: 0 }}
                 exit={{ x: "-100%" }}
                 transition={{ type: "spring", damping: 25, stiffness: 200 }}
                 onClick={(e) => e.stopPropagation()}
               >
-                    <div className="p-4 pt-16">
-                      <PhaseNav 
-                        active={activePhase} 
-                        onPhaseChange={handlePhaseChange}
-                        onCollapseChange={handleSidebarCollapseChange}
-                      />
-                    </div>
+                <div className="p-4 pt-16 mobile-safe-area">
+                  {/* Close Button */}
+                  <div className="flex justify-end mb-4">
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => setIsMobileMenuOpen(false)}
+                      className="touch-target"
+                    >
+                      <X className="w-5 h-5" />
+                    </Button>
+                  </div>
+                  
+                  <PhaseNav 
+                    active={activePhase} 
+                    onPhaseChange={(phaseId) => {
+                      handlePhaseChange(phaseId);
+                      setIsMobileMenuOpen(false); // Close menu when phase is selected
+                    }}
+                    onCollapseChange={handleSidebarCollapseChange}
+                  />
+                </div>
               </motion.div>
             </motion.div>
           )}
@@ -268,7 +299,7 @@ function AppPageContent() {
             </div>
 
         {/* Main Content */}
-        <div className={`flex-1 flex flex-col min-w-0 transition-all duration-300 ${isSidebarCollapsed ? 'ml-0' : ''}`}>
+        <div className="flex-1 flex flex-col min-w-0 transition-all duration-300">
           {/* Mobile Header */}
           <div className="lg:hidden flex items-center justify-between mobile-px py-4 border-b border-[var(--border)]">
             <Button
@@ -304,11 +335,11 @@ function AppPageContent() {
           </div>
 
               {/* Simplified Phase Header */}
-              <div className="mobile-px py-6">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <h1 className="text-2xl font-bold">{currentPhaseData?.phase.title}</h1>
-                    <p className="text-zinc-400 mt-1">{currentPhaseData?.phase.summary}</p>
+              <div className="mobile-px py-4 sm:py-6">
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                  <div className="flex-1 min-w-0">
+                    <h1 className="mobile-text-xl font-bold break-words">{currentPhaseData?.phase.title}</h1>
+                    <p className="mobile-text-sm text-zinc-400 mt-1 break-words">{currentPhaseData?.phase.summary}</p>
                     
                     {/* Progress Dots for 4 Phases */}
                     <div className="flex gap-2 mt-3">
@@ -328,7 +359,7 @@ function AppPageContent() {
                     </div>
                   </div>
                   
-                  <div className="flex items-center gap-4">
+                  <div className="flex items-center gap-3 sm:gap-4 flex-shrink-0">
                     {/* Export Button */}
                     <Button
                       onClick={async () => {
@@ -359,14 +390,14 @@ function AppPageContent() {
                           alert(`Export failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
                         }
                       }}
-                      className="bg-[var(--brand)] text-black hover:opacity-90"
+                      className="bg-[var(--brand)] text-black hover:opacity-90 mobile-text-sm touch-target"
                     >
                       Export PDF
                     </Button>
                     
                     <div className="text-right">
-                      <div className="text-sm text-zinc-400">Progress</div>
-                      <div className="text-xl font-bold text-[var(--brand)]">
+                      <div className="mobile-text-sm text-zinc-400">Progress</div>
+                      <div className="mobile-text-lg font-bold text-[var(--brand)]">
                         {currentPhaseData?.progress || 0}%
                       </div>
                     </div>
@@ -375,7 +406,18 @@ function AppPageContent() {
               </div>
 
               {/* Simplified Task List with fade effects */}
-              <div id="task-list" className="flex-1 overflow-y-auto mobile-px py-6 relative">
+              <div id="task-list" className="flex-1 overflow-y-auto mobile-px py-4 sm:py-6 relative">
+                {/* Debug info */}
+                {process.env.NODE_ENV === 'development' && (
+                  <div className="mb-4 p-3 bg-yellow-500/10 border border-yellow-500/20 rounded-lg text-xs">
+                    <div>Debug Info:</div>
+                    <div>Active Phase: {activePhase}</div>
+                    <div>Tasks Count: {currentPhaseData?.phase.tasks?.length || 0}</div>
+                    <div>Project ID: {activeProjectData?.id}</div>
+                    <div>Project Name: {activeProjectData?.name}</div>
+                  </div>
+                )}
+                
                 {/* Top fade overlay */}
                 <div className="absolute top-0 left-0 right-0 h-8 bg-gradient-to-b from-[var(--bg)] to-transparent z-10 pointer-events-none" />
                 
@@ -390,8 +432,8 @@ function AppPageContent() {
 
               {/* Simplified Footer */}
               <div className="mobile-px py-4 bg-[var(--card)]">
-                <div className="flex items-center justify-between">
-                  <div className="text-sm text-zinc-400">
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                  <div className="mobile-text-sm text-zinc-400 break-words">
                     {currentPhaseData?.tasksCompleted || 0} of {currentPhaseData?.totalTasks || 0} main tasks completed
                     {currentPhaseData?.totalSubtasks ? ` • ${currentPhaseData.subtasksCompleted || 0} of ${currentPhaseData.totalSubtasks} subtasks completed` : ''}
                   </div>
@@ -408,7 +450,7 @@ function AppPageContent() {
                   }
                 }}
                 disabled={activePhase === 'impact'}
-                className="touch-target"
+                className="touch-target mobile-text-sm"
               >
                 Next Phase
                 <ArrowRight className="w-4 h-4 ml-2" />

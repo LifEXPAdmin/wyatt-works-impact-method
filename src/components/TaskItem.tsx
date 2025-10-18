@@ -124,7 +124,7 @@ export default function TaskItem({ task, phaseId }: TaskItemProps) {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.2 }}
     >
-      <div className="p-6">
+      <div className="p-4 sm:p-6">
         <div className="flex items-start gap-4">
           {/* Drag Handle */}
           <div
@@ -160,7 +160,7 @@ export default function TaskItem({ task, phaseId }: TaskItemProps) {
               ) : (
                 <h3
                   className={cn(
-                    "text-lg font-semibold cursor-pointer hover:text-[var(--brand)] transition-colors break-words",
+                    "mobile-text-base font-semibold cursor-pointer hover:text-[var(--brand)] transition-colors break-words hyphens-auto",
                     task.done && "line-through text-zinc-500"
                   )}
                   onDoubleClick={() => {
@@ -182,7 +182,7 @@ export default function TaskItem({ task, phaseId }: TaskItemProps) {
 
             {/* Description */}
             {task.description && (
-              <p className="text-sm text-zinc-400 mb-3 break-words whitespace-pre-wrap">{task.description}</p>
+              <p className="mobile-text-sm text-zinc-400 mb-3 break-words whitespace-pre-wrap hyphens-auto leading-relaxed">{task.description}</p>
             )}
 
             {/* Tips */}
@@ -218,7 +218,7 @@ export default function TaskItem({ task, phaseId }: TaskItemProps) {
                   onChange={(e) => handleNotesChange(e.target.value)}
                   placeholder="Add notes..."
                   className={cn(
-                    "min-h-[80px] resize-none rounded-xl",
+                    "min-h-[60px] sm:min-h-[80px] resize-none rounded-xl mobile-text-sm",
                     task.done && "opacity-50"
                   )}
                   disabled={task.done}
@@ -442,7 +442,7 @@ function SubtaskItem({ subtask }: SubtaskItemProps) {
       animate={{ opacity: 1, x: 0 }}
       transition={{ duration: 0.15 }}
     >
-      <div className="p-3">
+      <div className="p-2 sm:p-3">
         {/* Main Row */}
         <div className="flex items-start gap-3">
           {/* Drag Handle */}
@@ -477,7 +477,7 @@ function SubtaskItem({ subtask }: SubtaskItemProps) {
             ) : (
               <span
                 className={cn(
-                  "text-sm cursor-pointer hover:text-[var(--brand)] transition-colors break-words",
+                  "mobile-text-sm cursor-pointer hover:text-[var(--brand)] transition-colors break-words hyphens-auto leading-relaxed",
                   subtask.done && "line-through text-zinc-500"
                 )}
                 onDoubleClick={() => {
@@ -533,7 +533,7 @@ function SubtaskItem({ subtask }: SubtaskItemProps) {
               animate={{ opacity: 1, height: "auto" }}
               exit={{ opacity: 0, height: 0 }}
               transition={{ duration: 0.2 }}
-              className="mt-3 p-3 bg-[var(--brand)]/10 border border-[var(--brand)]/20 rounded-lg"
+              className="mt-3 p-3 bg-[var(--brand)]/10 border border-[var(--brand)]/20 rounded-lg max-h-64 overflow-y-auto"
             >
               <div className="flex items-start justify-between gap-2 mb-2">
                 <h4 className="text-xs font-semibold text-[var(--brand)]">💡 AI Prompt</h4>
@@ -541,16 +541,16 @@ function SubtaskItem({ subtask }: SubtaskItemProps) {
                   variant="ghost"
                   size="sm"
                   onClick={() => copyPromptToClipboard(getSuggestedPrompt())}
-                  className="text-xs h-6 px-2 text-[var(--brand)] hover:bg-[var(--brand)]/20"
+                  className="text-xs h-6 px-2 text-[var(--brand)] hover:bg-[var(--brand)]/20 touch-target"
                 >
-                  📋 Copy Prompt
+                  📋 Copy
                 </Button>
               </div>
-              <p className="text-xs text-zinc-300 mb-2 break-words whitespace-pre-wrap">
+              <p className="text-xs text-zinc-300 mb-2 break-words whitespace-pre-wrap hyphens-auto leading-relaxed">
                 {getSuggestedPrompt()}
               </p>
               <p className="text-xs text-zinc-400 italic">
-                ⚠️ Important: Use this prompt as a starting point, then customize it with your specific details and personal touch. Don&apos;t just copy-paste - make it yours!
+                ⚠️ Customize with your specific details - don&apos;t just copy-paste!
               </p>
             </motion.div>
           )}
@@ -573,7 +573,7 @@ function SubtaskItem({ subtask }: SubtaskItemProps) {
                   value={subtask.notes ?? ""}
                   onChange={(e) => handleNotesChange(e.target.value)}
                   placeholder="Add notes for this step..."
-                  className="min-h-[60px] resize-none rounded-lg text-xs"
+                  className="min-h-[50px] sm:min-h-[60px] resize-none rounded-lg mobile-text-sm"
                 />
               </div>
             </motion.div>
