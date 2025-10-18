@@ -22,6 +22,7 @@ import {
   Target,
   X
 } from "lucide-react";
+import { sampleBlueprint } from "@/lib/sample-data";
 
 function AppPageContent() {
   const { 
@@ -60,6 +61,10 @@ function AppPageContent() {
   console.log("Progress data:", progressData);
   console.log("Is initialized:", isInitialized);
   console.log("Active phase:", activePhase);
+  
+  // Debug sample data directly
+  console.log("Sample blueprint spark phase tasks:", sampleBlueprint.phases.find(p => p.id === 'spark')?.tasks.length);
+  console.log("Sample blueprint spark phase task IDs:", sampleBlueprint.phases.find(p => p.id === 'spark')?.tasks.map(t => t.id));
   
   // Debug task data
   if (currentPhaseData) {
@@ -110,7 +115,27 @@ function AppPageContent() {
           console.log("No projects found, creating default...");
           const projectId = useBlueprint.getState().createProject("My Blueprint");
           console.log("Created project with ID:", projectId);
-        } else if (activeProjectId) {
+        } else {
+          // Check all projects for correct task count
+          let needsRecreation = false;
+          projects.forEach(project => {
+            const sparkPhase = project.blueprint.phases.find(p => p.id === 'spark');
+            if (sparkPhase && sparkPhase.tasks.length < 10) {
+              console.log(`Project ${project.name} has only ${sparkPhase.tasks.length} tasks, marking for recreation`);
+              needsRecreation = true;
+            }
+          });
+          
+          if (needsRecreation) {
+            console.log("Projects have incorrect task count, clearing all and creating fresh project...");
+            // Clear all projects
+            projects.forEach(project => {
+              useBlueprint.getState().deleteProject(project.id);
+            });
+            // Create fresh project
+            const projectId = useBlueprint.getState().createProject("My Blueprint");
+            console.log("Created fresh project with ID:", projectId);
+          } else if (activeProjectId) {
           const activeProject = projects.find(p => p.id === activeProjectId);
           if (activeProject) {
             console.log("Active project found:", activeProject.name);
