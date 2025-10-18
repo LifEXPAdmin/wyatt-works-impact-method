@@ -5,35 +5,36 @@ import { cn } from "@/lib/utils";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
-import { Sparkles, Hammer, Zap, Target, ChevronLeft, ChevronRight } from "lucide-react";
+import { Hammer, Rocket, TrendingUp, ChevronLeft, ChevronRight } from "lucide-react";
+import { CustomSpark } from "./icons/CustomSpark";
 
 const phases = [
   { 
     id: 'spark' as const, 
     title: "The Spark", 
     summary: "Clarify vision & target.",
-    icon: Sparkles,
+    icon: CustomSpark,
     color: "from-[var(--brand)] to-[var(--gold)]"
   },
   { 
     id: 'forge' as const, 
-    title: "The Forge", 
+    title: "The Build", 
     summary: "Make it real.",
     icon: Hammer,
     color: "from-[var(--gold)] to-[var(--brand)]"
   },
   { 
     id: 'flow' as const, 
-    title: "The Flow", 
+    title: "The Launch", 
     summary: "Create consistent momentum.",
-    icon: Zap,
+    icon: Rocket,
     color: "from-[var(--brand)] to-[var(--gold)]"
   },
   { 
     id: 'impact' as const, 
-    title: "The Impact", 
+    title: "The Scale", 
     summary: "Launch offers & partnerships.",
-    icon: Target,
+    icon: TrendingUp,
     color: "from-[var(--gold)] to-[var(--brand)]"
   }
 ];

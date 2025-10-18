@@ -2,30 +2,31 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
-import { X, Sparkles, Hammer, Zap, Target } from "lucide-react";
+import { X, Hammer, Rocket, TrendingUp } from "lucide-react";
+import { CustomSpark } from "./icons/CustomSpark";
 
 const steps = [
   {
-    icon: Sparkles,
+    icon: CustomSpark,
     title: "The Spark",
     description: "Clarify your vision and define your target audience. This is where great ideas take shape.",
     color: "from-[var(--brand)] to-[var(--gold)]",
   },
   {
     icon: Hammer,
-    title: "The Forge",
+    title: "The Build",
     description: "Build your brand foundation with domain, design, and content. Make your idea real.",
     color: "from-[var(--gold)] to-[var(--brand)]",
   },
   {
-    icon: Zap,
-    title: "The Flow",
+    icon: Rocket,
+    title: "The Launch",
     description: "Create consistent momentum through regular content and audience engagement.",
     color: "from-[var(--brand)] to-[var(--gold)]",
   },
   {
-    icon: Target,
-    title: "The Impact",
+    icon: TrendingUp,
+    title: "The Scale",
     description: "Launch offers, build partnerships, and scale your system for maximum impact.",
     color: "from-[var(--gold)] to-[var(--brand)]",
   },
