@@ -45,7 +45,7 @@ export default function TaskItem({ task, phaseId }: TaskItemProps) {
   
   const [isEditing, setIsEditing] = useState(false);
   const [editTitle, setEditTitle] = useState(task.title);
-  const [isExpanded, setIsExpanded] = useState(true);
+  const [isExpanded, setIsExpanded] = useState(true); // Always expanded by default for better mobile UX
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
@@ -233,7 +233,7 @@ export default function TaskItem({ task, phaseId }: TaskItemProps) {
                   variant="ghost"
                   size="sm"
                   onClick={() => setIsExpanded(!isExpanded)}
-                  className="mb-3 text-zinc-400 hover:text-zinc-300"
+                  className="mb-3 text-zinc-400 hover:text-zinc-300 touch-target"
                 >
                   {isExpanded ? <ChevronDown className="w-4 h-4 mr-1" /> : <ChevronRight className="w-4 h-4 mr-1" />}
                   {task.children.length} subtasks
@@ -246,7 +246,7 @@ export default function TaskItem({ task, phaseId }: TaskItemProps) {
                       animate={{ opacity: 1, height: "auto" }}
                       exit={{ opacity: 0, height: 0 }}
                       transition={{ duration: 0.2 }}
-                      className="space-y-2 ml-4"
+                      className="space-y-2 ml-2 sm:ml-4"
                     >
                       {task.children.map((subtask) => (
                         <SubtaskItem
