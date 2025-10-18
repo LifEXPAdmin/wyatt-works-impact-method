@@ -83,69 +83,73 @@ export default function NavBar() {
               </div>
             )}
 
-            {/* Mobile Menu Button */}
-            <button
-              onClick={toggleMobileMenu}
-              className="md:hidden touch-target p-2 text-zinc-300 hover:text-white transition-colors no-zoom"
-              aria-label="Toggle mobile menu"
-            >
-              {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
-            </button>
+            {/* Mobile Menu Button - Hidden on app page */}
+            {!isBlueprintPage && (
+              <button
+                onClick={toggleMobileMenu}
+                className="md:hidden touch-target p-2 text-zinc-300 hover:text-white transition-colors no-zoom"
+                aria-label="Toggle mobile menu"
+              >
+                {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+              </button>
+            )}
           </div>
         </div>
       </motion.nav>
 
-      {/* Mobile Menu Overlay */}
-      <AnimatePresence>
-        {isMobileMenuOpen && (
-          <>
-            {/* Backdrop */}
-            <motion.div
-              className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40 md:hidden"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              onClick={toggleMobileMenu}
-            />
+      {/* Mobile Menu Overlay - Hidden on app page */}
+      {!isBlueprintPage && (
+        <AnimatePresence>
+          {isMobileMenuOpen && (
+            <>
+              {/* Backdrop */}
+              <motion.div
+                className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40 md:hidden"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                onClick={toggleMobileMenu}
+              />
 
-            {/* Mobile Menu */}
-            <motion.div
-              className="fixed top-0 right-0 h-full w-80 max-w-[90vw] bg-[var(--card)] border-l border-[var(--border)] z-50 md:hidden"
-              initial={{ x: "100%" }}
-              animate={{ x: 0 }}
-              exit={{ x: "100%" }}
-              transition={{ type: "spring", damping: 25, stiffness: 200 }}
-            >
-              <div className="p-6 pt-20">
-                {/* Mobile Navigation Links */}
-                <div className="space-y-2 mb-8">
-                  {navLinks.map((link) => (
-                    <Link
-                      key={link.href}
-                      href={link.href}
-                      className="block mobile-text-lg font-medium text-zinc-300 hover:text-[var(--brand)] transition-colors touch-target py-2"
+              {/* Mobile Menu */}
+              <motion.div
+                className="fixed top-0 right-0 h-full w-80 max-w-[90vw] bg-[var(--card)] border-l border-[var(--border)] z-50 md:hidden"
+                initial={{ x: "100%" }}
+                animate={{ x: 0 }}
+                exit={{ x: "100%" }}
+                transition={{ type: "spring", damping: 25, stiffness: 200 }}
+              >
+                <div className="p-6 pt-20">
+                  {/* Mobile Navigation Links */}
+                  <div className="space-y-2 mb-8">
+                    {navLinks.map((link) => (
+                      <Link
+                        key={link.href}
+                        href={link.href}
+                        className="block mobile-text-lg font-medium text-zinc-300 hover:text-[var(--brand)] transition-colors touch-target py-2"
+                        onClick={toggleMobileMenu}
+                      >
+                        {link.label}
+                      </Link>
+                    ))}
+                  </div>
+
+                  {/* Mobile CTA - Hidden on blueprint page */}
+                  {!isBlueprintPage && (
+                    <Button
+                      asChild
+                      className="w-full bg-[var(--brand)] text-black hover:opacity-90 touch-target mobile-text-base"
                       onClick={toggleMobileMenu}
                     >
-                      {link.label}
-                    </Link>
-                  ))}
+                      <Link href="/app">Start Free Blueprint</Link>
+                    </Button>
+                  )}
                 </div>
-
-                {/* Mobile CTA - Hidden on blueprint page */}
-                {!isBlueprintPage && (
-                  <Button
-                    asChild
-                    className="w-full bg-[var(--brand)] text-black hover:opacity-90 touch-target mobile-text-base"
-                    onClick={toggleMobileMenu}
-                  >
-                    <Link href="/app">Start Free Blueprint</Link>
-                  </Button>
-                )}
-              </div>
-            </motion.div>
-          </>
-        )}
-      </AnimatePresence>
+              </motion.div>
+            </>
+          )}
+        </AnimatePresence>
+      )}
     </>
   );
 }

@@ -124,19 +124,36 @@ export default function TaskItem({ task, phaseId }: TaskItemProps) {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.2 }}
     >
-      <div className="p-4 sm:p-6">
-        <div className="flex items-start gap-4">
-          {/* Drag Handle */}
+      <div className="p-3 sm:p-6">
+        <div className="flex items-start gap-2 sm:gap-4">
+          {/* Drag Handle - Hidden on mobile */}
           <div
             {...attributes}
             {...listeners}
-            className="mt-1 cursor-grab hover:cursor-grabbing text-zinc-400 hover:text-zinc-300 transition-colors"
+            className="hidden sm:block mt-1 cursor-grab hover:cursor-grabbing text-zinc-400 hover:text-zinc-300 transition-colors"
           >
             <GripVertical className="w-4 h-4" />
           </div>
 
-          {/* Checkbox */}
-          <div className="mt-1">
+          {/* Mobile Checkbox - Compact circle */}
+          <div className="mt-1 sm:hidden">
+            <button
+              onClick={handleTaskClick}
+              className={cn(
+                "w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all duration-200 touch-target",
+                task.done 
+                  ? "border-[var(--brand)] bg-[var(--brand)]" 
+                  : "border-zinc-400 hover:border-[var(--brand)]"
+              )}
+            >
+              {task.done && (
+                <div className="w-2 h-2 bg-white rounded-full" />
+              )}
+            </button>
+          </div>
+
+          {/* Desktop Checkbox */}
+          <div className="hidden sm:block mt-1">
             <Checkbox
               checked={task.done}
               onCheckedChange={handleTaskClick}
@@ -160,7 +177,7 @@ export default function TaskItem({ task, phaseId }: TaskItemProps) {
               ) : (
                 <h3
                   className={cn(
-                    "mobile-text-base font-semibold cursor-pointer hover:text-[var(--brand)] transition-colors break-words hyphens-auto",
+                    "text-sm sm:text-base font-semibold cursor-pointer hover:text-[var(--brand)] transition-colors break-words hyphens-auto leading-tight",
                     task.done && "line-through text-zinc-500"
                   )}
                   onDoubleClick={() => {
@@ -182,7 +199,7 @@ export default function TaskItem({ task, phaseId }: TaskItemProps) {
 
             {/* Description */}
             {task.description && (
-              <p className="mobile-text-sm text-zinc-400 mb-3 break-words whitespace-pre-wrap hyphens-auto leading-relaxed">{task.description}</p>
+              <p className="text-xs sm:text-sm text-zinc-400 mb-3 break-words whitespace-pre-wrap hyphens-auto leading-relaxed">{task.description}</p>
             )}
 
             {/* Tips */}
@@ -246,7 +263,7 @@ export default function TaskItem({ task, phaseId }: TaskItemProps) {
                       animate={{ opacity: 1, height: "auto" }}
                       exit={{ opacity: 0, height: 0 }}
                       transition={{ duration: 0.2 }}
-                      className="space-y-2 ml-2 sm:ml-4"
+                      className="space-y-2 ml-1 sm:ml-4"
                     >
                       {task.children.map((subtask) => (
                         <SubtaskItem
@@ -444,18 +461,35 @@ function SubtaskItem({ subtask }: SubtaskItemProps) {
     >
       <div className="p-2 sm:p-3">
         {/* Main Row */}
-        <div className="flex items-start gap-3">
-          {/* Drag Handle */}
+        <div className="flex items-start gap-2 sm:gap-3">
+          {/* Drag Handle - Hidden on mobile */}
           <div
             {...attributes}
             {...listeners}
-            className="mt-1 cursor-grab hover:cursor-grabbing text-zinc-400 hover:text-zinc-300 transition-colors"
+            className="hidden sm:block mt-1 cursor-grab hover:cursor-grabbing text-zinc-400 hover:text-zinc-300 transition-colors"
           >
             <GripVertical className="w-3 h-3" />
           </div>
 
-          {/* Checkbox */}
-          <div className="mt-1">
+          {/* Mobile Checkbox - Compact circle */}
+          <div className="mt-1 sm:hidden">
+            <button
+              onClick={() => toggleSubtask(subtask.id)}
+              className={cn(
+                "w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all duration-200 touch-target",
+                subtask.done 
+                  ? "border-green-500 bg-green-500" 
+                  : "border-zinc-400 hover:border-green-500"
+              )}
+            >
+              {subtask.done && (
+                <div className="w-1.5 h-1.5 bg-white rounded-full" />
+              )}
+            </button>
+          </div>
+
+          {/* Desktop Checkbox */}
+          <div className="hidden sm:block mt-1">
             <Checkbox
               checked={subtask.done}
               onCheckedChange={() => toggleSubtask(subtask.id)}
@@ -477,7 +511,7 @@ function SubtaskItem({ subtask }: SubtaskItemProps) {
             ) : (
               <span
                 className={cn(
-                  "mobile-text-sm cursor-pointer hover:text-[var(--brand)] transition-colors break-words hyphens-auto leading-relaxed",
+                  "text-xs sm:text-sm cursor-pointer hover:text-[var(--brand)] transition-colors break-words hyphens-auto leading-tight",
                   subtask.done && "line-through text-zinc-500"
                 )}
                 onDoubleClick={() => {
