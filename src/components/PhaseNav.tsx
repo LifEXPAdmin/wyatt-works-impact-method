@@ -131,10 +131,7 @@ export default function PhaseNav({ active, onPhaseChange, onCollapseChange }: Ph
                         )}
                       >
                         <div className="flex items-center gap-3 mb-2">
-                          <div className={cn(
-                            "w-10 h-10 rounded-lg bg-gradient-to-r flex items-center justify-center",
-                            phase.color
-                          )}>
+                          <div className="w-10 h-10 rounded-lg bg-[var(--brand)] flex items-center justify-center">
                             <Icon className="w-5 h-5 text-white" />
                           </div>
                           <div className="flex-1 min-w-0">

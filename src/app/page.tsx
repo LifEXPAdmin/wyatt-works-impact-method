@@ -3,7 +3,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { motion, AnimatePresence, type Variants } from "framer-motion";
 import EnhancedPhaseCard from "@/components/EnhancedPhaseCard";
-import { Hammer, Rocket, TrendingUp, Brain, Lightbulb, RotateCcw, CheckCircle, AlertTriangle, X } from "lucide-react";
+import { Hammer, Rocket, TrendingUp, Brain, Lightbulb, RotateCcw, CheckCircle, AlertTriangle, X, Users, Search, CheckSquare } from "lucide-react";
 import { CustomSpark } from "@/components/icons/CustomSpark";
 import { useState, useEffect } from "react";
 
@@ -80,7 +80,7 @@ export default function Home() {
     },
     {
       title: "Understanding AI Types",
-      icon: Rocket,
+      icon: Users,
       content: (
         <div className="space-y-4">
             <p className="text-zinc-300 mb-4">
@@ -109,7 +109,7 @@ export default function Home() {
     },
     {
       title: "How to Use AI Positively",
-      icon: TrendingUp,
+      icon: CheckSquare,
       content: (
         <div className="space-y-4">
           <div className="grid gap-3">
@@ -418,7 +418,7 @@ export default function Home() {
               variants={cardVariants}
               className="bg-[var(--card)] border border-[var(--border)] rounded-xl p-6 hover:border-[var(--brand)]/50 transition-colors"
             >
-              <div className="w-12 h-12 rounded-lg bg-gradient-to-r from-[var(--brand)] to-[var(--gold)] flex items-center justify-center mb-4">
+              <div className="w-12 h-12 rounded-lg bg-[var(--brand)] flex items-center justify-center mb-4">
                 <Brain className="w-6 h-6 text-white" />
               </div>
               <h3 className="font-semibold text-lg mb-2">Expert Consultant</h3>
@@ -431,8 +431,8 @@ export default function Home() {
               variants={cardVariants}
               className="bg-[var(--card)] border border-[var(--border)] rounded-xl p-6 hover:border-[var(--brand)]/50 transition-colors"
             >
-              <div className="w-12 h-12 rounded-lg bg-gradient-to-r from-[var(--brand)] to-[var(--gold)] flex items-center justify-center mb-4">
-                <Rocket className="w-6 h-6 text-white" />
+              <div className="w-12 h-12 rounded-lg bg-[var(--brand)] flex items-center justify-center mb-4">
+                <Users className="w-6 h-6 text-white" />
               </div>
               <h3 className="font-semibold text-lg mb-2">Brainstorming Partner</h3>
               <p className="text-sm text-zinc-400">
@@ -444,8 +444,8 @@ export default function Home() {
               variants={cardVariants}
               className="bg-[var(--card)] border border-[var(--border)] rounded-xl p-6 hover:border-[var(--brand)]/50 transition-colors"
             >
-              <div className="w-12 h-12 rounded-lg bg-gradient-to-r from-[var(--brand)] to-[var(--gold)] flex items-center justify-center mb-4">
-                <TrendingUp className="w-6 h-6 text-white" />
+              <div className="w-12 h-12 rounded-lg bg-[var(--brand)] flex items-center justify-center mb-4">
+                <CheckSquare className="w-6 h-6 text-white" />
               </div>
               <h3 className="font-semibold text-lg mb-2">Quality Checker</h3>
               <p className="text-sm text-zinc-400">
@@ -457,8 +457,8 @@ export default function Home() {
               variants={cardVariants}
               className="bg-[var(--card)] border border-[var(--border)] rounded-xl p-6 hover:border-[var(--brand)]/50 transition-colors"
             >
-              <div className="w-12 h-12 rounded-lg bg-gradient-to-r from-[var(--brand)] to-[var(--gold)] flex items-center justify-center mb-4">
-                <Lightbulb className="w-6 h-6 text-white" />
+              <div className="w-12 h-12 rounded-lg bg-[var(--brand)] flex items-center justify-center mb-4">
+                <Search className="w-6 h-6 text-white" />
               </div>
               <h3 className="font-semibold text-lg mb-2">Research Assistant</h3>
               <p className="text-sm text-zinc-400">

@@ -124,12 +124,12 @@ export default function OnboardingModal({ isOpen: propIsOpen, onClose: propOnClo
                     transition={{ duration: 0.5 }}
                     className="mb-6"
                   >
-                    <div className={`w-20 h-20 mx-auto mb-4 rounded-full bg-gradient-to-r ${currentStepData.color} flex items-center justify-center`}>
-                      <currentStepData.icon 
-                        size={32} 
-                        className="text-white"
-                      />
-                    </div>
+    <div className={`w-20 h-20 mx-auto mb-4 rounded-full bg-[var(--brand)] flex items-center justify-center`}>
+      <currentStepData.icon 
+        size={32} 
+        className="text-white"
+      />
+    </div>
                     <h3 className="text-xl font-semibold mb-2">{currentStepData.title}</h3>
                     <p className="text-zinc-400 leading-relaxed">
                       {currentStepData.description}
