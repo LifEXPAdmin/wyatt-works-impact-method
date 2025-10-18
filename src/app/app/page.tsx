@@ -85,19 +85,39 @@ function AppPageContent() {
     return () => clearTimeout(timer);
   }, [load]);
 
-  // Force initialization if store is still empty
+  // Force initialization if store is still empty or has no tasks
   useEffect(() => {
-    if (isInitialized && !activeProjectData) {
-      console.log("Store is empty, forcing initialization...");
+    if (isInitialized) {
       try {
-        const { projects } = useBlueprint.getState();
+        const { projects, activeProjectId } = useBlueprint.getState();
         console.log("Current projects:", projects);
+        console.log("Active project ID:", activeProjectId);
+        
         if (projects.length === 0) {
           console.log("No projects found, creating default...");
           const projectId = useBlueprint.getState().createProject("My Blueprint");
           console.log("Created project with ID:", projectId);
+        } else if (activeProjectId) {
+          const activeProject = projects.find(p => p.id === activeProjectId);
+          if (activeProject) {
+            console.log("Active project found:", activeProject.name);
+            console.log("Active project phases:", activeProject.blueprint.phases.length);
+            
+            // Check if Spark phase has tasks
+            const sparkPhase = activeProject.blueprint.phases.find(p => p.id === 'spark');
+            if (sparkPhase) {
+              console.log("Spark phase tasks:", sparkPhase.tasks.length);
+              if (sparkPhase.tasks.length === 0) {
+                console.log("Spark phase has no tasks, recreating project with sample data...");
+                useBlueprint.getState().createProject("My Blueprint");
+              }
+            }
+          } else {
+            console.log("Active project not found, setting to first project");
+            useBlueprint.getState().setActiveProject(projects[0].id);
+          }
         } else {
-          console.log("Projects exist, setting active project to first one");
+          console.log("No active project, setting to first project");
           useBlueprint.getState().setActiveProject(projects[0].id);
         }
       } catch (error) {
@@ -244,25 +264,25 @@ function AppPageContent() {
       {/* TopBar removed - using NavBar from layout instead */}
       
       <div className="flex h-[calc(100vh-73px)] lg:h-[calc(100vh-73px)]">
-        {/* Mobile Menu Overlay */}
+        {/* Mobile Phase Navigation Overlay - 3/4 Screen */}
         <AnimatePresence>
           {isMobileMenuOpen && (
             <motion.div
-              className="mobile-overlay-fix bg-black/50 backdrop-blur-sm lg:hidden mobile-backdrop-z"
+              className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 lg:hidden"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setIsMobileMenuOpen(false)}
             >
               <motion.div
-                className="mobile-nav-fix w-80 max-w-[90vw] bg-[var(--card)] border-r border-[var(--border)] mobile-modal-z"
+                className="fixed top-0 left-0 h-full w-3/4 bg-[var(--card)] border-r border-[var(--border)] z-50"
                 initial={{ x: "-100%" }}
                 animate={{ x: 0 }}
                 exit={{ x: "-100%" }}
                 transition={{ type: "spring", damping: 25, stiffness: 200 }}
                 onClick={(e) => e.stopPropagation()}
               >
-                <div className="p-4 pt-16 mobile-safe-area">
+                <div className="p-4 pt-16 mobile-safe-area h-full overflow-y-auto">
                   {/* Close Button */}
                   <div className="flex justify-end mb-4">
                     <Button
@@ -275,14 +295,95 @@ function AppPageContent() {
                     </Button>
                   </div>
                   
-                  <PhaseNav 
-                    active={activePhase} 
-                    onPhaseChange={(phaseId) => {
-                      handlePhaseChange(phaseId);
-                      setIsMobileMenuOpen(false); // Close menu when phase is selected
-                    }}
-                    onCollapseChange={handleSidebarCollapseChange}
-                  />
+                  {/* Mobile Phase Navigation - No Collapse */}
+                  <div className="space-y-3">
+                    <h2 className="text-lg font-semibold mb-4">Blueprint Phases</h2>
+                    
+                    {['spark', 'forge', 'flow', 'impact'].map((phaseId) => {
+                      const phaseData = getPhase(phaseId as PhaseId);
+                      const isActive = activePhase === phaseId;
+                      
+                      return (
+                        <motion.div
+                          key={phaseId}
+                          whileHover={{ scale: 1.02 }}
+                          whileTap={{ scale: 0.98 }}
+                        >
+                          <button
+                            onClick={() => {
+                              handlePhaseChange(phaseId);
+                              setIsMobileMenuOpen(false);
+                            }}
+                            className={`w-full text-left rounded-xl border p-4 transition-all duration-200 ${
+                              isActive 
+                                ? "border-[var(--brand)] bg-[var(--brand)]/10" 
+                                : "border-[var(--border)] hover:border-[var(--brand)]/50 hover:bg-[var(--brand)]/5"
+                            }`}
+                          >
+                            <div className="flex items-center gap-3 mb-2">
+                              <div className="w-10 h-10 rounded-lg bg-[var(--brand)] flex items-center justify-center">
+                                {phaseId === 'spark' && <Sparkles className="w-5 h-5 text-white" />}
+                                {phaseId === 'forge' && <Hammer className="w-5 h-5 text-white" />}
+                                {phaseId === 'flow' && <Zap className="w-5 h-5 text-white" />}
+                                {phaseId === 'impact' && <Target className="w-5 h-5 text-white" />}
+                              </div>
+                              <div className="flex-1 min-w-0">
+                                <div className="font-medium text-sm">
+                                  {phaseId === 'spark' && 'The Spark'}
+                                  {phaseId === 'forge' && 'The Build'}
+                                  {phaseId === 'flow' && 'The Launch'}
+                                  {phaseId === 'impact' && 'The Scale'}
+                                </div>
+                                <div className="text-xs text-zinc-400">
+                                  <div>tasks {phaseData?.tasksCompleted || 0}/{phaseData?.totalTasks || 0}</div>
+                                  <div>subtasks {phaseData?.subtasksCompleted || 0}/{phaseData?.totalSubtasks || 0}</div>
+                                </div>
+                              </div>
+                              <div className="text-xs font-medium text-[var(--brand)]">
+                                {phaseData?.progress || 0}%
+                              </div>
+                            </div>
+                            
+                            <p className="text-xs text-zinc-400 mb-3">
+                              {phaseId === 'spark' && 'Clarify vision & target.'}
+                              {phaseId === 'forge' && 'Make it real.'}
+                              {phaseId === 'flow' && 'Create consistent momentum.'}
+                              {phaseId === 'impact' && 'Launch offers & partnerships.'}
+                            </p>
+                            
+                            <div className="space-y-1">
+                              <div className="w-full bg-[var(--border)] rounded-full h-1">
+                                <div 
+                                  className="bg-[var(--brand)] h-1 rounded-full transition-all duration-300"
+                                  style={{ width: `${phaseData?.progress || 0}%` }}
+                                />
+                              </div>
+                              <div className="flex justify-between text-xs text-zinc-500">
+                                <span>Progress</span>
+                                <span>{phaseData?.notesCount || 0} notes</span>
+                              </div>
+                            </div>
+                          </button>
+                        </motion.div>
+                      );
+                    })}
+                    
+                    {/* Overall Progress */}
+                    <div className="mt-6 p-3 rounded-lg bg-[var(--bg)] border border-[var(--border)]">
+                      <div className="flex items-center justify-between mb-2">
+                        <span className="text-sm font-medium">Overall Progress</span>
+                        <span className="text-sm font-bold text-[var(--brand)]">
+                          {progressData.overall}%
+                        </span>
+                      </div>
+                      <div className="w-full bg-[var(--border)] rounded-full h-2">
+                        <div 
+                          className="bg-[var(--brand)] h-2 rounded-full transition-all duration-300"
+                          style={{ width: `${progressData.overall}%` }}
+                        />
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </motion.div>
             </motion.div>
@@ -327,10 +428,10 @@ function AppPageContent() {
             <Button
               variant="outline"
               size="sm"
-              onClick={() => setIsCommandPaletteOpen(true)}
+              onClick={() => setIsMobileMenuOpen(true)}
               className="touch-target"
             >
-              ⌘K
+              <Menu className="w-4 h-4" />
             </Button>
           </div>
 
