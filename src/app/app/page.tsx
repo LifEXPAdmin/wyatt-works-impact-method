@@ -136,30 +136,31 @@ function AppPageContent() {
             const projectId = useBlueprint.getState().createProject("My Blueprint");
             console.log("Created fresh project with ID:", projectId);
           } else if (activeProjectId) {
-          const activeProject = projects.find(p => p.id === activeProjectId);
-          if (activeProject) {
-            console.log("Active project found:", activeProject.name);
-            console.log("Active project phases:", activeProject.blueprint.phases.length);
-            
-            // Check if Spark phase has all tasks (should be 10)
-            const sparkPhase = activeProject.blueprint.phases.find(p => p.id === 'spark');
-            if (sparkPhase) {
-              console.log("Spark phase tasks:", sparkPhase.tasks.length);
-              console.log("Expected: 10 tasks");
-              if (sparkPhase.tasks.length < 10) {
-                console.log(`Spark phase has only ${sparkPhase.tasks.length} tasks, recreating project with complete sample data...`);
-                // Delete the current project and create a new one
-                useBlueprint.getState().deleteProject(activeProjectId);
-                useBlueprint.getState().createProject("My Blueprint");
+            const activeProject = projects.find(p => p.id === activeProjectId);
+            if (activeProject) {
+              console.log("Active project found:", activeProject.name);
+              console.log("Active project phases:", activeProject.blueprint.phases.length);
+              
+              // Check if Spark phase has all tasks (should be 10)
+              const sparkPhase = activeProject.blueprint.phases.find(p => p.id === 'spark');
+              if (sparkPhase) {
+                console.log("Spark phase tasks:", sparkPhase.tasks.length);
+                console.log("Expected: 10 tasks");
+                if (sparkPhase.tasks.length < 10) {
+                  console.log(`Spark phase has only ${sparkPhase.tasks.length} tasks, recreating project with complete sample data...`);
+                  // Delete the current project and create a new one
+                  useBlueprint.getState().deleteProject(activeProjectId);
+                  useBlueprint.getState().createProject("My Blueprint");
+                }
               }
+            } else {
+              console.log("Active project not found, setting to first project");
+              useBlueprint.getState().setActiveProject(projects[0].id);
             }
           } else {
-            console.log("Active project not found, setting to first project");
+            console.log("No active project, setting to first project");
             useBlueprint.getState().setActiveProject(projects[0].id);
           }
-        } else {
-          console.log("No active project, setting to first project");
-          useBlueprint.getState().setActiveProject(projects[0].id);
         }
       } catch (error) {
         console.error("Error forcing initialization:", error);
