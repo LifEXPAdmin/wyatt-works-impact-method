@@ -42,22 +42,32 @@ export default function Tour({
   const getUnblurredElements = useCallback(() => {
     const unblurredRects: DOMRect[] = [];
     
-    // Skip step 0 (welcome step) - it should stay blurred
+    // Step 1: Everything blurred (welcome only)
     if (currentStep === 0) {
       return unblurredRects; // Return empty array for step 1
     }
     
-    // Add current step (but not step 0)
-    if (currentStepData && currentStep > 0) {
+    // Step 2: Highlight entire main task area
+    if (currentStep === 1) {
+      const mainContentArea = document.querySelector('main') || document.querySelector('[data-tour="main-content"]');
+      if (mainContentArea) {
+        unblurredRects.push(mainContentArea.getBoundingClientRect());
+      }
+      return unblurredRects;
+    }
+    
+    // Step 3+: Individual element highlighting
+    // Add current step (but not step 0 or 1)
+    if (currentStepData && currentStep > 1) {
       const currentElement = document.querySelector(currentStepData.target);
       if (currentElement) {
         unblurredRects.push(currentElement.getBoundingClientRect());
       }
     }
     
-    // Add completed steps (but not step 0)
+    // Add completed steps (but not step 0 or 1)
     completedSteps.forEach(stepIndex => {
-      if (stepIndex > 0) { // Skip step 0
+      if (stepIndex > 1) { // Skip step 0 and 1
         const stepData = steps[stepIndex];
         if (stepData) {
           const element = document.querySelector(stepData.target);
