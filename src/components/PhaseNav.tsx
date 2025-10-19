@@ -185,7 +185,7 @@ export default function PhaseNav({ active, onPhaseChange, onCollapseChange }: Ph
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.2 }}
-              className="space-y-3"
+              className="space-y-3 mt-12"
             >
               {phases.map((phase) => {
                 const phaseData = getPhase(phase.id);
