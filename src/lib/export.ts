@@ -16,14 +16,14 @@ export async function exportPDF(blueprint: Blueprint): Promise<Uint8Array> {
   let y = 750;
   
   // Header
-  page.drawText("Wyatt Works Method", { 
+  page.drawText(sanitizeText("Wyatt Works Method"), { 
     x: 50, y, 
     font: boldFont, size: 20, 
     color: brandColor 
   });
   y -= 30;
   
-  page.drawText(blueprint.name, { 
+  page.drawText(sanitizeText(blueprint.name), { 
     x: 50, y, 
     font: boldFont, size: 24, 
     color: textColor 
@@ -32,7 +32,7 @@ export async function exportPDF(blueprint: Blueprint): Promise<Uint8Array> {
   
   // Metadata
   const updatedDate = new Date(blueprint.updatedAt).toLocaleDateString();
-  page.drawText(`Updated: ${updatedDate}`, { 
+  page.drawText(sanitizeText(`Updated: ${updatedDate}`), { 
     x: 50, y, 
     font: font, size: 10, 
     color: mutedColor 
@@ -56,7 +56,7 @@ export async function exportPDF(blueprint: Blueprint): Promise<Uint8Array> {
       opacity: 0.1
     });
     
-    page.drawText(phase.title, { 
+    page.drawText(sanitizeText(phase.title), { 
       x: 55, y: y - 5, 
       font: boldFont, size: 16, 
       color: brandColor 
@@ -65,7 +65,7 @@ export async function exportPDF(blueprint: Blueprint): Promise<Uint8Array> {
     
     // Phase summary
     if (phase.summary) {
-      page.drawText(phase.summary, { 
+      page.drawText(sanitizeText(phase.summary), { 
         x: 55, y, 
         font: italicFont, size: 11, 
         color: mutedColor 
@@ -87,7 +87,7 @@ export async function exportPDF(blueprint: Blueprint): Promise<Uint8Array> {
         const taskColor = task.done ? mutedColor : textColor;
         
         // Task title
-        page.drawText(`${prefix} ${task.title}`, { 
+        page.drawText(sanitizeText(`${prefix} ${task.title}`), { 
           x: indent, y, 
           font: task.done ? italicFont : font, 
           size: 12, 
@@ -97,7 +97,7 @@ export async function exportPDF(blueprint: Blueprint): Promise<Uint8Array> {
         
         // Task description
         if (task.description) {
-          page.drawText(task.description, { 
+          page.drawText(sanitizeText(task.description), { 
             x: indent + 20, y, 
             font: italicFont, size: 10, 
             color: mutedColor 
@@ -142,14 +142,14 @@ export async function exportPDF(blueprint: Blueprint): Promise<Uint8Array> {
   const pages = doc.getPages();
   for (let i = 0; i < pages.length; i++) {
     const currentPage = pages[i];
-    currentPage.drawText("method.wyatt-works.com", {
+    currentPage.drawText(sanitizeText("method.wyatt-works.com"), {
       x: 50,
       y: 30,
       font: font,
       size: 8,
       color: mutedColor
     });
-    currentPage.drawText(`Page ${i + 1} of ${pages.length}`, {
+    currentPage.drawText(sanitizeText(`Page ${i + 1} of ${pages.length}`), {
       x: 500,
       y: 30,
       font: font,
@@ -161,9 +161,59 @@ export async function exportPDF(blueprint: Blueprint): Promise<Uint8Array> {
   return doc.save();
 }
 
+function sanitizeText(text: string): string {
+  // Replace Unicode characters with ASCII equivalents for PDF compatibility
+  return text
+    .replace(/≤/g, '<=') // Less than or equal to
+    .replace(/≥/g, '>=') // Greater than or equal to
+    .replace(/≠/g, '!=') // Not equal to
+    .replace(/±/g, '+/-') // Plus minus
+    .replace(/°/g, 'deg') // Degree symbol
+    .replace(/©/g, '(c)') // Copyright
+    .replace(/®/g, '(R)') // Registered trademark
+    .replace(/™/g, '(TM)') // Trademark
+    .replace(/"/g, '"') // Smart quotes
+    .replace(/"/g, '"') // Smart quotes
+    .replace(/'/g, "'") // Smart apostrophe
+    .replace(/'/g, "'") // Smart apostrophe
+    .replace(/–/g, '-') // En dash
+    .replace(/—/g, '--') // Em dash
+    .replace(/…/g, '...') // Ellipsis
+    .replace(/•/g, '*') // Bullet point
+    .replace(/→/g, '->') // Right arrow
+    .replace(/←/g, '<-') // Left arrow
+    .replace(/↑/g, '^') // Up arrow
+    .replace(/↓/g, 'v') // Down arrow
+    .replace(/✓/g, '[X]') // Checkmark
+    .replace(/✗/g, '[X]') // X mark
+    .replace(/○/g, '[ ]') // Empty circle
+    .replace(/●/g, '[X]') // Filled circle
+    .replace(/★/g, '*') // Star
+    .replace(/☆/g, '*') // Empty star
+    .replace(/♥/g, '<3') // Heart
+    .replace(/♦/g, '<>') // Diamond
+    .replace(/♠/g, '^') // Spade
+    .replace(/♣/g, '^') // Club
+    .replace(/€/g, 'EUR') // Euro
+    .replace(/£/g, 'GBP') // Pound
+    .replace(/¥/g, 'JPY') // Yen
+    .replace(/₹/g, 'INR') // Rupee
+    .replace(/₽/g, 'RUB') // Ruble
+    .replace(/α/g, 'alpha') // Greek alpha
+    .replace(/β/g, 'beta') // Greek beta
+    .replace(/γ/g, 'gamma') // Greek gamma
+    .replace(/δ/g, 'delta') // Greek delta
+    .replace(/ε/g, 'epsilon') // Greek epsilon
+    .replace(/π/g, 'pi') // Greek pi
+    .replace(/σ/g, 'sigma') // Greek sigma
+    .replace(/τ/g, 'tau') // Greek tau
+    .replace(/φ/g, 'phi') // Greek phi
+    .replace(/ω/g, 'omega'); // Greek omega
+}
+
 function formatMarkdownLine(text: string): string {
   // Simple markdown formatting for PDF
-  return text
+  return sanitizeText(text)
     .replace(/\*\*(.*?)\*\*/g, '$1') // Remove bold markers
     .replace(/\*(.*?)\*/g, '$1') // Remove italic markers
     .replace(/^- (.*$)/gm, '- $1') // Convert list items
