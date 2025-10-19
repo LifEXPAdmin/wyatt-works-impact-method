@@ -42,39 +42,34 @@ export default function Tour({
   const getUnblurredElements = useCallback(() => {
     const unblurredRects: DOMRect[] = [];
     
-    // Step 1: Everything blurred (welcome only)
+    // Always keep main workspace unblurred
+    const mainContentArea = document.querySelector('[data-tour="main-content"]');
+    if (mainContentArea) {
+      unblurredRects.push(mainContentArea.getBoundingClientRect());
+    }
+    
+    // Always keep top navigation unblurred
+    const topNav = document.querySelector('nav') || document.querySelector('header');
+    if (topNav) {
+      unblurredRects.push(topNav.getBoundingClientRect());
+    }
+    
+    // Step 1: Everything else blurred (welcome only)
     if (currentStep === 0) {
-      return unblurredRects; // Return empty array for step 1
+      return unblurredRects; // Return only workspace and nav
     }
     
-    // Step 2: Only phase navigation unblurred
-    if (currentStep === 1) {
-      const phaseNav = document.querySelector('#phase-nav');
-      if (phaseNav) {
-        unblurredRects.push(phaseNav.getBoundingClientRect());
-      }
-      return unblurredRects;
-    }
-    
-    // Step 3+: Workspace stays unblurred from step 3 onwards
-    if (currentStep >= 2) {
-      const mainContentArea = document.querySelector('[data-tour="main-content"]');
-      if (mainContentArea) {
-        unblurredRects.push(mainContentArea.getBoundingClientRect());
-      }
-    }
-    
-    // Step 3+: Add current step element (but not step 0, 1, or 2)
-    if (currentStepData && currentStep > 2) {
+    // Step 2+: Add current step element
+    if (currentStepData && currentStep > 0) {
       const currentElement = document.querySelector(currentStepData.target);
       if (currentElement) {
         unblurredRects.push(currentElement.getBoundingClientRect());
       }
     }
     
-    // Step 3+: Add completed steps (but not step 0, 1, or 2)
+    // Step 2+: Add completed steps
     completedSteps.forEach(stepIndex => {
-      if (stepIndex > 2) { // Skip step 0, 1, and 2
+      if (stepIndex > 0) { // Skip step 0
         const stepData = steps[stepIndex];
         if (stepData) {
           const element = document.querySelector(stepData.target);
