@@ -48,6 +48,7 @@ export default function TaskItem({ task, phaseId }: TaskItemProps) {
   const [isExpanded, setIsExpanded] = useState(true); // Always expanded by default for better mobile UX
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [showPrompt, setShowPrompt] = useState(false);
+  const [showNotes, setShowNotes] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   const copyPromptToClipboard = async (prompt: string) => {
@@ -140,8 +141,8 @@ export default function TaskItem({ task, phaseId }: TaskItemProps) {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.2 }}
     >
-      <div className="p-3 sm:p-6">
-        <div className="flex items-start gap-2 sm:gap-4">
+      <div className="p-2 sm:p-4">
+        <div className="flex items-start gap-1 sm:gap-2">
           {/* Drag Handle - Hidden on mobile */}
           <div
             {...attributes}
@@ -216,12 +217,12 @@ export default function TaskItem({ task, phaseId }: TaskItemProps) {
 
             {/* Description */}
             {task.description && (
-              <p className="text-xs sm:text-sm text-zinc-400 mb-3 break-words whitespace-pre-wrap hyphens-auto leading-relaxed">{task.description}</p>
+              <p className="text-xs sm:text-sm text-zinc-400 mb-2 break-words whitespace-pre-wrap hyphens-auto leading-relaxed">{task.description}</p>
             )}
 
             {/* AI Prompt Section */}
             {task.tips?.length && !task.done && (
-              <div className="mb-4">
+              <div className="mb-2">
                 <div className="flex items-start justify-between gap-2 mb-2">
                   <h4 className="text-xs font-semibold text-[var(--brand)]">💡 AI Prompt</h4>
                   <Button
@@ -259,7 +260,7 @@ export default function TaskItem({ task, phaseId }: TaskItemProps) {
 
             {/* Subtask Progress Bar */}
             {subtaskProgress.total > 0 && (
-              <div className="mb-4">
+              <div className="mb-2">
                 <div className="flex items-center justify-between text-xs text-zinc-400 mb-1">
                   <span>Subtask Progress</span>
                   <span>{subtaskProgress.percentage}%</span>
@@ -268,26 +269,39 @@ export default function TaskItem({ task, phaseId }: TaskItemProps) {
               </div>
             )}
 
-            {/* Notes Editor */}
+            {/* Notes Editor - Collapsed by default */}
             {(!task.done || task.notes) && (
-              <div className="mb-4">
-                <Textarea
-                  ref={textareaRef}
-                  value={task.notes ?? ""}
-                  onChange={(e) => handleNotesChange(e.target.value)}
-                  placeholder="Add notes..."
-                  className={cn(
-                    "min-h-[60px] sm:min-h-[80px] resize-none rounded-xl mobile-text-sm",
-                    task.done && "opacity-50"
-                  )}
-                  disabled={task.done}
-                />
+              <div className="mb-3">
+                <div className="flex items-center justify-between mb-2">
+                  <h4 className="text-xs font-semibold text-zinc-400">📝 Notes</h4>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => setShowNotes(!showNotes)}
+                    className="text-xs h-6 px-2 text-zinc-400 hover:text-[var(--brand)] hover:bg-[var(--brand)]/10"
+                  >
+                    {showNotes ? "Hide" : "Add Note"}
+                  </Button>
+                </div>
+                {showNotes && (
+                  <Textarea
+                    ref={textareaRef}
+                    value={task.notes ?? ""}
+                    onChange={(e) => handleNotesChange(e.target.value)}
+                    placeholder="Add notes..."
+                    className={cn(
+                      "min-h-[60px] sm:min-h-[80px] resize-none rounded-xl mobile-text-sm",
+                      task.done && "opacity-50"
+                    )}
+                    disabled={task.done}
+                  />
+                )}
               </div>
             )}
 
             {/* Subtasks */}
             {task.children && task.children.length > 0 && (
-              <div className="mt-4">
+              <div className="mt-2">
                 <Button
                   variant="ghost"
                   size="sm"
@@ -305,7 +319,7 @@ export default function TaskItem({ task, phaseId }: TaskItemProps) {
                       animate={{ opacity: 1, height: "auto" }}
                       exit={{ opacity: 0, height: 0 }}
                       transition={{ duration: 0.2 }}
-                      className="space-y-2 ml-1 sm:ml-4"
+                      className="space-y-1 ml-1 sm:ml-2"
                     >
                       {task.children.map((subtask) => (
                         <SubtaskItem
@@ -416,6 +430,7 @@ function SubtaskItem({ subtask }: SubtaskItemProps) {
   const [isExpanded, setIsExpanded] = useState(true); // Expanded by default
   const [showPrompt, setShowPrompt] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [showNotes, setShowNotes] = useState(false);
   const notesRef = useRef<HTMLTextAreaElement>(null);
 
   const {
@@ -501,9 +516,9 @@ function SubtaskItem({ subtask }: SubtaskItemProps) {
       animate={{ opacity: 1, x: 0 }}
       transition={{ duration: 0.15 }}
     >
-      <div className="p-2 sm:p-3">
+      <div className="p-1 sm:p-2">
         {/* Main Row */}
-        <div className="flex items-start gap-2 sm:gap-3">
+        <div className="flex items-start gap-1 sm:gap-2">
           {/* Drag Handle - Hidden on mobile */}
           <div
             {...attributes}
@@ -642,15 +657,28 @@ function SubtaskItem({ subtask }: SubtaskItemProps) {
               transition={{ duration: 0.2 }}
               className="mt-3"
             >
-              {/* Notes Editor */}
-              <div className="mb-3">
-                <Textarea
-                  ref={notesRef}
-                  value={subtask.notes ?? ""}
-                  onChange={(e) => handleNotesChange(e.target.value)}
-                  placeholder="Add notes for this step..."
-                  className="min-h-[50px] sm:min-h-[60px] resize-none rounded-lg mobile-text-sm"
-                />
+              {/* Notes Editor - Collapsed by default */}
+              <div className="mb-2">
+                <div className="flex items-center justify-between mb-1">
+                  <h4 className="text-xs font-semibold text-zinc-400">📝 Notes</h4>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => setShowNotes(!showNotes)}
+                    className="text-xs h-5 px-2 text-zinc-400 hover:text-[var(--brand)] hover:bg-[var(--brand)]/10"
+                  >
+                    {showNotes ? "Hide" : "Add"}
+                  </Button>
+                </div>
+                {showNotes && (
+                  <Textarea
+                    ref={notesRef}
+                    value={subtask.notes ?? ""}
+                    onChange={(e) => handleNotesChange(e.target.value)}
+                    placeholder="Add notes for this step..."
+                    className="min-h-[50px] sm:min-h-[60px] resize-none rounded-lg mobile-text-sm"
+                  />
+                )}
               </div>
             </motion.div>
           )}
