@@ -359,7 +359,7 @@ export default function TaskItem({ task, phaseId }: TaskItemProps) {
           {/* Actions Menu */}
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="sm" className="opacity-0 group-hover:opacity-100 transition-opacity" data-tour="menu">
+              <Button variant="ghost" size="sm" className="opacity-70 hover:opacity-100 transition-opacity" data-tour="menu">
                 <MoreVertical className="w-4 h-4" />
               </Button>
             </DropdownMenuTrigger>
@@ -618,15 +618,24 @@ function SubtaskItem({ subtask }: SubtaskItemProps) {
               />
             </Button>
 
-            {/* Delete Button */}
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => setShowDeleteConfirm(true)}
-              className="w-6 h-6 p-0 text-zinc-400 hover:text-red-500"
-            >
-              <X className="w-3 h-3" />
-            </Button>
+            {/* Three Dots Menu */}
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" size="sm" className="w-6 h-6 p-0 opacity-70 hover:opacity-100 transition-opacity">
+                  <MoreVertical className="w-3 h-3" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className="bg-[var(--card)] border-[var(--border)]">
+                <DropdownMenuItem onClick={() => setIsEditing(true)}>
+                  <Edit2 className="w-3 h-3 mr-2" />
+                  Rename
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => setShowDeleteConfirm(true)} className="text-red-500">
+                  <Trash2 className="w-3 h-3 mr-2" />
+                  Delete
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
         </div>
 
