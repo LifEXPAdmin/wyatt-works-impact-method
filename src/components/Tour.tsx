@@ -38,135 +38,38 @@ export default function Tour({
 
   const currentStepData = steps[currentStep];
 
-  // Get all elements that should be unblurred (current + completed steps)
-  const getUnblurredElements = useCallback(() => {
-    const unblurredRects: DOMRect[] = [];
-    
-    // Always keep main workspace unblurred
-    const mainContentArea = document.querySelector('[data-tour="main-content"]');
-    if (mainContentArea) {
-      unblurredRects.push(mainContentArea.getBoundingClientRect());
-    }
-    
-    // Always keep top navigation unblurred
-    const topNav = document.querySelector('nav') || document.querySelector('header');
-    if (topNav) {
-      unblurredRects.push(topNav.getBoundingClientRect());
-    }
-    
-    // Step 1: Everything else blurred (welcome only)
-    if (currentStep === 0) {
-      return unblurredRects; // Return only workspace and nav
-    }
-    
-    // Step 2+: Add current step element
-    if (currentStepData && currentStep > 0) {
+  // Get current element for highlighting (no blurring)
+  const getCurrentElement = useCallback(() => {
+    if (currentStepData) {
       const currentElement = document.querySelector(currentStepData.target);
       if (currentElement) {
-        unblurredRects.push(currentElement.getBoundingClientRect());
+        return currentElement.getBoundingClientRect();
       }
     }
-    
-    // Step 2+: Add completed steps
-    completedSteps.forEach(stepIndex => {
-      if (stepIndex > 0) { // Skip step 0
-        const stepData = steps[stepIndex];
-        if (stepData) {
-          const element = document.querySelector(stepData.target);
-          if (element) {
-            unblurredRects.push(element.getBoundingClientRect());
-          }
-        }
-      }
-    });
-    
-    return unblurredRects;
-  }, [currentStepData, completedSteps, steps, currentStep]);
+    return null;
+  }, [currentStepData]);
 
-  // Create overlay pieces that don't cover unblurred elements
-  const createOverlayPieces = useCallback(() => {
-    const unblurredRects = getUnblurredElements();
-    const viewportWidth = window.innerWidth;
-    const viewportHeight = window.innerHeight;
+  // Create highlight for current element (no blurring)
+  const createHighlight = useCallback(() => {
+    const currentRect = getCurrentElement();
+    if (!currentRect) return null;
     
-    if (unblurredRects.length === 0) {
-      return [<div key="full-overlay" className="absolute inset-0 bg-black/70 backdrop-blur-sm" />];
-    }
-    
-    // Sort rectangles by position
-    const sortedRects = [...unblurredRects].sort((a, b) => a.top - b.top);
-    const overlayPieces: React.JSX.Element[] = [];
-    
-    let currentY = 0;
-    sortedRects.forEach((rect, index) => {
-      // Add overlay piece above this rectangle
-      if (rect.top > currentY) {
-        overlayPieces.push(
-          <div
-            key={`above-${index}`}
-            className="absolute bg-black/70 backdrop-blur-sm"
-            style={{
-              left: 0,
-              top: currentY,
-              width: viewportWidth,
-              height: rect.top - currentY + 1, // Small overlap
-            }}
-          />
-        );
-      }
-      
-      // Add overlay pieces to the left and right of this rectangle
-      if (rect.left > 0) {
-        overlayPieces.push(
-          <div
-            key={`left-${index}`}
-            className="absolute bg-black/70 backdrop-blur-sm"
-            style={{
-              left: 0,
-              top: rect.top - 1, // Small overlap to prevent gaps
-              width: rect.left + 1, // Small overlap
-              height: rect.height + 2, // Small overlap
-            }}
-          />
-        );
-      }
-      
-      if (rect.right < viewportWidth) {
-        overlayPieces.push(
-          <div
-            key={`right-${index}`}
-            className="absolute bg-black/70 backdrop-blur-sm"
-            style={{
-              left: rect.right - 1, // Small overlap
-              top: rect.top - 1, // Small overlap
-              width: viewportWidth - rect.right + 1, // Small overlap
-              height: rect.height + 2, // Small overlap
-            }}
-          />
-        );
-      }
-      
-      currentY = Math.max(currentY, rect.bottom);
-    });
-    
-    // Add overlay piece below the last rectangle
-    if (currentY < viewportHeight) {
-      overlayPieces.push(
-        <div
-          key="below-last"
-          className="absolute bg-black/70 backdrop-blur-sm"
-          style={{
-            left: 0,
-            top: currentY - 1, // Small overlap
-            width: viewportWidth,
-            height: viewportHeight - currentY + 1, // Small overlap
-          }}
-        />
-      );
-    }
-    
-    return overlayPieces;
-  }, [getUnblurredElements]);
+    return (
+      <div
+        className="absolute pointer-events-none"
+        style={{
+          left: currentRect.left - 4,
+          top: currentRect.top - 4,
+          width: currentRect.width + 8,
+          height: currentRect.height + 8,
+          border: '3px solid #3b82f6', // Blue border
+          borderRadius: '8px',
+          boxShadow: '0 0 0 2px rgba(59, 130, 246, 0.3)', // Blue glow
+          zIndex: 1000,
+        }}
+      />
+    );
+  }, [getCurrentElement]);
 
   // Reset to step 1 when tour opens
 
@@ -175,10 +78,7 @@ export default function Tour({
     if (isOpen) {
       setCurrentStep(0);
       setCompletedSteps([]);
-      // Scroll to top when tour starts
-      window.scrollTo(0, 0);
-      document.documentElement.scrollTop = 0;
-      document.body.scrollTop = 0;
+      // Don't scroll - keep current position
     }
   }, [isOpen]);
 
@@ -252,29 +152,19 @@ export default function Tour({
     }
   }, [currentStepData]);
 
-  // Scroll target into view and update position
-  const scrollToTarget = useCallback(() => {
-    if (!currentStepData) return;
-
-    const targetElement = document.querySelector(currentStepData.target);
-    if (targetElement) {
-      targetElement.scrollIntoView({ 
-        block: "center", 
-        behavior: "smooth" 
-      });
-      
-      // Update position after scroll animation
-      setTimeout(updateTargetPosition, 500);
+  // Update position without scrolling
+  const updatePosition = useCallback(() => {
+    if (currentStepData) {
+      updateTargetPosition();
     }
   }, [currentStepData, updateTargetPosition]);
 
   // Handle step changes
   useEffect(() => {
     if (isOpen && currentStepData) {
-      scrollToTarget();
-      updateTargetPosition();
+      updatePosition();
     }
-  }, [isOpen, currentStep, currentStepData, scrollToTarget, updateTargetPosition]);
+  }, [isOpen, currentStep, updatePosition]);
 
   // Handle scroll and resize
   useEffect(() => {
@@ -370,21 +260,8 @@ export default function Tour({
         ref={overlayRef}
         aria-hidden="true"
       >
-        {/* Create overlay pieces that don't cover unblurred elements */}
-        {createOverlayPieces()}
-
-        {/* Target highlight ring for current step */}
-        {targetRect && (
-          <div
-            className="absolute ring-2 ring-[var(--brand)] rounded-xl shadow-[0_0_0_9999px_rgba(0,0,0,0)] pointer-events-none"
-            style={{
-              left: targetRect.left - 12,
-              top: targetRect.top - 12,
-              width: targetRect.width + 24,
-              height: targetRect.height + 24,
-            }}
-          />
-        )}
+        {/* Blue highlight for current element */}
+        {createHighlight()}
 
         {/* Tooltip */}
         <motion.div
@@ -399,7 +276,7 @@ export default function Tour({
           )}
           style={{
             left: isMobile ? 16 : tooltipPosition.x,
-            top: isMobile ? "auto" : tooltipPosition.y,
+            top: isMobile ? "auto" : (currentStep === 0 ? 80 : tooltipPosition.y), // Higher for first step
             bottom: isMobile ? 16 : "auto",
           }}
           role="dialog"
