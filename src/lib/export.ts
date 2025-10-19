@@ -186,24 +186,61 @@ export async function exportPDF(blueprint: Blueprint): Promise<Uint8Array> {
           y -= 15;
         }
         
-        // Task notes (only if user has added notes)
-        if (task.notes && task.notes.trim()) {
-          const lines = task.notes.split("\n");
-          for (const line of lines.slice(0, 5)) { // Limit notes length
-            if (y < 80) {
-              page = doc.addPage([595, 842]);
-              y = 750;
-            }
-            
-            const formattedLine = formatMarkdownLine(line);
-            page.drawText(`  ${formattedLine}`, { 
-              x: indent + 20, y, 
-              font: font, size: 9, 
-              color: rgb(0.3, 0.3, 0.3) 
-            });
-            y -= 12;
+        // Task notes (only if user has added notes OR if it's the first Spark task)
+        const isFirstSparkTask = phase.id === "spark" && task.id === "sp-purpose";
+        if ((task.notes && task.notes.trim()) || isFirstSparkTask) {
+          if (y < 100) {
+            page = doc.addPage([595, 842]);
+            y = 750;
           }
-          y -= 5;
+          
+          // Special instructions for first Spark task
+          if (isFirstSparkTask) {
+            const instructions = [
+              "Take notes here! Use the dropdown arrow to open or collapse notes on every task and subtask.",
+              "Click the lightbulb for AI prompt ideas to help you with each step.",
+              "The AI prompts are designed to give you specific, actionable guidance.",
+              "Customize the prompts with your specific details - don't just copy-paste!",
+              "Use the notes to track your progress, insights, and next steps."
+            ];
+            
+            page.drawText("Instructions:", { 
+              x: indent + 20, y, 
+              font: boldFont, size: 10, 
+              color: brandColor 
+            });
+            y -= 15;
+            
+            for (const instruction of instructions) {
+              page.drawText(`  • ${sanitizeText(instruction)}`, { 
+                x: indent + 20, y, 
+                font: font, size: 9, 
+                color: textColor 
+              });
+              y -= 12;
+            }
+            y -= 5;
+          }
+          
+          // User notes if they exist
+          if (task.notes && task.notes.trim()) {
+            const lines = task.notes.split("\n");
+            for (const line of lines.slice(0, 5)) { // Limit notes length
+              if (y < 80) {
+                page = doc.addPage([595, 842]);
+                y = 750;
+              }
+              
+              const formattedLine = formatMarkdownLine(line);
+              page.drawText(`  ${formattedLine}`, { 
+                x: indent + 20, y, 
+                font: font, size: 9, 
+                color: rgb(0.3, 0.3, 0.3) 
+              });
+              y -= 12;
+            }
+            y -= 5;
+          }
         }
         
         // Render subtasks

@@ -165,60 +165,43 @@ export const sampleBlueprint: Blueprint = {
               ]
             },
             {
-              id: "sp-foundation-systems",
-              title: "Set up your foundation systems",
-              description: "Basic systems in place before you start creating content. Use AI to think about systems you might need.",
-              done: false,
-              tips: [
-                "AI Prompt: 'For a [your business type] that [your purpose], what systems and tools do I need to set up? Include content creation, distribution, and tracking.'",
-                "Choose your primary platform",
-                "Set up basic profiles",
-                "Use AI to think about systems you might need"
-              ],
-              children: [
-                { id: "sp-systems-1", title: "AI system planning: Get comprehensive system recommendations", done: false, tips: ["Include content creation, distribution, and tracking"] },
-                { id: "sp-systems-2", title: "Human selection: Choose your tools and platforms", done: false, tips: ["Start with one platform, master it, then expand"] },
-                { id: "sp-systems-3", title: "AI workflow creation: Create content workflow", done: false, tips: ["Include creation, review, and distribution"] },
-                { id: "sp-systems-4", title: "Human setup: Set up your systems", done: false, tips: ["Keep branding consistent across platforms"] },
-                { id: "sp-systems-5", title: "AI optimization: Optimize workflow for efficiency", done: false, tips: ["Create templates to save time"] }
-              ]
-            },
-            {
-              id: "sp-first-content",
-              title: "Create your first content piece",
-              description: "Proof of concept - can you actually deliver on your promise? Use AI to create something truly remarkable.",
-              done: false,
-              tips: [
-                "AI Prompt: 'Help me plan my first [content type] about [your topic]. What should the structure be? What key points should I cover?'",
-                "Start simple, don't overcomplicate",
-                "Focus on value, not perfection",
-                "Use AI to create something truly remarkable"
-              ],
-              children: [
-                { id: "sp-first-1", title: "AI content planning: Plan structure and key points", done: false, tips: ["Define the format and main topics"] },
-                { id: "sp-first-2", title: "Human creation: Create content with AI guidance", done: false, tips: ["Focus on value delivery"] },
-                { id: "sp-first-3", title: "AI review: Review for clarity and engagement", done: false, tips: ["Get feedback on structure and flow"] },
-                { id: "sp-first-4", title: "Human refinement: Make improvements based on feedback", done: false, tips: ["Add your personal touch"] },
-                { id: "sp-first-5", title: "AI distribution: Create distribution plan", done: false, tips: ["Plan how to reach your avatar effectively"] }
-              ]
-            },
-            {
               id: "sp-brand-voice",
               title: "Define your brand voice & tone",
-              description: "How you communicate should reflect your values and resonate with your audience. Use AI to explore different voice options.",
+              description: "How you communicate should reflect your values and resonate with your audience. Keep this conceptual for now - you'll create your full voice guide in The Build phase.",
               done: false,
               tips: [
                 "AI Prompt: 'Help me define 5 different brand voices for [your business type] that serves [your avatar]. Include tone, personality traits, and communication style.'",
                 "Reflect your values",
                 "Resonate with your audience",
-                "Use AI to explore different voice options"
+                "Use AI to explore different voice options",
+                "Note: You'll create your full voice guide in The Build phase"
               ],
               children: [
                 { id: "sp-voice-1", title: "AI voice exploration: Generate 5 different brand voices", done: false, tips: ["Include tone, personality, and communication style"] },
                 { id: "sp-voice-2", title: "Human selection: Pick the voice that feels authentic", done: false, tips: ["Choose what reflects your values"] },
-                { id: "sp-voice-3", title: "AI refinement: Develop detailed voice guidelines", done: false, tips: ["Create specific examples and guidelines"] },
+                { id: "sp-voice-3", title: "AI refinement: Develop voice characteristics", done: false, tips: ["Define key traits and communication style"] },
                 { id: "sp-voice-4", title: "Human testing: Test with your avatar", done: false, tips: ["Get feedback on resonance and clarity"] },
-                { id: "sp-voice-5", title: "AI documentation: Create voice style guide", done: false, tips: ["Document examples and guidelines for consistency"] }
+                { id: "sp-voice-5", title: "AI documentation: Create voice summary", done: false, tips: ["Document key characteristics for The Build phase"] }
+              ]
+            },
+            {
+              id: "sp-problem-promise-proof",
+              title: "Create your Problem → Promise → Proof one-pager",
+              description: "Bridge your value proposition into copywriting and website use. This framework helps you communicate clearly and persuasively.",
+              done: false,
+              tips: [
+                "AI Prompt: 'Help me create a Problem → Promise → Proof framework for [your business]. Problem: what pain does my avatar have? Promise: what transformation do I deliver? Proof: what evidence shows I can deliver this?'",
+                "Problem: What specific pain does your avatar have?",
+                "Promise: What transformation do you deliver?",
+                "Proof: What evidence shows you can deliver this?",
+                "This bridges value proposition → copywriting → website use"
+              ],
+              children: [
+                { id: "sp-ppp-1", title: "AI brainstorm: Get 3 examples from competitors", done: false, tips: ["Study how others frame their Problem → Promise → Proof"] },
+                { id: "sp-ppp-2", title: "Human selection: Choose the clearest structure", done: false, tips: ["Pick the framework that feels most authentic to you"] },
+                { id: "sp-ppp-3", title: "AI refinement: Rewrite in your voice", done: false, tips: ["Make it sound like you, not like your competitors"] },
+                { id: "sp-ppp-4", title: "Human testing: Test clarity with your avatar", done: false, tips: ["Ensure it resonates and is easy to understand"] },
+                { id: "sp-ppp-5", title: "AI final polish: Create final one-pager", done: false, tips: ["Make it ready for copywriting and website use"] }
               ]
             }
       ]
@@ -229,6 +212,120 @@ export const sampleBlueprint: Blueprint = {
       title: "The Build",
       summary: "Make it real.",
       tasks: [
+        {
+          id: "fo-foundation-systems",
+          title: "Set up your foundation systems",
+          description: "Basic systems in place before you start creating content. Use AI to think about systems you might need.",
+          done: false,
+          tips: [
+            "AI Prompt: 'For a [your business type] that [your purpose], what systems and tools do I need to set up? Include content creation, distribution, and tracking.'",
+            "Choose your primary platform",
+            "Set up basic profiles",
+            "Use AI to think about systems you might need"
+          ],
+          children: [
+            { id: "fo-systems-1", title: "AI system planning: Get comprehensive system recommendations", done: false, tips: ["Include content creation, distribution, and tracking"] },
+            { id: "fo-systems-2", title: "Human selection: Choose your tools and platforms", done: false, tips: ["Start with one platform, master it, then expand"] },
+            { id: "fo-systems-3", title: "AI workflow creation: Create content workflow", done: false, tips: ["Include creation, review, and distribution"] },
+            { id: "fo-systems-4", title: "Human setup: Set up your systems", done: false, tips: ["Keep branding consistent across platforms"] },
+            { id: "fo-systems-5", title: "AI optimization: Optimize workflow for efficiency", done: false, tips: ["Create templates to save time"] }
+          ]
+        },
+        {
+          id: "fo-brand-voice-guide",
+          title: "Create brand voice style guide",
+          description: "Complete voice and tone guidelines for consistent communication. This builds on the conceptual work from The Spark phase.",
+          done: false,
+          tips: [
+            "AI Prompt: 'Help me create a comprehensive brand voice style guide for [your business]. Include tone, personality traits, communication style, do's and don'ts, and examples.'",
+            "Build on your conceptual voice work from The Spark",
+            "Create specific examples and guidelines",
+            "Include do's and don'ts for consistency"
+          ],
+          children: [
+            { id: "fo-voice-1", title: "AI guide creation: Generate comprehensive voice guidelines", done: false, tips: ["Include tone, personality, communication style"] },
+            { id: "fo-voice-2", title: "Human customization: Add your personal touch and examples", done: false, tips: ["Make it specific to your brand"] },
+            { id: "fo-voice-3", title: "AI do's and don'ts: Create clear communication rules", done: false, tips: ["Define what to avoid and what to embrace"] },
+            { id: "fo-voice-4", title: "Human testing: Test guidelines with sample content", done: false, tips: ["Ensure guidelines work in practice"] },
+            { id: "fo-voice-5", title: "AI documentation: Create final style guide document", done: false, tips: ["Make it easy to reference and follow"] }
+          ]
+        },
+        {
+          id: "fo-legal-compliance",
+          title: "Set up legal compliance",
+          description: "Essential legal protections for your business. Use AI to ensure you don't miss important requirements.",
+          done: false,
+          tips: [
+            "AI Prompt: 'What legal documents and compliance requirements do I need for a [your business type] that [your description]? Include privacy policy, terms of service, and email compliance.'",
+            "Privacy policy is essential for data collection",
+            "Terms of service protect your business",
+            "Email compliance (CAN-SPAM, GDPR) for marketing"
+          ],
+          children: [
+            { id: "fo-legal-1", title: "AI compliance audit: Identify required legal documents", done: false, tips: ["Include privacy policy, terms, email compliance"] },
+            { id: "fo-legal-2", title: "Human document creation: Create privacy policy and terms", done: false, tips: ["Use templates but customize for your business"] },
+            { id: "fo-legal-3", title: "AI email compliance: Set up CAN-SPAM and GDPR compliance", done: false, tips: ["Include unsubscribe, consent, data handling"] },
+            { id: "fo-legal-4", title: "Human cookie banner: Implement cookie consent banner", done: false, tips: ["Required for EU visitors and data collection"] },
+            { id: "fo-legal-5", title: "AI compliance checklist: Create ongoing compliance checklist", done: false, tips: ["Ensure you stay compliant as you grow"] }
+          ]
+        },
+        {
+          id: "fo-accessibility-usability",
+          title: "Accessibility & usability check",
+          description: "Ensure your product is accessible to all users. Use AI to identify potential barriers and improvements.",
+          done: false,
+          tips: [
+            "AI Prompt: 'Help me create an accessibility checklist for [your product/website]. Include contrast ratios, font sizes, keyboard navigation, screen reader compatibility, and ARIA labels.'",
+            "Contrast ratios should meet WCAG standards",
+            "Font sizes should be readable",
+            "Keyboard navigation for all functions"
+          ],
+          children: [
+            { id: "fo-access-1", title: "AI accessibility scan: Get comprehensive accessibility recommendations", done: false, tips: ["Include contrast, font size, ARIA labels"] },
+            { id: "fo-access-2", title: "Human contrast check: Verify color contrast ratios", done: false, tips: ["Use tools to check WCAG compliance"] },
+            { id: "fo-access-3", title: "AI navigation audit: Test keyboard navigation", done: false, tips: ["Ensure all functions work without mouse"] },
+            { id: "fo-access-4", title: "Human screen reader test: Test with screen reader", done: false, tips: ["Verify content is properly announced"] },
+            { id: "fo-access-5", title: "AI improvement plan: Create accessibility improvement roadmap", done: false, tips: ["Prioritize fixes by impact and effort"] }
+          ]
+        },
+        {
+          id: "fo-customer-support",
+          title: "Customer support setup",
+          description: "Professional support system for your customers. Use AI to design efficient support processes.",
+          done: false,
+          tips: [
+            "AI Prompt: 'Help me design a customer support system for [your business]. Include contact methods, response times, FAQ categories, and escalation procedures.'",
+            "Set up dedicated support email",
+            "Create auto-response templates",
+            "Build comprehensive FAQ section"
+          ],
+          children: [
+            { id: "fo-support-1", title: "AI support design: Design support system and processes", done: false, tips: ["Include contact methods and response times"] },
+            { id: "fo-support-2", title: "Human email setup: Set up support email and auto-responses", done: false, tips: ["Professional templates and quick responses"] },
+            { id: "fo-support-3", title: "AI FAQ creation: Generate comprehensive FAQ section", done: false, tips: ["Cover common questions and concerns"] },
+            { id: "fo-support-4", title: "Human escalation: Create escalation procedures", done: false, tips: ["When to escalate and how to handle"] },
+            { id: "fo-support-5", title: "AI optimization: Optimize support for efficiency", done: false, tips: ["Reduce response time and improve satisfaction"] }
+          ]
+        },
+        {
+          id: "fo-pricing-hypothesis",
+          title: "Pricing hypothesis",
+          description: "Test pricing models with your audience. Use AI to explore different pricing strategies.",
+          done: false,
+          tips: [
+            "AI Prompt: 'Help me create 3 different pricing models for [your product/service]. Include value-based pricing, tiered pricing, and freemium options with rationale for each.'",
+            "Test pricing with early users",
+            "Consider value-based pricing",
+            "Start with hypothesis, validate with data"
+          ],
+          children: [
+            { id: "fo-pricing-1", title: "AI pricing models: Generate 3 different pricing strategies", done: false, tips: ["Include value-based, tiered, freemium options"] },
+            { id: "fo-pricing-2", title: "Human validation: Test pricing with early users", done: false, tips: ["Get feedback on perceived value and willingness to pay"] },
+            { id: "fo-pricing-3", title: "AI competitive analysis: Analyze competitor pricing", done: false, tips: ["Understand market positioning and pricing"] },
+            { id: "fo-pricing-4", title: "Human refinement: Adjust pricing based on feedback", done: false, tips: ["Balance value delivery with profitability"] },
+            { id: "fo-pricing-5", title: "AI pricing strategy: Create final pricing strategy", done: false, tips: ["Document rationale and implementation plan"] }
+          ]
+        },
         {
           id: "fo-product-core",
           title: "Build your core product/service",
@@ -402,33 +499,33 @@ export const sampleBlueprint: Blueprint = {
         },
         {
           id: "fo-social-foundation",
-          title: "Establish social media presence",
-          description: "Set up and optimize your social platforms. Use AI to create platform-specific strategies.",
+          title: "Claim & optimize profiles",
+          description: "Set up social media profiles with consistent branding. Keep only claiming handles, logos, bios - content planning moves to Launch.",
           done: false,
           tips: [
-            "AI Prompt: 'Help me create a social media strategy for [your business] on [platform]. What content types work best? How should I engage with [your avatar]?'",
+            "AI Prompt: 'Help me optimize my social media profiles for [your business]. Focus on bio, handle, logo, and branding consistency across platforms.'",
             "Choose 2-3 platforms max",
-            "Optimize for each platform's culture",
-            "Use AI to create platform-specific strategies"
+            "Focus on profile optimization only",
+            "Content planning moves to Launch phase"
           ],
           children: [
             { id: "fo-social-1", title: "AI platform analysis: Choose best platforms for your audience", done: false, tips: ["Focus on where your avatar spends time"] },
             { id: "fo-social-2", title: "Human account setup: Create and optimize profiles", done: false, tips: ["Consistent branding, clear bio, professional images"] },
-            { id: "fo-social-3", title: "AI content strategy: Create platform-specific content plans", done: false, tips: ["Different content for different platforms"] },
-            { id: "fo-social-4", title: "Human profile optimization: Complete all profile sections", done: false, tips: ["Bio, links, highlights, pinned content"] },
-            { id: "fo-social-5", title: "AI engagement plan: Create engagement and community strategy", done: false, tips: ["How to build relationships and community"] }
+            { id: "fo-social-3", title: "AI profile optimization: Optimize bio and handle consistency", done: false, tips: ["Ensure branding is consistent across platforms"] },
+            { id: "fo-social-4", title: "Human profile completion: Complete all profile sections", done: false, tips: ["Bio, links, highlights, pinned content"] },
+            { id: "fo-social-5", title: "AI branding check: Verify consistent branding across platforms", done: false, tips: ["Ensure logos, colors, and messaging align"] }
           ]
         },
         {
           id: "fo-content-framework",
-          title: "Develop content creation framework",
-          description: "Systematic approach to creating valuable content. Use AI to build efficient content workflows.",
+          title: "Create content templates & workflow",
+          description: "Define structure and process for content creation, not execution. Use AI to build efficient content workflows.",
           done: false,
           tips: [
-            "AI Prompt: 'Help me create a content framework for [your business] that serves [your avatar]. What content formats work best? How can I create content efficiently?'",
-            "Focus on value over volume",
-            "Create reusable templates",
-            "Use AI to build efficient content workflows"
+            "AI Prompt: 'Help me create content templates and workflow for [your business] that serves [your avatar]. Focus on structure and process, not content creation itself.'",
+            "Focus on templates and workflow structure",
+            "Create reusable formats for efficiency",
+            "Define process, not execution"
           ],
           children: [
             { id: "fo-content-1", title: "AI content audit: Analyze what content your avatar needs", done: false, tips: ["Focus on their biggest questions and pain points"] },
@@ -542,17 +639,92 @@ export const sampleBlueprint: Blueprint = {
       summary: "Create consistent momentum.",
       tasks: [
         {
-          id: "fl-content-strategy",
-          title: "Develop your content strategy",
-          description: "Create a systematic approach to content that builds your audience and drives results. Use AI to plan content that serves your audience while growing your business.",
+          id: "fl-first-content",
+          title: "Create your first content piece",
+          description: "Proof of concept - can you actually deliver on your promise? Use AI to create something truly remarkable.",
           done: false,
           tips: [
-            "AI Prompt: 'Help me create a content strategy for [your business] that serves [your avatar]. Include: content pillars, posting frequency, content types, engagement tactics, and how to measure success. Focus on providing value while building trust.'",
-            "Focus on serving your audience first, selling second",
-            "Create content pillars that align with your expertise",
-            "Plan for consistency over perfection",
-            "Use AI to brainstorm content ideas and formats",
-            "Build systems for sustainable content creation"
+            "AI Prompt: 'Help me plan my first [content type] about [your topic]. What should the structure be? What key points should I cover?'",
+            "Start simple, don't overcomplicate",
+            "Focus on value, not perfection",
+            "Use AI to create something truly remarkable"
+          ],
+          children: [
+            { id: "fl-first-1", title: "AI content planning: Plan structure and key points", done: false, tips: ["Define the format and main topics"] },
+            { id: "fl-first-2", title: "Human creation: Create content with AI guidance", done: false, tips: ["Focus on value delivery"] },
+            { id: "fl-first-3", title: "AI review: Review for clarity and engagement", done: false, tips: ["Get feedback on structure and flow"] },
+            { id: "fl-first-4", title: "Human refinement: Make improvements based on feedback", done: false, tips: ["Add your personal touch"] },
+            { id: "fl-first-5", title: "AI distribution: Create distribution plan", done: false, tips: ["Plan how to reach your avatar effectively"] }
+          ]
+        },
+        {
+          id: "fl-experiment-log",
+          title: "Create experiment log",
+          description: "Track all your tests, hypotheses, and results. Use AI to help you design better experiments and analyze results.",
+          done: false,
+          tips: [
+            "AI Prompt: 'Help me create an experiment tracking system for [your business]. Include hypothesis, test method, results, and next steps for each experiment.'",
+            "Record each test, hypothesis, result, and next step",
+            "Use Notion or Google Sheet for tracking",
+            "Focus on learning from each experiment"
+          ],
+          children: [
+            { id: "fl-experiment-1", title: "AI log design: Create experiment tracking template", done: false, tips: ["Include hypothesis, method, results, next steps"] },
+            { id: "fl-experiment-2", title: "Human setup: Set up tracking system (Notion/Google Sheet)", done: false, tips: ["Make it easy to update regularly"] },
+            { id: "fl-experiment-3", title: "AI experiment design: Design your first experiment", done: false, tips: ["Start with something simple and measurable"] },
+            { id: "fl-experiment-4", title: "Human execution: Run first experiment and record results", done: false, tips: ["Be honest about what worked and what didn't"] },
+            { id: "fl-experiment-5", title: "AI analysis: Analyze results and plan next experiment", done: false, tips: ["Use data to inform next steps"] }
+          ]
+        },
+        {
+          id: "fl-community-safety",
+          title: "Community safety policy",
+          description: "Create guidelines for positive interactions in your community. Use AI to brainstorm comprehensive safety measures.",
+          done: false,
+          tips: [
+            "AI Prompt: 'Help me create community safety guidelines for [your business/community]. Include positive interaction rules, conflict resolution, and moderation policies.'",
+            "Focus on positive interactions",
+            "Create clear conflict resolution process",
+            "Set expectations for community behavior"
+          ],
+          children: [
+            { id: "fl-safety-1", title: "AI guideline brainstorm: Generate 5 community safety guidelines", done: false, tips: ["Focus on positive interactions and conflict resolution"] },
+            { id: "fl-safety-2", title: "Human customization: Adapt guidelines to your community", done: false, tips: ["Make them specific to your audience and values"] },
+            { id: "fl-safety-3", title: "AI policy creation: Create moderation and enforcement policies", done: false, tips: ["Define consequences and escalation procedures"] },
+            { id: "fl-safety-4", title: "Human testing: Test guidelines with early community members", done: false, tips: ["Get feedback on clarity and effectiveness"] },
+            { id: "fl-safety-5", title: "AI documentation: Create final community safety document", done: false, tips: ["Make it easy to reference and enforce"] }
+          ]
+        },
+        {
+          id: "fl-customer-journey",
+          title: "Customer journey map",
+          description: "Map the complete customer experience from awareness to retention. Use AI to identify touchpoints and optimization opportunities.",
+          done: false,
+          tips: [
+            "AI Prompt: 'Help me create a customer journey map for [your business]. Include awareness, consideration, purchase, onboarding, and retention stages with touchpoints and emotions.'",
+            "Map awareness → nurture → conversion → retention",
+            "Identify emotional touchpoints",
+            "Find optimization opportunities"
+          ],
+          children: [
+            { id: "fl-journey-1", title: "AI journey design: Generate customer journey flowchart", done: false, tips: ["Include awareness, nurture, conversion, retention"] },
+            { id: "fl-journey-2", title: "Human touchpoint mapping: Identify all customer touchpoints", done: false, tips: ["Include digital and offline interactions"] },
+            { id: "fl-journey-3", title: "AI emotion mapping: Map emotional journey at each stage", done: false, tips: ["Understand how customers feel at each touchpoint"] },
+            { id: "fl-journey-4", title: "Human optimization: Identify improvement opportunities", done: false, tips: ["Focus on reducing friction and increasing satisfaction"] },
+            { id: "fl-journey-5", title: "AI implementation: Create journey optimization plan", done: false, tips: ["Prioritize improvements by impact and effort"] }
+          ]
+        },
+        {
+          id: "fl-content-strategy",
+          title: "Build your ongoing content system",
+          description: "Create a systematic approach to content that builds your audience and drives results. Focus on content pillars, calendar, templates, and tone consistency.",
+          done: false,
+          tips: [
+            "AI Prompt: 'Help me create an ongoing content system for [your business] that serves [your avatar]. Include: content pillars, posting calendar, post templates, and tone consistency guidelines.'",
+            "Focus on content pillars that align with your expertise",
+            "Create posting calendar for consistency",
+            "Build post templates for efficiency",
+            "Maintain tone consistency across all content"
           ],
           children: [
             { 
@@ -1234,6 +1406,46 @@ export const sampleBlueprint: Blueprint = {
       summary: "Scale offers & partnerships.",
       tasks: [
         {
+          id: "im-data-governance",
+          title: "Data governance & backup",
+          description: "Protect your business data with proper governance, backups, and security measures. Use AI to create comprehensive data protection policies.",
+          done: false,
+          tips: [
+            "AI Prompt: 'Help me create a data governance and backup strategy for [your business]. Include permissions, backups, encryption, storage policy, and compliance requirements.'",
+            "Set up automated backups",
+            "Implement data encryption",
+            "Create access permissions and policies",
+            "Ensure compliance with regulations"
+          ],
+          children: [
+            { id: "im-data-1", title: "AI governance audit: Create comprehensive data governance checklist", done: false, tips: ["Include permissions, backups, encryption, storage policy"] },
+            { id: "im-data-2", title: "Human backup setup: Implement automated backup systems", done: false, tips: ["Set up regular backups for all critical data"] },
+            { id: "im-data-3", title: "AI security design: Create data encryption and access policies", done: false, tips: ["Protect sensitive data and control access"] },
+            { id: "im-data-4", title: "Human compliance: Ensure regulatory compliance", done: false, tips: ["Meet GDPR, CCPA, and other requirements"] },
+            { id: "im-data-5", title: "AI monitoring: Set up data monitoring and alerting", done: false, tips: ["Monitor data usage and security events"] }
+          ]
+        },
+        {
+          id: "im-brand-licensing",
+          title: "Brand licensing readiness checklist",
+          description: "Prepare your brand for licensing opportunities, collaborations, and partnerships. Use AI to identify licensing opportunities and create guidelines.",
+          done: false,
+          tips: [
+            "AI Prompt: 'Help me create a brand licensing readiness checklist for [your business]. Include guidelines for collaborations, merchandise, affiliate programs, and licensing deals.'",
+            "Create brand guidelines for partners",
+            "Develop licensing terms and conditions",
+            "Identify potential licensing opportunities",
+            "Protect your intellectual property"
+          ],
+          children: [
+            { id: "im-licensing-1", title: "AI opportunity analysis: Identify licensing opportunities", done: false, tips: ["Analyze market for collaborations, merch, affiliate programs"] },
+            { id: "im-licensing-2", title: "Human guidelines creation: Create brand guidelines for partners", done: false, tips: ["Define how partners can use your brand"] },
+            { id: "im-licensing-3", title: "AI terms development: Create licensing terms and conditions", done: false, tips: ["Protect your interests while enabling partnerships"] },
+            { id: "im-licensing-4", title: "Human IP protection: Secure intellectual property rights", done: false, tips: ["Trademark, copyright, and other IP protections"] },
+            { id: "im-licensing-5", title: "AI partnership strategy: Create partnership development plan", done: false, tips: ["Identify and approach potential partners"] }
+          ]
+        },
+        {
           id: "im-offer-portfolio",
           title: "Build your offer portfolio",
           description: "Create a systematic approach to developing and scaling multiple revenue streams. Use AI to analyze market opportunities and design compelling offers.",
@@ -1788,11 +2000,12 @@ export const sampleBlueprint: Blueprint = {
         {
           id: "im-brand-scaling",
           title: "Scale your brand and reputation",
-          description: "Develop systematic approaches to building brand recognition, authority, and reputation as you scale. Use AI to optimize brand positioning and reputation management.",
+          description: "Develop systematic approaches to building brand recognition, authority, and reputation as you scale. Include PR, podcasting, partnerships, and thought leadership. Use AI to optimize brand positioning and reputation management.",
           done: false,
           tips: [
-            "AI Prompt: 'Help me create comprehensive brand scaling strategies for [your business]. Include: brand positioning, authority building, reputation management, thought leadership, and brand expansion strategies.'",
+            "AI Prompt: 'Help me create comprehensive brand scaling strategies for [your business]. Include: brand positioning, authority building, reputation management, thought leadership, PR, podcasting, partnerships, and brand expansion strategies.'",
             "Build authority and thought leadership in your industry",
+            "Include PR, podcasting, partnerships, and thought leadership",
             "Create systematic approaches to reputation management",
             "Use AI to optimize brand positioning and messaging",
             "Develop brand expansion and licensing opportunities",
@@ -1919,6 +2132,17 @@ export const sampleBlueprint: Blueprint = {
                 "Create detailed transition timelines",
                 "Develop stakeholder communication plans",
                 "Measure and optimize transition success"
+              ] 
+            },
+            { 
+              id: "im-exit-6", 
+              title: "Human brand story documentation: Document brand story and vision handoff", 
+              done: false, 
+              tips: [
+                "Document your brand story and vision for future partners or teams",
+                "Create comprehensive brand guidelines and history",
+                "Ensure brand continuity after transition",
+                "Preserve the essence of your brand"
               ] 
             }
           ]
