@@ -134,7 +134,7 @@ export default function TaskItem({ task, phaseId }: TaskItemProps) {
         "group task-container transition-all duration-300",
         task.done 
           ? "border-[var(--brand)] bg-[var(--brand)]/5 shadow-[0_0_24px_rgba(46,168,255,0.25)]" 
-          : "border-[var(--border)] bg-[var(--card)] hover:border-[var(--brand)]/50",
+          : "border-[var(--brand)]/30 bg-[var(--card)] hover:border-[var(--brand)]/60 hover:shadow-[0_0_12px_rgba(46,168,255,0.15)]",
         isDragging && "opacity-50"
       )}
       initial={{ opacity: 0, y: 20 }}
@@ -517,8 +517,8 @@ function SubtaskItem({ subtask }: SubtaskItemProps) {
       className={cn(
         "subtask-container transition-all duration-200",
         subtask.done 
-          ? "border-green-500/30 bg-green-500/5" 
-          : "border-[var(--border)] bg-[var(--bg)] hover:border-[var(--brand)]/50",
+          ? "border-[var(--brand)] bg-[var(--brand)]/5 shadow-[0_0_16px_rgba(46,168,255,0.2)]" 
+          : "border-[var(--brand)]/30 bg-[var(--bg)] hover:border-[var(--brand)]/60 hover:shadow-[0_0_8px_rgba(46,168,255,0.1)]",
         isDragging && "opacity-50"
       )}
       initial={{ opacity: 0, x: -20 }}
