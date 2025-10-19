@@ -194,7 +194,7 @@ function AppPageContent() {
       id: "phase",
       target: "#phase-nav",
       title: "Pick a Phase",
-      body: "Choose Spark, Forge, Flow, or Impact to focus your work. Each phase builds on the previous one.",
+      body: "Choose Spark, Build, Launch, or Scale to focus your work. Each phase builds on the previous one.",
       placement: "right"
     },
     {
@@ -208,7 +208,7 @@ function AppPageContent() {
       id: "notes",
       target: "[data-tour='notes']",
       title: "Add Notes",
-      body: "Click the arrow next to 'Notes' to expand and add notes to any task or subtask. The arrow points right when closed, down when open.",
+      body: "Click the arrow (→) to expand and add notes to any task or subtask. The arrow points right when closed, down when open.",
       placement: "bottom"
     },
     {

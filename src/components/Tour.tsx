@@ -44,7 +44,19 @@ export default function Tour({
     console.log("Tour: Looking for target:", currentStepData.target);
     const targetElement = document.querySelector(currentStepData.target);
     console.log("Tour: Found target element:", targetElement);
-    if (!targetElement) return;
+    
+    if (!targetElement) {
+      console.log("Tour: Target element not found, skipping step");
+      // Skip to next step if target not found
+      if (currentStep < steps.length - 1) {
+        setCurrentStep(currentStep + 1);
+        return;
+      } else {
+        // If it's the last step and target not found, close tour
+        onClose();
+        return;
+      }
+    }
 
     const rect = targetElement.getBoundingClientRect();
     setTargetRect(rect);
@@ -201,6 +213,8 @@ export default function Tour({
 
   if (!isOpen || !currentStepData) return null;
 
+  console.log("Tour: Rendering tour overlay for step", currentStep, "of", steps.length);
+  
   const isMobile = typeof window !== 'undefined' && window.innerWidth < 640;
   const progress = ((currentStep + 1) / steps.length) * 100;
 
