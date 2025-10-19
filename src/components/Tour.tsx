@@ -330,7 +330,7 @@ export default function Tour({
   }, [isOpen, onClose]);
 
   // Navigation handlers
-  const handleNext = () => {
+  const handleNext = useCallback(() => {
     // Mark current step as completed
     if (!completedSteps.includes(currentStep)) {
       setCompletedSteps(prev => [...prev, currentStep]);
@@ -341,13 +341,13 @@ export default function Tour({
     } else {
       handleFinish();
     }
-  };
+  }, [completedSteps, currentStep, steps.length, handleFinish]);
 
-  const handlePrevious = () => {
+  const handlePrevious = useCallback(() => {
     if (currentStep > 0) {
       setCurrentStep(currentStep - 1);
     }
-  };
+  }, [currentStep]);
 
   const handleSkip = () => {
     localStorage.setItem(storageKey, "done");

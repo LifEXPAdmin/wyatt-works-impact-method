@@ -274,7 +274,7 @@ export default function TaskItem({ task, phaseId }: TaskItemProps) {
                     </Button>
                   </div>
                   <p className="text-xs text-zinc-400 italic">
-                    ⚠️ Customize with your specific details - don't just copy-paste!
+                    ⚠️ Customize with your specific details - don&apos;t just copy-paste!
                   </p>
                 </div>
               </div>
@@ -436,7 +436,6 @@ function SubtaskItem({ subtask }: SubtaskItemProps) {
   const { toggleSubtask, renameSubtask, deleteSubtask, updateSubtaskNotes } = useBlueprint();
   const [isEditing, setIsEditing] = useState(false);
   const [editTitle, setEditTitle] = useState(subtask.title);
-  const [isExpanded, setIsExpanded] = useState(true); // Expanded by default
   const [showPrompt, setShowPrompt] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [showNotes, setShowNotes] = useState(false);

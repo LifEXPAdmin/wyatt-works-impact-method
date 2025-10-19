@@ -245,7 +245,6 @@ function AppPageContent() {
       useEffect(() => {
         try {
           const hasSeenOnboarding = localStorage.getItem("wwm-onboarding-seen");
-          const hasSeenTour = localStorage.getItem("wwm-app-tour-v1");
           
           if (!hasSeenOnboarding) {
             // Show phase breakdown when first visiting blueprint
