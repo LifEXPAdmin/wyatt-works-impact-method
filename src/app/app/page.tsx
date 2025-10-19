@@ -191,6 +191,13 @@ function AppPageContent() {
   // Tour steps definition
   const tourSteps: Step[] = [
     {
+      id: "welcome",
+      target: "body",
+      title: "Welcome to Your Blueprint!",
+      body: "This is your complete business blueprint with 4 phases: Spark (ideas), Build (foundation), Launch (momentum), and Scale (growth). Let's take a quick tour!",
+      placement: "center"
+    },
+    {
       id: "phase",
       target: "#phase-nav",
       title: "Pick a Phase",
@@ -246,6 +253,13 @@ function AppPageContent() {
         } catch (error) {
           console.error("Error checking onboarding status:", error);
         }
+      }, []);
+
+      // Always scroll to top when component mounts or refreshes
+      useEffect(() => {
+        window.scrollTo(0, 0);
+        document.documentElement.scrollTop = 0;
+        document.body.scrollTop = 0;
       }, []);
 
   // Handle phase completion celebrations
@@ -624,12 +638,25 @@ function AppPageContent() {
                       <button 
                         onClick={() => {
                           console.log("Starting tour...");
+                          console.log("Current isTourOpen state:", isTourOpen);
                           setIsTourOpen(true);
+                          console.log("Set isTourOpen to true");
+                          // Force a re-render check
+                          setTimeout(() => {
+                            console.log("After timeout, isTourOpen should be true");
+                          }, 100);
                         }}
                         className="px-2 py-1 bg-green-500 text-white rounded text-xs"
                       >
                         Start Tour
                       </button>
+                    </div>
+                    
+                    {/* Tour State Debug */}
+                    <div className="mt-2 p-2 bg-yellow-100 text-black text-xs rounded">
+                      <strong>Tour Debug:</strong> isTourOpen = {isTourOpen ? "TRUE" : "FALSE"} | 
+                      Steps = {tourSteps.length} | 
+                      Current Step = {isTourOpen ? "0" : "N/A"}
                     </div>
                   </div>
                 )}
