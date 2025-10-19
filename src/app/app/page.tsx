@@ -198,10 +198,31 @@ function AppPageContent() {
       placement: "right"
     },
     {
+      id: "lightbulb",
+      target: "[data-tour='lightbulb']",
+      title: "Get AI Prompts",
+      body: "Click the 💡 lightbulb to see AI prompts you can copy and paste. Customize them with your specific details!",
+      placement: "bottom"
+    },
+    {
       id: "tasks",
       target: "#task-list",
       title: "Check tasks & add notes",
       body: "Tick off steps and capture decisions. Everything autosaves locally—no login needed.",
+      placement: "bottom"
+    },
+    {
+      id: "drag",
+      target: "[data-tour='drag']",
+      title: "Move tasks around",
+      body: "Drag tasks and subtasks to reorder them. Create your own workflow!",
+      placement: "bottom"
+    },
+    {
+      id: "menu",
+      target: "[data-tour='menu']",
+      title: "Edit & delete",
+      body: "Click the ⋮ menu to rename, delete, or add new tasks. Make it your own!",
       placement: "bottom"
     }
   ];
@@ -210,10 +231,16 @@ function AppPageContent() {
       useEffect(() => {
         try {
           const hasSeenOnboarding = localStorage.getItem("wwm-onboarding-seen");
+          const hasSeenTour = localStorage.getItem("wwm-app-tour-v1");
           
           if (!hasSeenOnboarding) {
             // Show phase breakdown when first visiting blueprint
             setTimeout(() => setShowPhaseBreakdown(true), 1000);
+          }
+          
+          if (!hasSeenTour) {
+            // Show tour after a delay to let the page load
+            setTimeout(() => setIsTourOpen(true), 2000);
           }
         } catch (error) {
           console.error("Error checking onboarding status:", error);
@@ -592,6 +619,15 @@ function AppPageContent() {
                         className="px-2 py-1 bg-blue-500 text-white rounded text-xs"
                       >
                         Force New Forge Phase
+                      </button>
+                      <button 
+                        onClick={() => {
+                          console.log("Starting tour...");
+                          setIsTourOpen(true);
+                        }}
+                        className="px-2 py-1 bg-green-500 text-white rounded text-xs"
+                      >
+                        Start Tour
                       </button>
                     </div>
                   </div>

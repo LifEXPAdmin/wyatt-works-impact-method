@@ -360,6 +360,29 @@
     overflow: hidden;
   }
   
+  /* Fix any potential line glitches */
+  .task-container * {
+    border-collapse: separate;
+  }
+  
+  /* Ensure clean progress bars */
+  .progress-bar {
+    border: none;
+    outline: none;
+    box-shadow: none;
+  }
+  
+  /* Remove any unwanted borders from progress components */
+  [data-radix-progress-root] {
+    border: none !important;
+    outline: none !important;
+  }
+  
+  [data-radix-progress-indicator] {
+    border: none !important;
+    outline: none !important;
+  }
+  
   /* Mobile-optimized containers */
   .mobile-container {
     @apply w-full max-w-full overflow-hidden;

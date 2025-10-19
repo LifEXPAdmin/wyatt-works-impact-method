@@ -234,7 +234,6 @@ export const sampleBlueprint: Blueprint = {
           title: "Build your core product/service",
           description: "Create the actual deliverable that solves your audience's problem. Use AI to think through product development systematically.",
           done: false,
-          notes: "This is where you transform your idea into something real that people can actually use. Focus on creating something that delivers genuine value to your specific audience. Don't overcomplicate - start with the core problem you're solving and build from there.",
           tips: [
             "AI Prompt: 'Help me design a [product/service type] that solves [specific problem] for [your avatar]. What are the essential features, user experience, and delivery method? Include pricing strategy and competitive advantages.'",
             "Start with MVP - minimum viable product that solves the core problem",
@@ -311,7 +310,6 @@ export const sampleBlueprint: Blueprint = {
           title: "Create complete brand identity",
           description: "Visual identity that reflects your values and resonates with your audience. Use AI to explore creative directions.",
           done: false,
-          notes: "Your brand identity is how people recognize and remember you. It's not just colors and fonts - it's the feeling people get when they interact with your brand. Make sure it authentically represents who you are and what you stand for.",
           tips: [
             "AI Prompt: 'Help me create a brand identity for [your business] that serves [your avatar]. Include color psychology, typography choices, visual style, and brand personality that reflects [your values]. Create 5 different directions with specific color palettes and style descriptions.'",
             "Colors should evoke the right emotions for your audience",

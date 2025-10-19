@@ -47,6 +47,7 @@ export default function TaskItem({ task, phaseId }: TaskItemProps) {
   const [editTitle, setEditTitle] = useState(task.title);
   const [isExpanded, setIsExpanded] = useState(true); // Always expanded by default for better mobile UX
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [showPrompt, setShowPrompt] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   const copyPromptToClipboard = async (prompt: string) => {
@@ -56,6 +57,12 @@ export default function TaskItem({ task, phaseId }: TaskItemProps) {
     } catch (err) {
       console.error('Failed to copy prompt:', err);
     }
+  };
+
+  // Get the main AI prompt for this task
+  const getMainPrompt = () => {
+    const aiPrompt = task.tips?.find(tip => tip.startsWith("AI Prompt:"));
+    return aiPrompt ? aiPrompt.replace("AI Prompt: ", "") : "Help me with this task: " + task.title;
   };
 
   const {
@@ -140,6 +147,7 @@ export default function TaskItem({ task, phaseId }: TaskItemProps) {
             {...attributes}
             {...listeners}
             className="hidden sm:block mt-1 cursor-grab hover:cursor-grabbing text-zinc-400 hover:text-zinc-300 transition-colors"
+            data-tour="drag"
           >
             <GripVertical className="w-4 h-4" />
           </div>
@@ -211,37 +219,41 @@ export default function TaskItem({ task, phaseId }: TaskItemProps) {
               <p className="text-xs sm:text-sm text-zinc-400 mb-3 break-words whitespace-pre-wrap hyphens-auto leading-relaxed">{task.description}</p>
             )}
 
-            {/* Tips */}
+            {/* AI Prompt Section */}
             {task.tips?.length && !task.done && (
               <div className="mb-4">
                 <div className="flex items-start justify-between gap-2 mb-2">
-                  <h4 className="text-xs font-semibold text-[var(--brand)]">💡 AI Tips & Prompts</h4>
+                  <h4 className="text-xs font-semibold text-[var(--brand)]">💡 AI Prompt</h4>
                   <Button
                     variant="ghost"
                     size="sm"
-                    onClick={() => copyPromptToClipboard(task.tips?.join('\n\n') || '')}
+                    onClick={() => setShowPrompt(!showPrompt)}
                     className="text-xs h-6 px-2 text-[var(--brand)] hover:bg-[var(--brand)]/20 touch-target"
+                    data-tour="lightbulb"
                   >
-                    📋 Copy All
+                    {showPrompt ? "Hide" : "Show"}
                   </Button>
                 </div>
-                <div className="space-y-2">
-                  {task.tips.map((tip, index) => (
-                    <div key={index} className="flex items-start gap-2 p-2 bg-zinc-800/50 rounded border border-zinc-700/50">
+                {showPrompt && (
+                  <div className="space-y-2">
+                    <div className="flex items-start gap-2 p-2 bg-zinc-800/50 rounded border border-zinc-700/50">
                       <span className="text-xs text-zinc-300 break-words whitespace-pre-wrap hyphens-auto leading-relaxed flex-1">
-                        {tip}
+                        {getMainPrompt()}
                       </span>
                       <Button
                         variant="ghost"
                         size="sm"
-                        onClick={() => copyPromptToClipboard(tip)}
+                        onClick={() => copyPromptToClipboard(getMainPrompt())}
                         className="text-xs h-6 px-2 text-[var(--brand)] hover:bg-[var(--brand)]/20 touch-target flex-shrink-0"
                       >
-                        📋
+                        📋 Copy
                       </Button>
                     </div>
-                  ))}
-                </div>
+                    <p className="text-xs text-zinc-400 italic">
+                      ⚠️ Customize with your specific details - don't just copy-paste!
+                    </p>
+                  </div>
+                )}
               </div>
             )}
 
@@ -324,7 +336,7 @@ export default function TaskItem({ task, phaseId }: TaskItemProps) {
           {/* Actions Menu */}
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="sm" className="opacity-0 group-hover:opacity-100 transition-opacity">
+              <Button variant="ghost" size="sm" className="opacity-0 group-hover:opacity-100 transition-opacity" data-tour="menu">
                 <MoreVertical className="w-4 h-4" />
               </Button>
             </DropdownMenuTrigger>
