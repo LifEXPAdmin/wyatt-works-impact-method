@@ -120,8 +120,15 @@ function AppPageContent() {
           let needsRecreation = false;
           projects.forEach(project => {
             const sparkPhase = project.blueprint.phases.find(p => p.id === 'spark');
+            const forgePhase = project.blueprint.phases.find(p => p.id === 'forge');
+            
             if (sparkPhase && sparkPhase.tasks.length < 10) {
-              console.log(`Project ${project.name} has only ${sparkPhase.tasks.length} tasks, marking for recreation`);
+              console.log(`Project ${project.name} Spark phase has only ${sparkPhase.tasks.length} tasks, marking for recreation`);
+              needsRecreation = true;
+            }
+            
+            if (forgePhase && forgePhase.tasks.length < 10) {
+              console.log(`Project ${project.name} Forge phase has only ${forgePhase.tasks.length} tasks, marking for recreation`);
               needsRecreation = true;
             }
           });
@@ -546,8 +553,8 @@ function AppPageContent() {
                   <div className="mb-4 p-3 bg-yellow-500/10 border border-yellow-500/20 rounded-lg text-xs">
                     <div>Debug Info:</div>
                     <div>Active Phase: {activePhase}</div>
-                    <div>Tasks Count: {currentPhaseData?.phase.tasks?.length || 0} (Expected: 10)</div>
-                    <div>Subtasks Count: {currentPhaseData?.phase.tasks?.reduce((sum, task) => sum + (task.children?.length || 0), 0) || 0} (Expected: 50)</div>
+                    <div>Tasks Count: {currentPhaseData?.phase.tasks?.length || 0} (Expected: {activePhase === 'spark' ? '10' : activePhase === 'forge' ? '10' : '4'})</div>
+                    <div>Subtasks Count: {currentPhaseData?.phase.tasks?.reduce((sum, task) => sum + (task.children?.length || 0), 0) || 0} (Expected: {activePhase === 'spark' ? '50' : activePhase === 'forge' ? '50' : '12'})</div>
                     <div>Project ID: {activeProjectData?.id}</div>
                     <div>Project Name: {activeProjectData?.name}</div>
                     <div className="mt-2 space-x-2">
@@ -572,6 +579,19 @@ function AppPageContent() {
                         className="px-2 py-1 bg-orange-500 text-white rounded text-xs"
                       >
                         Clear Storage & Reload
+                      </button>
+                      <button 
+                        onClick={() => {
+                          console.log("Force recreating project with new Forge phase...");
+                          if (activeProjectData?.id) {
+                            useBlueprint.getState().deleteProject(activeProjectData.id);
+                          }
+                          useBlueprint.getState().createProject("My Blueprint");
+                          window.location.reload();
+                        }}
+                        className="px-2 py-1 bg-blue-500 text-white rounded text-xs"
+                      >
+                        Force New Forge Phase
                       </button>
                     </div>
                   </div>
