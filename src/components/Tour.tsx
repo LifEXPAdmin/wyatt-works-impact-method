@@ -41,7 +41,9 @@ export default function Tour({
   const updateTargetPosition = useCallback(() => {
     if (!currentStepData) return;
 
+    console.log("Tour: Looking for target:", currentStepData.target);
     const targetElement = document.querySelector(currentStepData.target);
+    console.log("Tour: Found target element:", targetElement);
     if (!targetElement) return;
 
     const rect = targetElement.getBoundingClientRect();
@@ -115,7 +117,9 @@ export default function Tour({
 
   // Handle step changes
   useEffect(() => {
+    console.log("Tour useEffect: isOpen =", isOpen, "currentStepData =", currentStepData);
     if (isOpen && currentStepData) {
+      console.log("Tour: Starting tour step", currentStep);
       scrollToTarget();
       updateTargetPosition();
     }
