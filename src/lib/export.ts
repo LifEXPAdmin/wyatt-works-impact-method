@@ -15,57 +15,140 @@ export async function exportPDF(blueprint: Blueprint): Promise<Uint8Array> {
   let page = doc.addPage([595, 842]); // A4
   let y = 750;
   
-  // Header
-  page.drawText(sanitizeText("Wyatt Works Method"), { 
-    x: 50, y, 
-    font: boldFont, size: 20, 
+  // Title page - centered and beautiful
+  const titleText = sanitizeText("Wyatt Works Method");
+  const titleWidth = boldFont.widthOfTextAtSize(titleText, 32);
+  const titleX = (595 - titleWidth) / 2;
+  
+  page.drawText(titleText, { 
+    x: titleX, y: 500, 
+    font: boldFont, size: 32, 
     color: brandColor 
+  });
+  
+  const subtitleText = sanitizeText(blueprint.name);
+  const subtitleWidth = boldFont.widthOfTextAtSize(subtitleText, 28);
+  const subtitleX = (595 - subtitleWidth) / 2;
+  
+  page.drawText(subtitleText, { 
+    x: subtitleX, y: 450, 
+    font: boldFont, size: 28, 
+    color: textColor 
+  });
+  
+  // Add decorative line
+  page.drawLine({
+    start: { x: 150, y: 420 },
+    end: { x: 445, y: 420 },
+    thickness: 2,
+    color: brandColor
+  });
+  
+  // Add tagline
+  const taglineText = "Your Complete Business Blueprint";
+  const taglineWidth = font.widthOfTextAtSize(taglineText, 16);
+  const taglineX = (595 - taglineWidth) / 2;
+  
+  page.drawText(taglineText, { 
+    x: taglineX, y: 380, 
+    font: italicFont, size: 16, 
+    color: mutedColor 
+  });
+  
+  // Add date
+  const updatedDate = new Date(blueprint.updatedAt).toLocaleDateString();
+  const dateText = sanitizeText(`Created: ${updatedDate}`);
+  const dateWidth = font.widthOfTextAtSize(dateText, 12);
+  const dateX = (595 - dateWidth) / 2;
+  
+  page.drawText(dateText, { 
+    x: dateX, y: 320, 
+    font: font, size: 12, 
+    color: mutedColor 
+  });
+  
+  // Add progress summary
+  const totalTasks = blueprint.phases.reduce((sum, phase) => sum + phase.tasks.length, 0);
+  const totalSubtasks = blueprint.phases.reduce((sum, phase) => 
+    sum + phase.tasks.reduce((taskSum, task) => taskSum + (task.children?.length || 0), 0), 0
+  );
+  
+  const summaryText = `${totalTasks} Main Tasks • ${totalSubtasks} Sub-tasks • 4 Phases`;
+  const summaryWidth = font.widthOfTextAtSize(summaryText, 14);
+  const summaryX = (595 - summaryWidth) / 2;
+  
+  page.drawText(summaryText, { 
+    x: summaryX, y: 280, 
+    font: font, size: 14, 
+    color: textColor 
+  });
+  
+  // Add phase overview
+  y = 220;
+  page.drawText("Phase Overview:", { 
+    x: 50, y, 
+    font: boldFont, size: 16, 
+    color: textColor 
   });
   y -= 30;
   
-  page.drawText(sanitizeText(blueprint.name), { 
-    x: 50, y, 
-    font: boldFont, size: 24, 
-    color: textColor 
+  blueprint.phases.forEach((phase, index) => {
+    const phaseText = `${index + 1}. ${phase.title} - ${phase.summary}`;
+    page.drawText(sanitizeText(phaseText), { 
+      x: 70, y, 
+      font: font, size: 12, 
+      color: textColor 
+    });
+    y -= 20;
   });
-  y -= 40;
   
-  // Metadata
-  const updatedDate = new Date(blueprint.updatedAt).toLocaleDateString();
-  page.drawText(sanitizeText(`Updated: ${updatedDate}`), { 
-    x: 50, y, 
-    font: font, size: 10, 
-    color: mutedColor 
-  });
-  y -= 60;
+  y = 50; // Reset for next page
   
   for (const phase of blueprint.phases) {
     // Always start each phase on a fresh page
     page = doc.addPage([595, 842]);
     y = 750;
     
-    // Phase title with background
+    // Phase title with subtle background
     page.drawRectangle({
-      x: 45,
-      y: y - 25,
-      width: 505,
-      height: 30,
+      x: 50,
+      y: y - 35,
+      width: 495,
+      height: 40,
       color: brandColor,
-      opacity: 0.1
+      opacity: 0.05
     });
     
-    page.drawText(sanitizeText(phase.title), { 
-      x: 55, y: y - 5, 
-      font: boldFont, size: 16, 
+    // Draw a decorative line above
+    page.drawLine({
+      start: { x: 50, y: y - 10 },
+      end: { x: 545, y: y - 10 },
+      thickness: 1,
+      color: brandColor,
+      opacity: 0.3
+    });
+    
+    // Phase title - centered
+    const phaseTitle = sanitizeText(phase.title);
+    const phaseTitleWidth = boldFont.widthOfTextAtSize(phaseTitle, 20);
+    const phaseTitleX = (595 - phaseTitleWidth) / 2;
+    
+    page.drawText(phaseTitle, { 
+      x: phaseTitleX, y: y - 5, 
+      font: boldFont, size: 20, 
       color: brandColor 
     });
     y -= 45;
     
-    // Phase summary
+    // Phase summary - centered
     if (phase.summary) {
-      page.drawText(sanitizeText(phase.summary), { 
-        x: 55, y, 
-        font: italicFont, size: 11, 
+      const phaseSummary = sanitizeText(phase.summary);
+      const summaryWidth = font.widthOfTextAtSize(phaseSummary, 14);
+      const summaryX = (595 - summaryWidth) / 2;
+      
+      page.drawText(phaseSummary, { 
+        x: summaryX, y, 
+        font: italicFont, size: 14, 
         color: mutedColor 
       });
       y -= 25;
