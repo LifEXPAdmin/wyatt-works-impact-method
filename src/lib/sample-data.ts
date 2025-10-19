@@ -234,18 +234,76 @@ export const sampleBlueprint: Blueprint = {
           title: "Build your core product/service",
           description: "Create the actual deliverable that solves your audience's problem. Use AI to think through product development systematically.",
           done: false,
+          notes: "This is where you transform your idea into something real that people can actually use. Focus on creating something that delivers genuine value to your specific audience. Don't overcomplicate - start with the core problem you're solving and build from there.",
           tips: [
-            "AI Prompt: 'Help me design a [product/service type] that solves [specific problem] for [your avatar]. What are the essential features, user experience, and delivery method?'",
-            "Start with MVP - minimum viable product",
-            "Focus on core value delivery",
-            "Use AI to think through product development systematically"
+            "AI Prompt: 'Help me design a [product/service type] that solves [specific problem] for [your avatar]. What are the essential features, user experience, and delivery method? Include pricing strategy and competitive advantages.'",
+            "Start with MVP - minimum viable product that solves the core problem",
+            "Focus on core value delivery over fancy features",
+            "Use AI to think through product development systematically",
+            "Consider both digital and physical delivery methods",
+            "Think about scalability from day one"
           ],
           children: [
-            { id: "fo-product-1", title: "AI product design: Define core features and user experience", done: false, tips: ["Focus on solving the main problem effectively"] },
-            { id: "fo-product-2", title: "Human creation: Build your MVP version", done: false, tips: ["Start simple, iterate based on feedback"] },
-            { id: "fo-product-3", title: "AI testing plan: Create user testing strategy", done: false, tips: ["Define how to validate with real users"] },
-            { id: "fo-product-4", title: "Human refinement: Improve based on testing", done: false, tips: ["Focus on user feedback and pain points"] },
-            { id: "fo-product-5", title: "AI optimization: Optimize for maximum value delivery", done: false, tips: ["Enhance user experience and outcomes"] }
+            { 
+              id: "fo-product-1", 
+              title: "AI product design: Define core features and user experience", 
+              done: false, 
+              notes: "Use AI to brainstorm features you might not think of. Focus on what your avatar actually needs, not what you think is cool.",
+              tips: [
+                "AI Prompt: 'I want to create a [product/service] for [your avatar] who struggles with [specific problem]. List 20 essential features, 10 nice-to-have features, and 5 features to avoid. Explain the user journey from discovery to success.'",
+                "Focus on solving the main problem effectively",
+                "Consider the user's technical skill level",
+                "Think about accessibility and ease of use"
+              ] 
+            },
+            { 
+              id: "fo-product-2", 
+              title: "Human creation: Build your MVP version", 
+              done: false, 
+              notes: "This is where you actually build something. Start simple - you can always add features later. Focus on making it work well for your core use case.",
+              tips: [
+                "Start simple, iterate based on feedback",
+                "Use tools you're comfortable with",
+                "Focus on core functionality first",
+                "Don't worry about perfection - worry about functionality"
+              ] 
+            },
+            { 
+              id: "fo-product-3", 
+              title: "AI testing plan: Create user testing strategy", 
+              done: false, 
+              notes: "Testing is crucial. Use AI to help you think through what to test and how to test it. You need real feedback from real users.",
+              tips: [
+                "AI Prompt: 'I've built a [product/service] for [your avatar]. Create a comprehensive testing plan including what to test, who to test with, what questions to ask, and how to measure success.'",
+                "Define how to validate with real users",
+                "Test with people who match your avatar",
+                "Focus on usability and value delivery"
+              ] 
+            },
+            { 
+              id: "fo-product-4", 
+              title: "Human refinement: Improve based on testing", 
+              done: false, 
+              notes: "Take the feedback seriously. Your users will tell you what's working and what's not. Don't get defensive - get better.",
+              tips: [
+                "Focus on user feedback and pain points",
+                "Prioritize changes that improve core value",
+                "Don't try to please everyone",
+                "Focus on the biggest pain points first"
+              ] 
+            },
+            { 
+              id: "fo-product-5", 
+              title: "AI optimization: Optimize for maximum value delivery", 
+              done: false, 
+              notes: "Once you have something that works, use AI to help you optimize it. Look for ways to deliver more value with less effort.",
+              tips: [
+                "AI Prompt: 'My [product/service] currently [current state]. How can I optimize it to deliver more value to [your avatar] while reducing complexity and effort? Focus on automation, efficiency, and user experience improvements.'",
+                "Enhance user experience and outcomes",
+                "Look for automation opportunities",
+                "Focus on the 80/20 rule - what 20% of features deliver 80% of value?"
+              ] 
+            }
           ]
         },
         {
@@ -253,18 +311,76 @@ export const sampleBlueprint: Blueprint = {
           title: "Create complete brand identity",
           description: "Visual identity that reflects your values and resonates with your audience. Use AI to explore creative directions.",
           done: false,
+          notes: "Your brand identity is how people recognize and remember you. It's not just colors and fonts - it's the feeling people get when they interact with your brand. Make sure it authentically represents who you are and what you stand for.",
           tips: [
-            "AI Prompt: 'Help me create a brand identity for [your business] that serves [your avatar]. Include color psychology, typography choices, and visual style that reflects [your values].'",
-            "Colors should evoke the right emotions",
-            "Typography should match your voice",
-            "Use AI to explore creative directions"
+            "AI Prompt: 'Help me create a brand identity for [your business] that serves [your avatar]. Include color psychology, typography choices, visual style, and brand personality that reflects [your values]. Create 5 different directions with specific color palettes and style descriptions.'",
+            "Colors should evoke the right emotions for your audience",
+            "Typography should match your voice and personality",
+            "Use AI to explore creative directions you might not consider",
+            "Consider how your brand will look across different platforms",
+            "Think about accessibility and readability"
           ],
           children: [
-            { id: "fo-brand-1", title: "AI brand exploration: Generate 5 different brand directions", done: false, tips: ["Include color psychology and visual style"] },
-            { id: "fo-brand-2", title: "Human selection: Choose direction that feels authentic", done: false, tips: ["Pick what reflects your values and resonates"] },
-            { id: "fo-brand-3", title: "AI color palette: Create 3-color palette with psychology", done: false, tips: ["Primary, secondary, accent colors with meaning"] },
-            { id: "fo-brand-4", title: "Human logo creation: Design wordmark and symbol", done: false, tips: ["Keep it simple and memorable"] },
-            { id: "fo-brand-5", title: "AI style guide: Create comprehensive brand guidelines", done: false, tips: ["Document colors, fonts, usage rules"] }
+            { 
+              id: "fo-brand-1", 
+              title: "AI brand exploration: Generate 5 different brand directions", 
+              done: false, 
+              notes: "Let AI help you explore directions you might not think of. Don't limit yourself to what you think you should do - explore what could work.",
+              tips: [
+                "AI Prompt: 'I'm creating a brand for [your business] that serves [your avatar]. Generate 5 completely different brand directions including: 1) Professional & trustworthy, 2) Creative & innovative, 3) Warm & approachable, 4) Bold & disruptive, 5) Minimalist & elegant. For each, include color psychology, typography suggestions, and visual style descriptions.'",
+                "Include color psychology and visual style",
+                "Consider different personality types",
+                "Think about your competition and how to stand out"
+              ] 
+            },
+            { 
+              id: "fo-brand-2", 
+              title: "Human selection: Choose direction that feels authentic", 
+              done: false, 
+              notes: "This is where your human judgment is crucial. Pick the direction that feels like 'you' - not what you think you should be, but what you actually are.",
+              tips: [
+                "Pick what reflects your values and resonates",
+                "Consider which direction you could maintain long-term",
+                "Think about how it makes you feel",
+                "Consider your audience's preferences"
+              ] 
+            },
+            { 
+              id: "fo-brand-3", 
+              title: "AI color palette: Create 3-color palette with psychology", 
+              done: false, 
+              notes: "Colors have psychological effects. Use AI to help you understand what colors will evoke the right emotions in your audience.",
+              tips: [
+                "AI Prompt: 'I've chosen [brand direction] for my [business type]. Create a 3-color palette (primary, secondary, accent) that will evoke [specific emotions] in [your avatar]. Explain the psychology behind each color choice and how they work together.'",
+                "Primary, secondary, accent colors with meaning",
+                "Consider accessibility and contrast",
+                "Think about how colors work across different media"
+              ] 
+            },
+            { 
+              id: "fo-brand-4", 
+              title: "Human logo creation: Design wordmark and symbol", 
+              done: false, 
+              notes: "Your logo is often the first thing people see. Keep it simple, memorable, and scalable. It should work at any size and in any context.",
+              tips: [
+                "Keep it simple and memorable",
+                "Make sure it works in black and white",
+                "Consider how it will look on different backgrounds",
+                "Test it at different sizes"
+              ] 
+            },
+            { 
+              id: "fo-brand-5", 
+              title: "AI style guide: Create comprehensive brand guidelines", 
+              done: false, 
+              notes: "Document everything so you can be consistent. This will save you time and ensure your brand looks professional across all touchpoints.",
+              tips: [
+                "AI Prompt: 'Create a comprehensive brand style guide for [your business] including: logo usage rules, color specifications, typography guidelines, spacing rules, do's and don'ts, and examples of correct and incorrect usage.'",
+                "Document colors, fonts, usage rules",
+                "Include examples of correct and incorrect usage",
+                "Make it easy for others to follow"
+              ] 
+            }
           ]
         },
         {
