@@ -29,6 +29,7 @@ export default function Tour({
   storageKey = "wwm-app-tour-v1" 
 }: TourProps) {
   const [currentStep, setCurrentStep] = useState(0);
+  const [completedSteps, setCompletedSteps] = useState<number[]>([]);
   const [targetRect, setTargetRect] = useState<DOMRect | null>(null);
   const [tooltipPosition, setTooltipPosition] = useState({ x: 0, y: 0 });
   const overlayRef = useRef<HTMLDivElement>(null);
@@ -37,10 +38,37 @@ export default function Tour({
 
   const currentStepData = steps[currentStep];
 
+  // Get all elements that should be unblurred (current + completed steps)
+  const getUnblurredElements = useCallback(() => {
+    const unblurredRects: DOMRect[] = [];
+    
+    // Add current step
+    if (currentStepData) {
+      const currentElement = document.querySelector(currentStepData.target);
+      if (currentElement) {
+        unblurredRects.push(currentElement.getBoundingClientRect());
+      }
+    }
+    
+    // Add completed steps
+    completedSteps.forEach(stepIndex => {
+      const stepData = steps[stepIndex];
+      if (stepData) {
+        const element = document.querySelector(stepData.target);
+        if (element) {
+          unblurredRects.push(element.getBoundingClientRect());
+        }
+      }
+    });
+    
+    return unblurredRects;
+  }, [currentStepData, completedSteps, steps]);
+
   // Reset to step 1 when tour opens
   useEffect(() => {
     if (isOpen) {
       setCurrentStep(0);
+      setCompletedSteps([]);
     }
   }, [isOpen]);
 
@@ -188,6 +216,11 @@ export default function Tour({
 
   // Navigation handlers
   const handleNext = () => {
+    // Mark current step as completed
+    if (!completedSteps.includes(currentStep)) {
+      setCompletedSteps(prev => [...prev, currentStep]);
+    }
+    
     if (currentStep < steps.length - 1) {
       setCurrentStep(currentStep + 1);
     } else {
@@ -227,7 +260,24 @@ export default function Tour({
         ref={overlayRef}
         aria-hidden="true"
       >
-        {/* Target highlight ring */}
+        {/* Add bright glow to unblurred elements */}
+        {getUnblurredElements().map((rect, index) => (
+          <div
+            key={`glow-${index}`}
+            className="absolute pointer-events-none"
+            style={{
+              left: rect.left - 15,
+              top: rect.top - 15,
+              width: rect.width + 30,
+              height: rect.height + 30,
+              background: `radial-gradient(circle, rgba(59, 130, 246, 0.3) 0%, rgba(59, 130, 246, 0.1) 50%, transparent 100%)`,
+              borderRadius: '12px',
+              zIndex: 1,
+            }}
+          />
+        ))}
+
+        {/* Target highlight ring for current step */}
         {targetRect && (
           <div
             className="absolute ring-2 ring-[var(--brand)] rounded-xl shadow-[0_0_0_9999px_rgba(0,0,0,0)] pointer-events-none"
