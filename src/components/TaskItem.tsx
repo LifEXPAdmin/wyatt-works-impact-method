@@ -49,6 +49,15 @@ export default function TaskItem({ task, phaseId }: TaskItemProps) {
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
+  const copyPromptToClipboard = async (prompt: string) => {
+    try {
+      await navigator.clipboard.writeText(prompt);
+      // You could add a toast notification here
+    } catch (err) {
+      console.error('Failed to copy prompt:', err);
+    }
+  };
+
   const {
     attributes,
     listeners,
@@ -114,7 +123,7 @@ export default function TaskItem({ task, phaseId }: TaskItemProps) {
       ref={setNodeRef}
       style={style}
       className={cn(
-        "group rounded-2xl border transition-all duration-300",
+        "group task-container transition-all duration-300",
         task.done 
           ? "border-[var(--brand)] bg-[var(--brand)]/5 shadow-[0_0_24px_rgba(46,168,255,0.25)]" 
           : "border-[var(--border)] bg-[var(--card)] hover:border-[var(--brand)]/50",
@@ -177,7 +186,7 @@ export default function TaskItem({ task, phaseId }: TaskItemProps) {
               ) : (
                 <h3
                   className={cn(
-                    "text-sm sm:text-base font-semibold cursor-pointer hover:text-[var(--brand)] transition-colors break-words hyphens-auto leading-tight",
+                    "text-sm sm:text-base font-semibold cursor-pointer hover:text-[var(--brand)] transition-colors mobile-text-wrap break-words hyphens-auto leading-tight",
                     task.done && "line-through text-zinc-500"
                   )}
                   onDoubleClick={() => {
@@ -205,11 +214,32 @@ export default function TaskItem({ task, phaseId }: TaskItemProps) {
             {/* Tips */}
             {task.tips?.length && !task.done && (
               <div className="mb-4">
-                <div className="flex flex-wrap gap-2">
+                <div className="flex items-start justify-between gap-2 mb-2">
+                  <h4 className="text-xs font-semibold text-[var(--brand)]">💡 AI Tips & Prompts</h4>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => copyPromptToClipboard(task.tips?.join('\n\n') || '')}
+                    className="text-xs h-6 px-2 text-[var(--brand)] hover:bg-[var(--brand)]/20 touch-target"
+                  >
+                    📋 Copy All
+                  </Button>
+                </div>
+                <div className="space-y-2">
                   {task.tips.map((tip, index) => (
-                    <Badge key={index} variant="secondary" className="text-xs">
-                      💡 {tip}
-                    </Badge>
+                    <div key={index} className="flex items-start gap-2 p-2 bg-zinc-800/50 rounded border border-zinc-700/50">
+                      <span className="text-xs text-zinc-300 break-words whitespace-pre-wrap hyphens-auto leading-relaxed flex-1">
+                        {tip}
+                      </span>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => copyPromptToClipboard(tip)}
+                        className="text-xs h-6 px-2 text-[var(--brand)] hover:bg-[var(--brand)]/20 touch-target flex-shrink-0"
+                      >
+                        📋
+                      </Button>
+                    </div>
                   ))}
                 </div>
               </div>
@@ -449,7 +479,7 @@ function SubtaskItem({ subtask }: SubtaskItemProps) {
       ref={setNodeRef}
       style={style}
       className={cn(
-        "rounded-lg border transition-all duration-200",
+        "subtask-container transition-all duration-200",
         subtask.done 
           ? "border-green-500/30 bg-green-500/5" 
           : "border-[var(--border)] bg-[var(--bg)] hover:border-[var(--brand)]/50",
@@ -511,7 +541,7 @@ function SubtaskItem({ subtask }: SubtaskItemProps) {
             ) : (
               <span
                 className={cn(
-                  "text-xs sm:text-sm cursor-pointer hover:text-[var(--brand)] transition-colors break-words hyphens-auto leading-tight",
+                  "text-xs sm:text-sm cursor-pointer hover:text-[var(--brand)] transition-colors mobile-text-wrap break-words hyphens-auto leading-tight",
                   subtask.done && "line-through text-zinc-500"
                 )}
                 onDoubleClick={() => {

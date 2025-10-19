@@ -342,6 +342,22 @@
     hyphens: auto;
     -webkit-hyphens: auto;
     -ms-hyphens: auto;
+    word-break: break-word;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  
+  /* Ensure task containers have clean borders */
+  .task-container {
+    border: 1px solid var(--border);
+    border-radius: 0.75rem;
+    overflow: hidden;
+  }
+  
+  .subtask-container {
+    border: 1px solid var(--border);
+    border-radius: 0.5rem;
+    overflow: hidden;
   }
   
   /* Mobile-optimized containers */
