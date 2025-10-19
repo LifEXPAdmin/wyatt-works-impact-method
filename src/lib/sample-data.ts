@@ -1231,50 +1231,696 @@ export const sampleBlueprint: Blueprint = {
     {
       id: "impact",
       title: "The Impact",
-      summary: "Launch offers & partnerships.",
+      summary: "Scale offers & partnerships.",
       tasks: [
         {
-          id: "im-offer",
-          title: "Set first paid offer",
-          description: "Simple, clear, easy to buy.",
+          id: "im-offer-portfolio",
+          title: "Build your offer portfolio",
+          description: "Create a systematic approach to developing and scaling multiple revenue streams. Use AI to analyze market opportunities and design compelling offers.",
           done: false,
-          tips: ["Price based on value", "Start small, iterate"],
+          tips: [
+            "AI Prompt: 'Help me build a comprehensive offer portfolio for [your business] that serves [your avatar]. Include: entry-level offers, premium offerings, recurring revenue streams, and complementary products/services that create multiple touchpoints.'",
+            "Start with one core offer, then expand systematically",
+            "Create offers at different price points and commitment levels",
+            "Design complementary offerings that work together",
+            "Use AI to identify market gaps and opportunities",
+            "Test and validate each new offer before scaling"
+          ],
           children: [
-            { id: "im-offer-1", title: "Define offer & deliverables", done: false },
-            { id: "im-offer-2", title: "Create checkout page", done: false }
+            { 
+              id: "im-offer-1", 
+              title: "AI market analysis: Identify scaling opportunities", 
+              done: false, 
+              tips: [
+                "AI Prompt: 'What are the biggest scaling opportunities for [your business] that serves [your avatar]? Include: underserved needs, complementary services, recurring revenue models, and premium offerings.'",
+                "Analyze your existing customer base for patterns",
+                "Look for recurring needs and pain points",
+                "Identify premium service opportunities"
+              ] 
+            },
+            { 
+              id: "im-offer-2", 
+              title: "Human offer design: Create tiered offer structure", 
+              done: false, 
+              tips: [
+                "Design entry, mid-tier, and premium offers",
+                "Ensure clear value progression between tiers",
+                "Create logical upgrade paths for customers"
+              ] 
+            },
+            { 
+              id: "im-offer-3", 
+              title: "AI pricing strategy: Develop value-based pricing models", 
+              done: false, 
+              tips: [
+                "AI Prompt: 'Help me create value-based pricing for [your offer portfolio] that serves [your avatar]. Include: pricing tiers, value justification, competitive analysis, and testing strategies.'",
+                "Price based on value delivered, not time spent",
+                "Test different price points systematically",
+                "Consider psychological pricing principles"
+              ] 
+            },
+            { 
+              id: "im-offer-4", 
+              title: "Human offer testing: Validate new offerings", 
+              done: false, 
+              tips: [
+                "Test offers with existing customers first",
+                "Gather feedback before full launch",
+                "Iterate based on customer response"
+              ] 
+            },
+            { 
+              id: "im-offer-5", 
+              title: "AI scaling strategy: Plan systematic offer expansion", 
+              done: false, 
+              tips: [
+                "AI Prompt: 'Create a systematic plan for scaling [your offer portfolio] including: launch sequence, marketing strategies, resource allocation, and success metrics for each offer.'",
+                "Plan launches strategically to avoid cannibalization",
+                "Allocate resources based on expected returns",
+                "Set clear success metrics for each offer"
+              ] 
+            }
           ]
         },
         {
-          id: "im-partner",
-          title: "Partnership outreach (1/mo)",
-          description: "Mutual value; start small.",
+          id: "im-partnership-scaling",
+          title: "Scale through strategic partnerships",
+          description: "Develop systematic approaches to building partnerships that drive growth and expand your reach. Use AI to identify partnership opportunities and create collaboration strategies.",
           done: false,
-          tips: ["Be specific about collaboration idea"],
+          tips: [
+            "AI Prompt: 'Help me create a comprehensive partnership scaling strategy for [your business] that serves [your avatar]. Include: partnership types, ideal partner profiles, collaboration models, and systematic outreach processes.'",
+            "Focus on partnerships that create mutual value",
+            "Develop systematic approaches to partnership building",
+            "Create scalable collaboration models",
+            "Use AI to identify and prioritize partnership opportunities",
+            "Build long-term relationships, not just transactions"
+          ],
           children: [
-            { id: "im-partner-1", title: "List 10 targets", done: false },
-            { id: "im-partner-2", title: "Send 3 pitches", done: false }
+            { 
+              id: "im-partner-1", 
+              title: "AI partnership mapping: Identify strategic partnership opportunities", 
+              done: false, 
+              tips: [
+                "AI Prompt: 'Map strategic partnership opportunities for [your business] including: complementary businesses, influencers, industry leaders, and platform partnerships that could accelerate growth.'",
+                "Look for businesses that serve the same audience",
+                "Identify complementary service providers",
+                "Consider platform and distribution partnerships"
+              ] 
+            },
+            { 
+              id: "im-partner-2", 
+              title: "Human partnership models: Design collaboration frameworks", 
+              done: false, 
+              tips: [
+                "Create standardized partnership agreements",
+                "Develop different collaboration models",
+                "Establish clear value exchange mechanisms"
+              ] 
+            },
+            { 
+              id: "im-partner-3", 
+              title: "AI outreach system: Create systematic partnership acquisition", 
+              done: false, 
+              tips: [
+                "AI Prompt: 'Create a systematic partnership outreach process for [your business] including: prospect research, personalized outreach templates, follow-up sequences, and relationship nurturing strategies.'",
+                "Develop personalized outreach approaches",
+                "Create systematic follow-up processes",
+                "Build relationships before pitching collaborations"
+              ] 
+            },
+            { 
+              id: "im-partner-4", 
+              title: "Human relationship management: Build partnership infrastructure", 
+              done: false, 
+              tips: [
+                "Create systems for managing partnerships",
+                "Develop regular check-in processes",
+                "Establish performance tracking and optimization"
+              ] 
+            },
+            { 
+              id: "im-partner-5", 
+              title: "AI partnership optimization: Scale successful collaborations", 
+              done: false, 
+              tips: [
+                "AI Prompt: 'How can I optimize and scale successful partnerships for [your business]? Include: performance analysis, expansion opportunities, and systematic replication of successful models.'",
+                "Analyze what makes partnerships successful",
+                "Identify opportunities to expand existing partnerships",
+                "Create templates for replicating successful collaborations"
+              ] 
+            }
           ]
         },
         {
-          id: "im-referrals",
-          title: "Launch referral program",
-          description: "Make sharing meaningful & simple.",
+          id: "im-team-building",
+          title: "Build your scaling team",
+          description: "Develop systems for hiring, training, and managing team members as you scale. Use AI to create hiring processes and team management systems.",
           done: false,
-          tips: ["Easy to explain in 1 sentence"],
+          tips: [
+            "AI Prompt: 'Help me create a comprehensive team building strategy for scaling [your business]. Include: hiring processes, role definitions, training systems, performance management, and culture development.'",
+            "Hire for culture fit and growth potential",
+            "Create systematic training and onboarding processes",
+            "Develop clear role definitions and responsibilities",
+            "Use AI to optimize hiring and team management",
+            "Build systems that work without you"
+          ],
           children: [
-            { id: "im-referrals-1", title: "Define reward", done: false },
-            { id: "im-referrals-2", title: "Create referral page", done: false }
+            { 
+              id: "im-team-1", 
+              title: "AI role planning: Define scaling team structure", 
+              done: false, 
+              tips: [
+                "AI Prompt: 'What team structure do I need to scale [your business]? Include: key roles, responsibilities, reporting structure, and hiring priorities for sustainable growth.'",
+                "Identify roles that will have the biggest impact",
+                "Plan for both immediate needs and future growth",
+                "Consider remote vs. in-person team members"
+              ] 
+            },
+            { 
+              id: "im-team-2", 
+              title: "Human hiring process: Create systematic recruitment", 
+              done: false, 
+              tips: [
+                "Develop clear job descriptions and requirements",
+                "Create structured interview processes",
+                "Implement reference checking and testing"
+              ] 
+            },
+            { 
+              id: "im-team-3", 
+              title: "AI training systems: Design comprehensive onboarding", 
+              done: false, 
+              tips: [
+                "AI Prompt: 'Create a comprehensive onboarding and training system for [your business] including: orientation processes, skill development, performance standards, and ongoing education programs.'",
+                "Create detailed training materials and processes",
+                "Implement mentorship and shadowing programs",
+                "Develop ongoing skill development programs"
+              ] 
+            },
+            { 
+              id: "im-team-4", 
+              title: "Human culture development: Build strong team culture", 
+              done: false, 
+              tips: [
+                "Define and communicate company values",
+                "Create team building and recognition programs",
+                "Establish clear communication channels"
+              ] 
+            },
+            { 
+              id: "im-team-5", 
+              title: "AI performance management: Create systematic evaluation", 
+              done: false, 
+              tips: [
+                "AI Prompt: 'Design a performance management system for [your business] including: goal setting, regular reviews, feedback processes, and development planning that supports team growth.'",
+                "Create clear performance metrics and goals",
+                "Implement regular review and feedback processes",
+                "Develop career development and advancement paths"
+              ] 
+            }
           ]
         },
         {
-          id: "im-systems",
-          title: "Scale with systems & automation",
-          description: "Document processes to grow without chaos.",
+          id: "im-systems-automation",
+          title: "Implement scaling systems and automation",
+          description: "Create comprehensive systems and automation that allow your business to grow without proportional increases in manual work. Use AI to identify automation opportunities and design efficient workflows.",
           done: false,
-          tips: ["SOPs + light automation"],
+          tips: [
+            "AI Prompt: 'Help me create comprehensive systems and automation for scaling [your business]. Include: process documentation, automation opportunities, workflow optimization, and scaling infrastructure.'",
+            "Document every process that can be systematized",
+            "Automate repetitive tasks to free up time for growth",
+            "Create systems that work consistently without oversight",
+            "Use AI to identify optimization opportunities",
+            "Build infrastructure that supports rapid scaling"
+          ],
           children: [
-            { id: "im-systems-1", title: "Write 3 SOPs (publish cadence, comments, uploads)", done: false },
-            { id: "im-systems-2", title: "Automate 1 repetitive task", done: false }
+            { 
+              id: "im-systems-1", 
+              title: "AI process mapping: Document all business processes", 
+              done: false, 
+              tips: [
+                "AI Prompt: 'Help me map and document all processes in [your business] including: customer acquisition, service delivery, support, billing, and administrative tasks. Identify automation opportunities.'",
+                "Document every step in your business processes",
+                "Identify bottlenecks and inefficiencies",
+                "Look for repetitive tasks that can be automated"
+              ] 
+            },
+            { 
+              id: "im-systems-2", 
+              title: "Human SOP creation: Develop standard operating procedures", 
+              done: false, 
+              tips: [
+                "Create detailed step-by-step procedures",
+                "Include quality standards and checkpoints",
+                "Make procedures easy to follow and update"
+              ] 
+            },
+            { 
+              id: "im-systems-3", 
+              title: "AI automation design: Implement workflow automation", 
+              done: false, 
+              tips: [
+                "AI Prompt: 'Design automation workflows for [your business] including: customer onboarding, lead nurturing, order processing, and customer support that maintain quality while reducing manual work.'",
+                "Start with high-impact, low-risk automation",
+                "Ensure automation maintains quality standards",
+                "Create fallback processes for automation failures"
+              ] 
+            },
+            { 
+              id: "im-systems-4", 
+              title: "Human technology integration: Set up scaling infrastructure", 
+              done: false, 
+              tips: [
+                "Choose tools that integrate well and scale",
+                "Implement proper data management systems",
+                "Create backup and disaster recovery plans"
+              ] 
+            },
+            { 
+              id: "im-systems-5", 
+              title: "AI optimization: Continuously improve systems", 
+              done: false, 
+              tips: [
+                "AI Prompt: 'How can I continuously optimize my business systems for [your business]? Include: performance monitoring, bottleneck identification, and systematic improvement processes.'",
+                "Monitor system performance regularly",
+                "Identify and address bottlenecks quickly",
+                "Create feedback loops for continuous improvement"
+              ] 
+            }
+          ]
+        },
+        {
+          id: "im-financial-scaling",
+          title: "Optimize financial systems for scale",
+          description: "Develop financial systems and strategies that support sustainable growth and profitability. Use AI to analyze financial performance and optimize revenue streams.",
+          done: false,
+          tips: [
+            "AI Prompt: 'Help me create comprehensive financial systems for scaling [your business]. Include: revenue optimization, cost management, cash flow planning, investment strategies, and financial reporting.'",
+            "Track key financial metrics religiously",
+            "Optimize pricing and revenue streams continuously",
+            "Plan for cash flow needs during growth",
+            "Use AI to analyze financial patterns and opportunities",
+            "Build financial systems that scale with your business"
+          ],
+          children: [
+            { 
+              id: "im-financial-1", 
+              title: "AI financial analysis: Analyze revenue and cost optimization", 
+              done: false, 
+              tips: [
+                "AI Prompt: 'Analyze the financial performance of [your business] and identify optimization opportunities including: revenue stream analysis, cost reduction strategies, and profitability improvements.'",
+                "Analyze revenue by source and customer segment",
+                "Identify high-margin vs. low-margin activities",
+                "Look for cost reduction opportunities"
+              ] 
+            },
+            { 
+              id: "im-financial-2", 
+              title: "Human cash flow management: Create scaling financial planning", 
+              done: false, 
+              tips: [
+                "Create detailed cash flow projections",
+                "Plan for seasonal variations and growth needs",
+                "Establish credit lines and funding sources"
+              ] 
+            },
+            { 
+              id: "im-financial-3", 
+              title: "AI pricing optimization: Implement dynamic pricing strategies", 
+              done: false, 
+              tips: [
+                "AI Prompt: 'Help me optimize pricing strategies for [your business] including: value-based pricing, dynamic pricing models, bundling strategies, and pricing psychology techniques.'",
+                "Implement value-based pricing models",
+                "Test different pricing strategies systematically",
+                "Consider psychological pricing principles"
+              ] 
+            },
+            { 
+              id: "im-financial-4", 
+              title: "Human investment planning: Plan strategic investments", 
+              done: false, 
+              tips: [
+                "Identify key areas for investment",
+                "Plan technology and infrastructure upgrades",
+                "Consider team expansion and training investments"
+              ] 
+            },
+            { 
+              id: "im-financial-5", 
+              title: "AI financial reporting: Create comprehensive reporting systems", 
+              done: false, 
+              tips: [
+                "AI Prompt: 'Design comprehensive financial reporting for [your business] including: KPI dashboards, automated reports, trend analysis, and actionable insights for decision making.'",
+                "Create automated financial reporting",
+                "Develop key performance indicators",
+                "Implement regular financial reviews"
+              ] 
+            }
+          ]
+        },
+        {
+          id: "im-customer-retention",
+          title: "Build customer retention and expansion systems",
+          description: "Create systematic approaches to retaining customers and increasing their lifetime value. Use AI to analyze customer behavior and optimize retention strategies.",
+          done: false,
+          tips: [
+            "AI Prompt: 'Help me create comprehensive customer retention and expansion systems for [your business] that serves [your avatar]. Include: retention strategies, upselling opportunities, customer success programs, and loyalty initiatives.'",
+            "Focus on customer success, not just customer service",
+            "Create systematic upselling and cross-selling processes",
+            "Use AI to predict and prevent churn",
+            "Develop loyalty programs that create genuine value",
+            "Measure and optimize customer lifetime value"
+          ],
+          children: [
+            { 
+              id: "im-retention-1", 
+              title: "AI customer analysis: Analyze customer behavior patterns", 
+              done: false, 
+              tips: [
+                "AI Prompt: 'Analyze customer behavior patterns for [your business] to identify: high-value customer characteristics, churn risk indicators, expansion opportunities, and retention strategies.'",
+                "Identify patterns in customer usage and satisfaction",
+                "Segment customers by value and behavior",
+                "Look for early warning signs of churn"
+              ] 
+            },
+            { 
+              id: "im-retention-2", 
+              title: "Human retention programs: Create customer success initiatives", 
+              done: false, 
+              tips: [
+                "Develop proactive customer success programs",
+                "Create onboarding and training processes",
+                "Implement regular check-ins and support"
+              ] 
+            },
+            { 
+              id: "im-retention-3", 
+              title: "AI expansion strategies: Design upselling and cross-selling", 
+              done: false, 
+              tips: [
+                "AI Prompt: 'Create upselling and cross-selling strategies for [your business] including: opportunity identification, timing strategies, offer design, and conversion optimization.'",
+                "Identify natural expansion opportunities",
+                "Create compelling upgrade offers",
+                "Time expansion conversations strategically"
+              ] 
+            },
+            { 
+              id: "im-retention-4", 
+              title: "Human loyalty programs: Build customer loyalty initiatives", 
+              done: false, 
+              tips: [
+                "Create meaningful loyalty rewards",
+                "Develop referral and advocacy programs",
+                "Implement customer appreciation initiatives"
+              ] 
+            },
+            { 
+              id: "im-retention-5", 
+              title: "AI retention optimization: Monitor and improve retention", 
+              done: false, 
+              tips: [
+                "AI Prompt: 'How can I continuously optimize customer retention for [your business]? Include: retention metrics, churn prediction, intervention strategies, and success measurement.'",
+                "Track key retention metrics",
+                "Implement early intervention systems",
+                "Continuously test and optimize retention strategies"
+              ] 
+            }
+          ]
+        },
+        {
+          id: "im-market-expansion",
+          title: "Plan market expansion strategies",
+          description: "Develop systematic approaches to expanding into new markets and customer segments. Use AI to identify expansion opportunities and create market entry strategies.",
+          done: false,
+          tips: [
+            "AI Prompt: 'Help me create comprehensive market expansion strategies for [your business]. Include: new market identification, customer segment analysis, entry strategies, and scaling approaches for different markets.'",
+            "Research new markets thoroughly before entering",
+            "Start with adjacent markets and customer segments",
+            "Use AI to identify market opportunities and risks",
+            "Create systematic approaches to market entry",
+            "Plan for cultural and regulatory differences"
+          ],
+          children: [
+            { 
+              id: "im-expansion-1", 
+              title: "AI market research: Identify expansion opportunities", 
+              done: false, 
+              tips: [
+                "AI Prompt: 'What are the best market expansion opportunities for [your business]? Include: adjacent markets, new customer segments, geographic expansion, and vertical market opportunities.'",
+                "Analyze adjacent markets and customer segments",
+                "Research geographic expansion opportunities",
+                "Consider vertical market expansion"
+              ] 
+            },
+            { 
+              id: "im-expansion-2", 
+              title: "Human market validation: Test expansion opportunities", 
+              done: false, 
+              tips: [
+                "Conduct market research and validation",
+                "Test offerings with new market segments",
+                "Gather feedback before full market entry"
+              ] 
+            },
+            { 
+              id: "im-expansion-3", 
+              title: "AI entry strategy: Create market entry plans", 
+              done: false, 
+              tips: [
+                "AI Prompt: 'Create market entry strategies for [your business] expanding into [new market]. Include: positioning, pricing, marketing, partnerships, and resource allocation.'",
+                "Develop market-specific positioning and messaging",
+                "Create appropriate pricing strategies",
+                "Plan marketing and distribution approaches"
+              ] 
+            },
+            { 
+              id: "im-expansion-4", 
+              title: "Human resource planning: Allocate resources for expansion", 
+              done: false, 
+              tips: [
+                "Plan team and resource allocation",
+                "Consider local partnerships and hiring",
+                "Develop market-specific operational processes"
+              ] 
+            },
+            { 
+              id: "im-expansion-5", 
+              title: "AI scaling optimization: Optimize multi-market operations", 
+              done: false, 
+              tips: [
+                "AI Prompt: 'How can I optimize operations across multiple markets for [your business]? Include: standardization vs. localization, resource sharing, and performance management across markets.'",
+                "Balance standardization with market customization",
+                "Create efficient resource sharing systems",
+                "Develop market-specific performance metrics"
+              ] 
+            }
+          ]
+        },
+        {
+          id: "im-technology-scaling",
+          title: "Implement technology for scale",
+          description: "Develop technology infrastructure and systems that support rapid scaling and growth. Use AI to identify technology needs and optimize digital operations.",
+          done: false,
+          tips: [
+            "AI Prompt: 'Help me create comprehensive technology scaling strategies for [your business]. Include: infrastructure planning, software selection, automation tools, data management, and security considerations.'",
+            "Choose technology that scales with your growth",
+            "Invest in automation and efficiency tools",
+            "Use AI to optimize technology decisions",
+            "Plan for data management and security",
+            "Build technology systems that support remote work"
+          ],
+          children: [
+            { 
+              id: "im-tech-1", 
+              title: "AI technology audit: Assess current technology needs", 
+              done: false, 
+              tips: [
+                "AI Prompt: 'Audit the technology needs for scaling [your business] including: current system limitations, automation opportunities, integration needs, and infrastructure requirements.'",
+                "Evaluate current technology limitations",
+                "Identify automation and integration opportunities",
+                "Assess infrastructure scaling requirements"
+              ] 
+            },
+            { 
+              id: "im-tech-2", 
+              title: "Human infrastructure planning: Design scalable technology architecture", 
+              done: false, 
+              tips: [
+                "Plan cloud infrastructure and scaling",
+                "Design data management and backup systems",
+                "Implement security and compliance measures"
+              ] 
+            },
+            { 
+              id: "im-tech-3", 
+              title: "AI automation implementation: Deploy scaling automation tools", 
+              done: false, 
+              tips: [
+                "AI Prompt: 'Help me implement automation tools for scaling [your business] including: workflow automation, AI-powered tools, integration platforms, and performance monitoring systems.'",
+                "Implement workflow and process automation",
+                "Deploy AI-powered tools for efficiency",
+                "Create integration and monitoring systems"
+              ] 
+            },
+            { 
+              id: "im-tech-4", 
+              title: "Human team enablement: Train team on new technology", 
+              done: false, 
+              tips: [
+                "Provide comprehensive technology training",
+                "Create technology adoption processes",
+                "Develop technical support and troubleshooting"
+              ] 
+            },
+            { 
+              id: "im-tech-5", 
+              title: "AI optimization: Continuously optimize technology systems", 
+              done: false, 
+              tips: [
+                "AI Prompt: 'How can I continuously optimize technology systems for [your business]? Include: performance monitoring, cost optimization, security updates, and technology evolution planning.'",
+                "Monitor technology performance and costs",
+                "Implement regular security updates",
+                "Plan for technology evolution and upgrades"
+              ] 
+            }
+          ]
+        },
+        {
+          id: "im-brand-scaling",
+          title: "Scale your brand and reputation",
+          description: "Develop systematic approaches to building brand recognition, authority, and reputation as you scale. Use AI to optimize brand positioning and reputation management.",
+          done: false,
+          tips: [
+            "AI Prompt: 'Help me create comprehensive brand scaling strategies for [your business]. Include: brand positioning, authority building, reputation management, thought leadership, and brand expansion strategies.'",
+            "Build authority and thought leadership in your industry",
+            "Create systematic approaches to reputation management",
+            "Use AI to optimize brand positioning and messaging",
+            "Develop brand expansion and licensing opportunities",
+            "Monitor and manage online reputation proactively"
+          ],
+          children: [
+            { 
+              id: "im-brand-1", 
+              title: "AI brand positioning: Optimize brand for scale", 
+              done: false, 
+              tips: [
+                "AI Prompt: 'How can I optimize my brand positioning for scaling [your business]? Include: market positioning, competitive differentiation, brand messaging, and expansion strategies.'",
+                "Analyze competitive positioning and opportunities",
+                "Develop clear brand differentiation",
+                "Create scalable brand messaging"
+              ] 
+            },
+            { 
+              id: "im-brand-2", 
+              title: "Human authority building: Develop thought leadership", 
+              done: false, 
+              tips: [
+                "Create content that establishes expertise",
+                "Develop speaking and media opportunities",
+                "Build relationships with industry leaders"
+              ] 
+            },
+            { 
+              id: "im-brand-3", 
+              title: "AI reputation management: Implement systematic reputation systems", 
+              done: false, 
+              tips: [
+                "AI Prompt: 'Create comprehensive reputation management for [your business] including: monitoring systems, response strategies, crisis management, and reputation optimization.'",
+                "Implement reputation monitoring systems",
+                "Develop response and crisis management plans",
+                "Create reputation optimization strategies"
+              ] 
+            },
+            { 
+              id: "im-brand-4", 
+              title: "Human brand expansion: Explore licensing and partnerships", 
+              done: false, 
+              tips: [
+                "Identify brand licensing opportunities",
+                "Develop strategic brand partnerships",
+                "Create brand extension strategies"
+              ] 
+            },
+            { 
+              id: "im-brand-5", 
+              title: "AI brand optimization: Continuously improve brand performance", 
+              done: false, 
+              tips: [
+                "AI Prompt: 'How can I continuously optimize brand performance for [your business]? Include: brand metrics, market feedback analysis, positioning optimization, and brand evolution strategies.'",
+                "Track brand performance metrics",
+                "Analyze market feedback and sentiment",
+                "Continuously optimize brand positioning"
+              ] 
+            }
+          ]
+        },
+        {
+          id: "im-exit-strategy",
+          title: "Plan your exit and legacy strategy",
+          description: "Develop long-term strategies for business exit, succession planning, or legacy building. Use AI to analyze exit options and create comprehensive transition plans.",
+          done: false,
+          tips: [
+            "AI Prompt: 'Help me create comprehensive exit and legacy strategies for [your business]. Include: exit options analysis, business valuation, succession planning, legacy building, and transition strategies.'",
+            "Plan for multiple exit scenarios and timelines",
+            "Build business value that's attractive to buyers",
+            "Use AI to analyze exit options and valuations",
+            "Create succession plans for key roles",
+            "Develop legacy and impact strategies"
+          ],
+          children: [
+            { 
+              id: "im-exit-1", 
+              title: "AI exit analysis: Evaluate exit options and timing", 
+              done: false, 
+              tips: [
+                "AI Prompt: 'Analyze exit options for [your business] including: sale options, IPO potential, management buyout, succession planning, and optimal timing strategies.'",
+                "Evaluate different exit scenarios",
+                "Analyze market conditions and timing",
+                "Consider personal and business goals"
+              ] 
+            },
+            { 
+              id: "im-exit-2", 
+              title: "Human value building: Maximize business value", 
+              done: false, 
+              tips: [
+                "Focus on building sustainable competitive advantages",
+                "Develop strong financial performance",
+                "Create systems that work without you"
+              ] 
+            },
+            { 
+              id: "im-exit-3", 
+              title: "AI succession planning: Create leadership transition plans", 
+              done: false, 
+              tips: [
+                "AI Prompt: 'Create comprehensive succession planning for [your business] including: leadership development, knowledge transfer, role transitions, and continuity strategies.'",
+                "Develop internal leadership capabilities",
+                "Create knowledge transfer processes",
+                "Plan for smooth role transitions"
+              ] 
+            },
+            { 
+              id: "im-exit-4", 
+              title: "Human legacy building: Develop impact and legacy strategies", 
+              done: false, 
+              tips: [
+                "Define your desired legacy and impact",
+                "Create programs that continue your mission",
+                "Develop mentorship and giving programs"
+              ] 
+            },
+            { 
+              id: "im-exit-5", 
+              title: "AI transition optimization: Optimize exit and transition process", 
+              done: false, 
+              tips: [
+                "AI Prompt: 'How can I optimize the exit and transition process for [your business]? Include: transition planning, stakeholder communication, timeline optimization, and success measurement.'",
+                "Create detailed transition timelines",
+                "Develop stakeholder communication plans",
+                "Measure and optimize transition success"
+              ] 
+            }
           ]
         }
       ]
