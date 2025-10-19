@@ -182,37 +182,73 @@ export default function TaskItem({ task, phaseId }: TaskItemProps) {
           {/* Content */}
           <div className="flex-1 min-w-0">
             {/* Title */}
-            <div className="flex items-start gap-2 mb-2">
-              {isEditing ? (
-                <Input
-                  value={editTitle}
-                  onChange={(e) => setEditTitle(e.target.value)}
-                  onBlur={handleRenameTask}
-                  onKeyDown={handleKeyDown}
-                  className="text-lg font-semibold bg-transparent border-none p-0 h-auto focus:ring-0"
-                  autoFocus
-                />
-              ) : (
-                <h3
-                  className={cn(
-                    "text-sm sm:text-base font-semibold cursor-pointer hover:text-[var(--brand)] transition-colors mobile-text-wrap break-words hyphens-auto leading-tight",
-                    task.done && "line-through text-zinc-500"
-                  )}
-                  onDoubleClick={() => {
-                    setIsEditing(true);
-                    setEditTitle(task.title);
-                  }}
-                >
-                  {task.title}
-                </h3>
-              )}
-              
-              {/* Subtask Progress Badge */}
-              {subtaskProgress.total > 0 && (
-                <Badge variant="outline" className="text-xs">
-                  {subtaskProgress.completed}/{subtaskProgress.total}
-                </Badge>
-              )}
+            <div className="flex items-start justify-between gap-2 mb-2">
+              <div className="flex items-start gap-2 flex-1 min-w-0">
+                {isEditing ? (
+                  <Input
+                    value={editTitle}
+                    onChange={(e) => setEditTitle(e.target.value)}
+                    onBlur={handleRenameTask}
+                    onKeyDown={handleKeyDown}
+                    className="text-lg font-semibold bg-transparent border-none p-0 h-auto focus:ring-0"
+                    autoFocus
+                  />
+                ) : (
+                  <h3
+                    className={cn(
+                      "text-sm sm:text-base font-semibold cursor-pointer hover:text-[var(--brand)] transition-colors mobile-text-wrap break-words hyphens-auto leading-tight",
+                      task.done && "line-through text-zinc-500"
+                    )}
+                    onDoubleClick={() => {
+                      setIsEditing(true);
+                      setEditTitle(task.title);
+                    }}
+                  >
+                    {task.title}
+                  </h3>
+                )}
+                
+                {/* Subtask Progress Badge */}
+                {subtaskProgress.total > 0 && (
+                  <Badge variant="outline" className="text-xs">
+                    {subtaskProgress.completed}/{subtaskProgress.total}
+                  </Badge>
+                )}
+              </div>
+
+              {/* Top Right Actions */}
+              <div className="flex items-center gap-1 flex-shrink-0">
+                {/* AI Prompt Button */}
+                {task.tips?.length && !task.done && (
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => setShowPrompt(!showPrompt)}
+                    className="w-6 h-6 p-0 text-[var(--brand)] hover:bg-[var(--brand)]/20"
+                    data-tour="lightbulb"
+                  >
+                    💡
+                  </Button>
+                )}
+
+                {/* Notes Button */}
+                {(!task.done || task.notes) && (
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => setShowNotes(!showNotes)}
+                    className="w-6 h-6 p-0 text-zinc-400 hover:text-[var(--brand)]"
+                    data-tour="notes"
+                  >
+                    <ChevronRight 
+                      className={cn(
+                        "w-3 h-3 transition-transform duration-200",
+                        showNotes && "rotate-90"
+                      )} 
+                    />
+                  </Button>
+                )}
+              </div>
             </div>
 
             {/* Description */}
@@ -220,41 +256,27 @@ export default function TaskItem({ task, phaseId }: TaskItemProps) {
               <p className="text-xs sm:text-sm text-zinc-400 mb-2 break-words whitespace-pre-wrap hyphens-auto leading-relaxed">{task.description}</p>
             )}
 
-            {/* AI Prompt Section */}
-            {task.tips?.length && !task.done && (
+            {/* AI Prompt Section - Now shown below when expanded */}
+            {showPrompt && task.tips?.length && !task.done && (
               <div className="mb-2">
-                <div className="flex items-start justify-between gap-2 mb-2">
-                  <h4 className="text-xs font-semibold text-[var(--brand)]">💡 AI Prompt</h4>
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => setShowPrompt(!showPrompt)}
-                    className="text-xs h-6 px-2 text-[var(--brand)] hover:bg-[var(--brand)]/20 touch-target"
-                    data-tour="lightbulb"
-                  >
-                    {showPrompt ? "Hide" : "Show"}
-                  </Button>
-                </div>
-                {showPrompt && (
-                  <div className="space-y-2">
-                    <div className="flex items-start gap-2 p-2 bg-zinc-800/50 rounded border border-zinc-700/50">
-                      <span className="text-xs text-zinc-300 break-words whitespace-pre-wrap hyphens-auto leading-relaxed flex-1">
-                        {getMainPrompt()}
-                      </span>
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => copyPromptToClipboard(getMainPrompt())}
-                        className="text-xs h-6 px-2 text-[var(--brand)] hover:bg-[var(--brand)]/20 touch-target flex-shrink-0"
-                      >
-                        📋 Copy
-                      </Button>
-                    </div>
-                    <p className="text-xs text-zinc-400 italic">
-                      ⚠️ Customize with your specific details - don't just copy-paste!
-                    </p>
+                <div className="space-y-2">
+                  <div className="flex items-start gap-2 p-2 bg-zinc-800/50 rounded border border-zinc-700/50">
+                    <span className="text-xs text-zinc-300 break-words whitespace-pre-wrap hyphens-auto leading-relaxed flex-1">
+                      {getMainPrompt()}
+                    </span>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => copyPromptToClipboard(getMainPrompt())}
+                      className="text-xs h-6 px-2 text-[var(--brand)] hover:bg-[var(--brand)]/20 touch-target flex-shrink-0"
+                    >
+                      📋 Copy
+                    </Button>
                   </div>
-                )}
+                  <p className="text-xs text-zinc-400 italic">
+                    ⚠️ Customize with your specific details - don't just copy-paste!
+                  </p>
+                </div>
               </div>
             )}
 
@@ -269,37 +291,20 @@ export default function TaskItem({ task, phaseId }: TaskItemProps) {
               </div>
             )}
 
-            {/* Notes Section - Simple arrow toggle */}
-            {(!task.done || task.notes) && (
+            {/* Notes Section - Now shown below when expanded */}
+            {showNotes && (!task.done || task.notes) && (
               <div className="mb-2">
-                <div className="flex items-center justify-between mb-2">
-                  <button
-                    onClick={() => setShowNotes(!showNotes)}
-                    className="flex items-center gap-1 text-xs text-zinc-400 hover:text-[var(--brand)] transition-colors"
-                    data-tour="notes"
-                  >
-                    <ChevronRight 
-                      className={cn(
-                        "w-3 h-3 transition-transform duration-200",
-                        showNotes && "rotate-90"
-                      )} 
-                    />
-                    <span>Notes</span>
-                  </button>
-                </div>
-                {showNotes && (
-                  <Textarea
-                    ref={textareaRef}
-                    value={task.notes ?? ""}
-                    onChange={(e) => handleNotesChange(e.target.value)}
-                    placeholder="Add notes..."
-                    className={cn(
-                      "min-h-[60px] sm:min-h-[80px] resize-none rounded-xl mobile-text-sm",
-                      task.done && "opacity-50"
-                    )}
-                    disabled={task.done}
-                  />
-                )}
+                <Textarea
+                  ref={textareaRef}
+                  value={task.notes ?? ""}
+                  onChange={(e) => handleNotesChange(e.target.value)}
+                  placeholder="Add notes..."
+                  className={cn(
+                    "min-h-[60px] sm:min-h-[80px] resize-none rounded-xl mobile-text-sm",
+                    task.done && "opacity-50"
+                  )}
+                  disabled={task.done}
+                />
               </div>
             )}
 
@@ -661,33 +666,6 @@ function SubtaskItem({ subtask }: SubtaskItemProps) {
               transition={{ duration: 0.2 }}
               className="mt-3"
             >
-              {/* Notes Section - Simple arrow toggle */}
-              <div className="mb-2">
-                <div className="flex items-center justify-between mb-1">
-                  <button
-                    onClick={() => setShowNotes(!showNotes)}
-                    className="flex items-center gap-1 text-xs text-zinc-400 hover:text-[var(--brand)] transition-colors"
-                    data-tour="notes"
-                  >
-                    <ChevronRight 
-                      className={cn(
-                        "w-3 h-3 transition-transform duration-200",
-                        showNotes && "rotate-90"
-                      )} 
-                    />
-                    <span>Notes</span>
-                  </button>
-                </div>
-                {showNotes && (
-                  <Textarea
-                    ref={notesRef}
-                    value={subtask.notes ?? ""}
-                    onChange={(e) => handleNotesChange(e.target.value)}
-                    placeholder="Add notes for this step..."
-                    className="min-h-[50px] sm:min-h-[60px] resize-none rounded-lg mobile-text-sm"
-                  />
-                )}
-              </div>
             </motion.div>
           )}
         </AnimatePresence>
