@@ -48,7 +48,7 @@ export default function TaskItem({ task, phaseId }: TaskItemProps) {
   const [isExpanded, setIsExpanded] = useState(true); // Always expanded by default for better mobile UX
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [showPrompt, setShowPrompt] = useState(false);
-  const [showNotes, setShowNotes] = useState(false);
+  const [showNotes, setShowNotes] = useState(phaseId === "spark" && task.id === "sp-purpose");
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   const copyPromptToClipboard = async (prompt: string) => {
