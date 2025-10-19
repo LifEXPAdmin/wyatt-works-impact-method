@@ -47,7 +47,7 @@ const blueprintBenefits = [
   },
   {
     title: "Build Your Brand Foundation",
-    phase: "The Forge", 
+    phase: "The Build", 
     icon: Hammer,
     description: "Create the essential systems and assets that make your brand look professional and trustworthy.",
     benefits: [
@@ -61,7 +61,7 @@ const blueprintBenefits = [
   },
   {
     title: "Create Consistent Momentum",
-    phase: "The Flow",
+    phase: "The Launch",
     icon: Zap,
     description: "Build systems for regular content creation and audience engagement that don't require constant effort.",
     benefits: [
@@ -75,7 +75,7 @@ const blueprintBenefits = [
   },
   {
     title: "Launch Offers & Scale Systems",
-    phase: "The Impact",
+    phase: "The Scale",
     icon: Target,
     description: "Turn your audience into customers and build systems that allow you to scale without burning out.",
     benefits: [

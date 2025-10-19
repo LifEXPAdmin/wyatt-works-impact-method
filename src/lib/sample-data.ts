@@ -226,7 +226,7 @@ export const sampleBlueprint: Blueprint = {
 
     {
       id: "forge",
-      title: "The Forge",
+      title: "The Build",
       summary: "Make it real.",
       tasks: [
         {
@@ -538,7 +538,7 @@ export const sampleBlueprint: Blueprint = {
 
     {
       id: "flow",
-      title: "The Flow",
+      title: "The Launch",
       summary: "Create consistent momentum.",
       tasks: [
         {
@@ -1230,7 +1230,7 @@ export const sampleBlueprint: Blueprint = {
 
     {
       id: "impact",
-      title: "The Impact",
+      title: "The Scale",
       summary: "Scale offers & partnerships.",
       tasks: [
         {

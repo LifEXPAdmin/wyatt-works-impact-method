@@ -125,7 +125,7 @@ export default function CommandPalette({ isOpen, onClose }: CommandPaletteProps)
     {
       id: "go-to-forge",
       title: "Go to Forge",
-      description: "Navigate to The Forge phase",
+      description: "Navigate to The Build phase",
       icon: Hammer,
       action: () => {
         // Navigate to forge phase
@@ -136,7 +136,7 @@ export default function CommandPalette({ isOpen, onClose }: CommandPaletteProps)
     {
       id: "go-to-flow",
       title: "Go to Flow",
-      description: "Navigate to The Flow phase",
+      description: "Navigate to The Launch phase",
       icon: Zap,
       action: () => {
         // Navigate to flow phase
@@ -147,7 +147,7 @@ export default function CommandPalette({ isOpen, onClose }: CommandPaletteProps)
     {
       id: "go-to-impact",
       title: "Go to Impact",
-      description: "Navigate to The Impact phase",
+      description: "Navigate to The Scale phase",
       icon: Target,
       action: () => {
         // Navigate to impact phase
