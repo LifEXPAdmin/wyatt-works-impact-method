@@ -578,6 +578,15 @@ function AppPageContent() {
                       Export PDF
                     </Button>
                     
+                    <Button
+                      onClick={() => setIsTourOpen(true)}
+                      variant="outline"
+                      className="border-[var(--brand)]/30 text-[var(--brand)] hover:bg-[var(--brand)]/10 mobile-text-sm touch-target"
+                      title="Take a guided tour of the blueprint"
+                    >
+                      🎯 Tour
+                    </Button>
+                    
                     <div className="text-right">
                       <div className="mobile-text-sm text-zinc-400">Progress</div>
                       <div className="mobile-text-lg font-bold text-[var(--brand)]">
@@ -637,26 +646,12 @@ function AppPageContent() {
                       </button>
                       <button 
                         onClick={() => {
-                          console.log("Starting tour...");
-                          console.log("Current isTourOpen state:", isTourOpen);
                           setIsTourOpen(true);
-                          console.log("Set isTourOpen to true");
-                          // Force a re-render check
-                          setTimeout(() => {
-                            console.log("After timeout, isTourOpen should be true");
-                          }, 100);
                         }}
                         className="px-2 py-1 bg-green-500 text-white rounded text-xs"
                       >
                         Start Tour
                       </button>
-                    </div>
-                    
-                    {/* Tour State Debug */}
-                    <div className="mt-2 p-2 bg-yellow-100 text-black text-xs rounded">
-                      <strong>Tour Debug:</strong> isTourOpen = {isTourOpen ? "TRUE" : "FALSE"} | 
-                      Steps = {tourSteps.length} | 
-                      Current Step = {isTourOpen ? "0" : "N/A"}
                     </div>
                   </div>
                 )}
