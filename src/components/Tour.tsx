@@ -42,27 +42,34 @@ export default function Tour({
   const getUnblurredElements = useCallback(() => {
     const unblurredRects: DOMRect[] = [];
     
-    // Add current step
-    if (currentStepData) {
+    // Skip step 0 (welcome step) - it should stay blurred
+    if (currentStep === 0) {
+      return unblurredRects; // Return empty array for step 1
+    }
+    
+    // Add current step (but not step 0)
+    if (currentStepData && currentStep > 0) {
       const currentElement = document.querySelector(currentStepData.target);
       if (currentElement) {
         unblurredRects.push(currentElement.getBoundingClientRect());
       }
     }
     
-    // Add completed steps
+    // Add completed steps (but not step 0)
     completedSteps.forEach(stepIndex => {
-      const stepData = steps[stepIndex];
-      if (stepData) {
-        const element = document.querySelector(stepData.target);
-        if (element) {
-          unblurredRects.push(element.getBoundingClientRect());
+      if (stepIndex > 0) { // Skip step 0
+        const stepData = steps[stepIndex];
+        if (stepData) {
+          const element = document.querySelector(stepData.target);
+          if (element) {
+            unblurredRects.push(element.getBoundingClientRect());
+          }
         }
       }
     });
     
     return unblurredRects;
-  }, [currentStepData, completedSteps, steps]);
+  }, [currentStepData, completedSteps, steps, currentStep]);
 
   // Create overlay pieces that don't cover unblurred elements
   const createOverlayPieces = useCallback(() => {
@@ -156,6 +163,10 @@ export default function Tour({
     if (isOpen) {
       setCurrentStep(0);
       setCompletedSteps([]);
+      // Scroll to top when tour starts
+      window.scrollTo(0, 0);
+      document.documentElement.scrollTop = 0;
+      document.body.scrollTop = 0;
     }
   }, [isOpen]);
 
