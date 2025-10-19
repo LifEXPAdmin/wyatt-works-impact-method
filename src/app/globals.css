@@ -360,6 +360,51 @@
     overflow: hidden;
   }
   
+  /* Smooth scroll fade effects */
+  .scroll-fade-container {
+    position: relative;
+    overflow-y: auto;
+  }
+  
+  .scroll-fade-top {
+    position: sticky;
+    top: 0;
+    height: 20px;
+    background: linear-gradient(to bottom, var(--bg) 0%, var(--bg) 50%, transparent 100%);
+    z-index: 10;
+    pointer-events: none;
+  }
+  
+  .scroll-fade-bottom {
+    position: sticky;
+    bottom: 0;
+    height: 20px;
+    background: linear-gradient(to top, var(--bg) 0%, var(--bg) 50%, transparent 100%);
+    z-index: 10;
+    pointer-events: none;
+  }
+  
+  /* Enhanced fade overlays */
+  .fade-overlay-top {
+    background: linear-gradient(to bottom, 
+      var(--bg) 0%, 
+      var(--bg) 30%, 
+      rgba(11, 14, 20, 0.8) 60%, 
+      rgba(11, 14, 20, 0.4) 80%, 
+      transparent 100%
+    );
+  }
+  
+  .fade-overlay-bottom {
+    background: linear-gradient(to top, 
+      var(--bg) 0%, 
+      var(--bg) 30%, 
+      rgba(11, 14, 20, 0.8) 60%, 
+      rgba(11, 14, 20, 0.4) 80%, 
+      transparent 100%
+    );
+  }
+  
   /* Mobile-optimized containers */
   .mobile-container {
     @apply w-full max-w-full overflow-hidden;
