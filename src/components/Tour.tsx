@@ -47,27 +47,34 @@ export default function Tour({
       return unblurredRects; // Return empty array for step 1
     }
     
-    // Step 2: Highlight entire main task area
+    // Step 2: Only phase navigation unblurred
     if (currentStep === 1) {
-      const mainContentArea = document.querySelector('main') || document.querySelector('[data-tour="main-content"]');
-      if (mainContentArea) {
-        unblurredRects.push(mainContentArea.getBoundingClientRect());
+      const phaseNav = document.querySelector('#phase-nav');
+      if (phaseNav) {
+        unblurredRects.push(phaseNav.getBoundingClientRect());
       }
       return unblurredRects;
     }
     
-    // Step 3+: Individual element highlighting
-    // Add current step (but not step 0 or 1)
-    if (currentStepData && currentStep > 1) {
+    // Step 3+: Workspace stays unblurred from step 3 onwards
+    if (currentStep >= 2) {
+      const mainContentArea = document.querySelector('[data-tour="main-content"]');
+      if (mainContentArea) {
+        unblurredRects.push(mainContentArea.getBoundingClientRect());
+      }
+    }
+    
+    // Step 3+: Add current step element (but not step 0, 1, or 2)
+    if (currentStepData && currentStep > 2) {
       const currentElement = document.querySelector(currentStepData.target);
       if (currentElement) {
         unblurredRects.push(currentElement.getBoundingClientRect());
       }
     }
     
-    // Add completed steps (but not step 0 or 1)
+    // Step 3+: Add completed steps (but not step 0, 1, or 2)
     completedSteps.forEach(stepIndex => {
-      if (stepIndex > 1) { // Skip step 0 and 1
+      if (stepIndex > 2) { // Skip step 0, 1, and 2
         const stepData = steps[stepIndex];
         if (stepData) {
           const element = document.querySelector(stepData.target);

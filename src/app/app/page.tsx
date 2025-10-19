@@ -198,18 +198,18 @@ function AppPageContent() {
       placement: "center"
     },
     {
-      id: "main-content",
-      target: "[data-tour='main-content']",
-      title: "Your Blueprint Workspace",
-      body: "This is where you'll work on your tasks and subtasks. Each phase has specific goals to help you build your business step by step.",
-      placement: "center"
-    },
-    {
       id: "phase",
       target: "#phase-nav",
       title: "Pick a Phase",
       body: "Choose Spark, Build, Launch, or Scale to focus your work. Each phase builds on the previous one.",
       placement: "right"
+    },
+    {
+      id: "main-content",
+      target: "[data-tour='main-content']",
+      title: "Your Blueprint Workspace",
+      body: "This is where you'll work on your tasks and subtasks. Each phase has specific goals to help you build your business step by step.",
+      placement: "center"
     },
     {
       id: "lightbulb",
