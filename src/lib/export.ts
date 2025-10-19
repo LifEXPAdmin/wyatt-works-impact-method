@@ -40,11 +40,9 @@ export async function exportPDF(blueprint: Blueprint): Promise<Uint8Array> {
   y -= 60;
   
   for (const phase of blueprint.phases) {
-    // Check if we need a new page
-    if (y < 150) {
-      page = doc.addPage([595, 842]);
-      y = 750;
-    }
+    // Always start each phase on a fresh page
+    page = doc.addPage([595, 842]);
+    y = 750;
     
     // Phase title with background
     page.drawRectangle({
@@ -125,12 +123,42 @@ export async function exportPDF(blueprint: Blueprint): Promise<Uint8Array> {
           y -= 5;
         }
         
+        // Add space for handwritten notes
+        if (y < 100) {
+          page = doc.addPage([595, 842]);
+          y = 750;
+        }
+        
+        // Notes section for handwritten notes
+        page.drawText("Notes:", { 
+          x: indent + 20, y, 
+          font: font, size: 9, 
+          color: rgb(0.5, 0.5, 0.5) 
+        });
+        y -= 20;
+        
+        // Add lines for handwritten notes
+        for (let i = 0; i < 3; i++) {
+          if (y < 50) {
+            page = doc.addPage([595, 842]);
+            y = 750;
+          }
+          page.drawLine({
+            start: { x: indent + 20, y: y - 5 },
+            end: { x: indent + 200, y: y - 5 },
+            thickness: 0.5,
+            color: rgb(0.7, 0.7, 0.7)
+          });
+          y -= 15;
+        }
+        y -= 10;
+        
         // Render subtasks
         if (task.children && task.children.length > 0) {
           renderTasks(task.children, depth + 1);
         }
         
-        y -= 5;
+        y -= 15; // More space between main tasks
       }
     };
     

@@ -603,14 +603,20 @@ function SubtaskItem({ subtask }: SubtaskItemProps) {
               💡
             </Button>
 
-            {/* Expand/Collapse Button */}
+            {/* Notes Button */}
             <Button
               variant="ghost"
               size="sm"
-              onClick={() => setIsExpanded(!isExpanded)}
-              className="w-6 h-6 p-0 text-zinc-400 hover:text-zinc-300"
+              onClick={() => setShowNotes(!showNotes)}
+              className="w-6 h-6 p-0 text-zinc-400 hover:text-[var(--brand)]"
+              data-tour="notes"
             >
-              {isExpanded ? <ChevronDown className="w-3 h-3" /> : <ChevronRight className="w-3 h-3" />}
+              <ChevronRight 
+                className={cn(
+                  "w-3 h-3 transition-transform duration-200",
+                  showNotes && "rotate-90"
+                )} 
+              />
             </Button>
 
             {/* Delete Button */}
@@ -656,9 +662,9 @@ function SubtaskItem({ subtask }: SubtaskItemProps) {
           )}
         </AnimatePresence>
 
-        {/* Expanded Content */}
+        {/* Notes Section */}
         <AnimatePresence>
-          {isExpanded && (
+          {showNotes && (
             <motion.div
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: "auto" }}
@@ -666,6 +672,13 @@ function SubtaskItem({ subtask }: SubtaskItemProps) {
               transition={{ duration: 0.2 }}
               className="mt-3"
             >
+              <Textarea
+                ref={notesRef}
+                value={subtask.notes ?? ""}
+                onChange={(e) => handleNotesChange(e.target.value)}
+                placeholder="Add notes for this step..."
+                className="min-h-[50px] sm:min-h-[60px] resize-none rounded-lg mobile-text-sm"
+              />
             </motion.div>
           )}
         </AnimatePresence>
