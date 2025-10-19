@@ -205,10 +205,10 @@ function AppPageContent() {
       placement: "bottom"
     },
     {
-      id: "tasks",
-      target: "#task-list",
-      title: "Check tasks & add notes",
-      body: "Tick off steps and capture decisions. Everything autosaves locally—no login needed.",
+      id: "notes",
+      target: "[data-tour='notes']",
+      title: "Add Notes",
+      body: "Click the arrow next to 'Notes' to expand and add notes to any task or subtask. The arrow points right when closed, down when open.",
       placement: "bottom"
     },
     {

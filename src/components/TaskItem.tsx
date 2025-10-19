@@ -269,19 +269,23 @@ export default function TaskItem({ task, phaseId }: TaskItemProps) {
               </div>
             )}
 
-            {/* Notes Editor - Collapsed by default */}
+            {/* Notes Section - Simple arrow toggle */}
             {(!task.done || task.notes) && (
-              <div className="mb-3">
+              <div className="mb-2">
                 <div className="flex items-center justify-between mb-2">
-                  <h4 className="text-xs font-semibold text-zinc-400">📝 Notes</h4>
-                  <Button
-                    variant="ghost"
-                    size="sm"
+                  <button
                     onClick={() => setShowNotes(!showNotes)}
-                    className="text-xs h-6 px-2 text-zinc-400 hover:text-[var(--brand)] hover:bg-[var(--brand)]/10"
+                    className="flex items-center gap-1 text-xs text-zinc-400 hover:text-[var(--brand)] transition-colors"
+                    data-tour="notes"
                   >
-                    {showNotes ? "Hide" : "Add Note"}
-                  </Button>
+                    <ChevronRight 
+                      className={cn(
+                        "w-3 h-3 transition-transform duration-200",
+                        showNotes && "rotate-90"
+                      )} 
+                    />
+                    <span>Notes</span>
+                  </button>
                 </div>
                 {showNotes && (
                   <Textarea
@@ -657,18 +661,22 @@ function SubtaskItem({ subtask }: SubtaskItemProps) {
               transition={{ duration: 0.2 }}
               className="mt-3"
             >
-              {/* Notes Editor - Collapsed by default */}
+              {/* Notes Section - Simple arrow toggle */}
               <div className="mb-2">
                 <div className="flex items-center justify-between mb-1">
-                  <h4 className="text-xs font-semibold text-zinc-400">📝 Notes</h4>
-                  <Button
-                    variant="ghost"
-                    size="sm"
+                  <button
                     onClick={() => setShowNotes(!showNotes)}
-                    className="text-xs h-5 px-2 text-zinc-400 hover:text-[var(--brand)] hover:bg-[var(--brand)]/10"
+                    className="flex items-center gap-1 text-xs text-zinc-400 hover:text-[var(--brand)] transition-colors"
+                    data-tour="notes"
                   >
-                    {showNotes ? "Hide" : "Add"}
-                  </Button>
+                    <ChevronRight 
+                      className={cn(
+                        "w-3 h-3 transition-transform duration-200",
+                        showNotes && "rotate-90"
+                      )} 
+                    />
+                    <span>Notes</span>
+                  </button>
                 </div>
                 {showNotes && (
                   <Textarea
