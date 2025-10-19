@@ -238,10 +238,11 @@ function AppPageContent() {
             setTimeout(() => setShowPhaseBreakdown(true), 1000);
           }
           
-          if (!hasSeenTour) {
-            // Show tour after a delay to let the page load
-            setTimeout(() => setIsTourOpen(true), 2000);
-          }
+          // Temporarily disabled automatic tour to fix interaction issues
+          // if (!hasSeenTour) {
+          //   // Show tour after a delay to let the page load
+          //   setTimeout(() => setIsTourOpen(true), 2000);
+          // }
         } catch (error) {
           console.error("Error checking onboarding status:", error);
         }
