@@ -224,10 +224,42 @@ export default function Tour({
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
-        className="fixed inset-0 z-[55] tour-spotlight bg-black/70 backdrop-blur-sm"
+        className="fixed inset-0 z-[9999] bg-red-500/50 backdrop-blur-sm"
         ref={overlayRef}
         aria-hidden="true"
+        style={{ 
+          backgroundColor: 'rgba(255, 0, 0, 0.3)',
+          zIndex: 9999,
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0
+        }}
       >
+        {/* Test visibility - bright red box */}
+        <div 
+          style={{
+            position: 'fixed',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            width: '200px',
+            height: '100px',
+            backgroundColor: 'red',
+            border: '5px solid yellow',
+            zIndex: 10001,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            color: 'white',
+            fontSize: '16px',
+            fontWeight: 'bold'
+          }}
+        >
+          TOUR IS VISIBLE!
+        </div>
+
         {/* Target highlight ring */}
         {targetRect && (
           <div
@@ -249,13 +281,16 @@ export default function Tour({
           exit={{ opacity: 0, y: 8 }}
           transition={{ duration: 0.2 }}
           className={cn(
-            "absolute z-[60] rounded-xl border border-[var(--border)] bg-[var(--card)]/95 shadow-2xl backdrop-blur mobile-px py-3",
+            "absolute z-[10000] rounded-xl border-4 border-yellow-400 bg-yellow-100 shadow-2xl backdrop-blur mobile-px py-3",
             isMobile ? "w-[calc(100vw-32px)] max-w-sm" : "w-80"
           )}
           style={{
             left: isMobile ? 16 : tooltipPosition.x,
             top: isMobile ? "auto" : tooltipPosition.y,
             bottom: isMobile ? 16 : "auto",
+            zIndex: 10000,
+            backgroundColor: 'yellow',
+            border: '4px solid red'
           }}
           role="dialog"
           aria-labelledby="tour-title"
