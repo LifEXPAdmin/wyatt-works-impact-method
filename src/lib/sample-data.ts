@@ -16,6 +16,7 @@ export const sampleBlueprint: Blueprint = {
               title: "Define your one-sentence purpose",
               description: "Who you serve + transformation they get. Use AI to brainstorm options, then choose what feels authentic.",
               done: false,
+              notes: "📝 Welcome to your blueprint! This is where you can take notes for each task.\n\n💡 Use the dropdown arrow (→) to expand or collapse notes on every task and subtask.\n\n🔍 Click the lightbulb (💡) to see AI prompts that will help you with each step.\n\n✅ When you complete a task, click the checkbox to mark it as done.\n\nStart by taking notes here as you work through defining your purpose statement!",
               tips: [
                 "AI Prompt: 'I want to help [general audience] with [general problem]. Give me 20 different ways to phrase my one-sentence purpose, focusing on the transformation I create.'",
                 "Format: I help [who] go from [now] to [after].",
