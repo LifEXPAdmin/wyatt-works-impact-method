@@ -64,6 +64,93 @@ export default function Tour({
     return unblurredRects;
   }, [currentStepData, completedSteps, steps]);
 
+  // Create overlay pieces that don't cover unblurred elements
+  const createOverlayPieces = useCallback(() => {
+    const unblurredRects = getUnblurredElements();
+    const viewportWidth = window.innerWidth;
+    const viewportHeight = window.innerHeight;
+    
+    if (unblurredRects.length === 0) {
+      return [<div key="full-overlay" className="absolute inset-0 bg-black/70 backdrop-blur-sm" />];
+    }
+    
+    // Sort rectangles by position
+    const sortedRects = [...unblurredRects].sort((a, b) => a.top - b.top);
+    const overlayPieces: JSX.Element[] = [];
+    
+    let currentY = 0;
+    sortedRects.forEach((rect, index) => {
+      // Add overlay piece above this rectangle
+      if (rect.top > currentY) {
+        overlayPieces.push(
+          <div
+            key={`above-${index}`}
+            className="absolute bg-black/70 backdrop-blur-sm"
+            style={{
+              left: 0,
+              top: currentY,
+              width: viewportWidth,
+              height: rect.top - currentY,
+            }}
+          />
+        );
+      }
+      
+      // Add overlay pieces to the left and right of this rectangle
+      if (rect.left > 0) {
+        overlayPieces.push(
+          <div
+            key={`left-${index}`}
+            className="absolute bg-black/70 backdrop-blur-sm"
+            style={{
+              left: 0,
+              top: rect.top,
+              width: rect.left,
+              height: rect.height,
+            }}
+          />
+        );
+      }
+      
+      if (rect.right < viewportWidth) {
+        overlayPieces.push(
+          <div
+            key={`right-${index}`}
+            className="absolute bg-black/70 backdrop-blur-sm"
+            style={{
+              left: rect.right,
+              top: rect.top,
+              width: viewportWidth - rect.right,
+              height: rect.height,
+            }}
+          />
+        );
+      }
+      
+      currentY = Math.max(currentY, rect.bottom);
+    });
+    
+    // Add overlay piece below the last rectangle
+    if (currentY < viewportHeight) {
+      overlayPieces.push(
+        <div
+          key="below-last"
+          className="absolute bg-black/70 backdrop-blur-sm"
+          style={{
+            left: 0,
+            top: currentY,
+            width: viewportWidth,
+            height: viewportHeight - currentY,
+          }}
+        />
+      );
+    }
+    
+    return overlayPieces;
+  }, [getUnblurredElements]);
+
+  // Reset to step 1 when tour opens
+
   // Reset to step 1 when tour opens
   useEffect(() => {
     if (isOpen) {
@@ -256,26 +343,12 @@ export default function Tour({
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
-        className="fixed inset-0 z-[9999] bg-black/70 backdrop-blur-sm"
+        className="fixed inset-0 z-[9999]"
         ref={overlayRef}
         aria-hidden="true"
       >
-        {/* Add bright glow to unblurred elements */}
-        {getUnblurredElements().map((rect, index) => (
-          <div
-            key={`glow-${index}`}
-            className="absolute pointer-events-none"
-            style={{
-              left: rect.left - 15,
-              top: rect.top - 15,
-              width: rect.width + 30,
-              height: rect.height + 30,
-              background: `radial-gradient(circle, rgba(59, 130, 246, 0.3) 0%, rgba(59, 130, 246, 0.1) 50%, transparent 100%)`,
-              borderRadius: '12px',
-              zIndex: 1,
-            }}
-          />
-        ))}
+        {/* Create overlay pieces that don't cover unblurred elements */}
+        {createOverlayPieces()}
 
         {/* Target highlight ring for current step */}
         {targetRect && (
