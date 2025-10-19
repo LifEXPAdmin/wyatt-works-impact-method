@@ -542,48 +542,687 @@ export const sampleBlueprint: Blueprint = {
       summary: "Create consistent momentum.",
       tasks: [
         {
-          id: "fl-weekly-video",
-          title: "Plan weekly long-form video",
-          description: "One cornerstone per week.",
+          id: "fl-content-strategy",
+          title: "Develop your content strategy",
+          description: "Create a systematic approach to content that builds your audience and drives results. Use AI to plan content that serves your audience while growing your business.",
           done: false,
-          tips: ["Same day/time weekly", "3 weeks of topics ready"],
+          tips: [
+            "AI Prompt: 'Help me create a content strategy for [your business] that serves [your avatar]. Include: content pillars, posting frequency, content types, engagement tactics, and how to measure success. Focus on providing value while building trust.'",
+            "Focus on serving your audience first, selling second",
+            "Create content pillars that align with your expertise",
+            "Plan for consistency over perfection",
+            "Use AI to brainstorm content ideas and formats",
+            "Build systems for sustainable content creation"
+          ],
           children: [
-            { id: "fl-weekly-1", title: "Create repeating calendar block", done: false },
-            { id: "fl-weekly-2", title: "Draft next 3 titles", done: false },
-            { id: "fl-weekly-3", title: "Prepare A/B thumbnail concepts", done: false }
+            { 
+              id: "fl-content-1", 
+              title: "AI content pillars: Define 3-5 core content themes", 
+              done: false, 
+              tips: [
+                "AI Prompt: 'What are the 5 most valuable content pillars for [your business type] that serves [your avatar]? Each pillar should provide genuine value while positioning me as an expert.'",
+                "Choose themes that showcase your expertise",
+                "Ensure each pillar serves your audience's needs"
+              ] 
+            },
+            { 
+              id: "fl-content-2", 
+              title: "Human calendar planning: Create content calendar template", 
+              done: false, 
+              tips: [
+                "Plan 2-4 weeks ahead",
+                "Mix different content types",
+                "Include seasonal and trending topics"
+              ] 
+            },
+            { 
+              id: "fl-content-3", 
+              title: "AI content ideas: Generate 20 content ideas per pillar", 
+              done: false, 
+              tips: [
+                "AI Prompt: 'Generate 20 specific content ideas for [content pillar] that would help [your avatar] with [specific problem]. Include different formats: educational, inspirational, behind-the-scenes, and case studies.'",
+                "Mix educational and entertaining content",
+                "Include personal stories and examples"
+              ] 
+            },
+            { 
+              id: "fl-content-4", 
+              title: "Human content systems: Set up creation workflows", 
+              done: false, 
+              tips: [
+                "Create templates for different content types",
+                "Batch similar tasks together",
+                "Set up approval and review processes"
+              ] 
+            },
+            { 
+              id: "fl-content-5", 
+              title: "AI optimization: Plan content performance tracking", 
+              done: false, 
+              tips: [
+                "AI Prompt: 'What metrics should I track for [your content strategy] to measure success? Include engagement, reach, conversion, and business impact metrics.'",
+                "Focus on metrics that matter to your business",
+                "Set up regular review and optimization cycles"
+              ] 
+            }
           ]
         },
         {
-          id: "fl-mid-cta",
-          title: "Define mid-video CTA",
-          description: "Organic, simple, valuable.",
+          id: "fl-platform-presence",
+          title: "Build your platform presence",
+          description: "Establish a strong presence on the platforms where your audience lives. Use AI to optimize your profiles and create platform-specific content strategies.",
           done: false,
-          tips: ["Ex: Comment 'Guide' to get the checklist", "Place around Minute 4–6"],
+          tips: [
+            "AI Prompt: 'Help me optimize my [platform] profile for [your business] that serves [your avatar]. Include: bio optimization, content strategy, engagement tactics, and growth strategies specific to this platform.'",
+            "Focus on 1-2 platforms initially",
+            "Optimize profiles for your target audience",
+            "Create platform-specific content strategies",
+            "Engage authentically with your community",
+            "Use AI to adapt content for different platforms"
+          ],
           children: [
-            { id: "fl-mid-cta-1", title: "Write 2 CTA lines", done: false },
-            { id: "fl-mid-cta-2", title: "Add on-screen lower-third", done: false }
+            { 
+              id: "fl-platform-1", 
+              title: "AI platform research: Identify best platforms for your audience", 
+              done: false, 
+              tips: [
+                "AI Prompt: 'Where does [your avatar] spend time online? Analyze the best platforms for [your business type] to reach [your avatar] and explain why each platform works.'",
+                "Consider where your audience is most active",
+                "Think about content format preferences"
+              ] 
+            },
+            { 
+              id: "fl-platform-2", 
+              title: "Human profile optimization: Create compelling profiles", 
+              done: false, 
+              tips: [
+                "Write clear, benefit-focused bios",
+                "Use consistent branding across platforms",
+                "Include clear call-to-actions"
+              ] 
+            },
+            { 
+              id: "fl-platform-3", 
+              title: "AI content adaptation: Adapt content for each platform", 
+              done: false, 
+              tips: [
+                "AI Prompt: 'How should I adapt [content type] for [platform]? Include format, length, tone, and engagement tactics specific to this platform's culture.'",
+                "Respect each platform's unique culture",
+                "Optimize for platform-specific algorithms"
+              ] 
+            },
+            { 
+              id: "fl-platform-4", 
+              title: "Human engagement strategy: Plan community building", 
+              done: false, 
+              tips: [
+                "Set daily engagement goals",
+                "Create engagement templates",
+                "Plan for authentic interactions"
+              ] 
+            },
+            { 
+              id: "fl-platform-5", 
+              title: "AI growth tactics: Develop platform-specific growth strategies", 
+              done: false, 
+              tips: [
+                "AI Prompt: 'What are the most effective organic growth strategies for [platform] in [your industry]? Include specific tactics, timing, and content strategies that work.'",
+                "Focus on organic growth first",
+                "Build genuine relationships"
+              ] 
+            }
           ]
         },
         {
-          id: "fl-email",
-          title: "Build email list with lead magnet",
-          description: "Deliver the blueprint PDF/MD.",
+          id: "fl-email-marketing",
+          title: "Build your email marketing system",
+          description: "Create a powerful email marketing system that nurtures relationships and drives business results. Use AI to craft compelling emails and automate your sequences.",
           done: false,
-          tips: ["Make it truly useful", "Short and actionable"],
+          tips: [
+            "AI Prompt: 'Help me create an email marketing strategy for [your business] that serves [your avatar]. Include: welcome sequence, nurture campaigns, segmentation strategy, and automation workflows that build trust and drive conversions.'",
+            "Focus on providing value in every email",
+            "Build trust before asking for sales",
+            "Use segmentation to personalize messages",
+            "Automate repetitive tasks",
+            "Test and optimize continuously"
+          ],
           children: [
-            { id: "fl-email-1", title: "Set up capture form", done: false },
-            { id: "fl-email-2", title: "Auto-deliver PDF via email", done: false }
+            { 
+              id: "fl-email-1", 
+              title: "AI welcome sequence: Create 5-email welcome series", 
+              done: false, 
+              tips: [
+                "AI Prompt: 'Create a 5-email welcome sequence for [your business] that introduces [your avatar] to my value and expertise. Each email should provide genuine value while building trust.'",
+                "Introduce yourself and your story",
+                "Deliver immediate value",
+                "Set expectations for future emails"
+              ] 
+            },
+            { 
+              id: "fl-email-2", 
+              title: "Human lead magnet: Create valuable free resource", 
+              done: false, 
+              tips: [
+                "Make it genuinely useful",
+                "Easy to consume and implement",
+                "Directly related to your paid offerings"
+              ] 
+            },
+            { 
+              id: "fl-email-3", 
+              title: "AI nurture campaigns: Design ongoing value campaigns", 
+              done: false, 
+              tips: [
+                "AI Prompt: 'Create 3 different nurture email campaigns for [your business]: educational series, behind-the-scenes series, and case study series. Each should provide value while positioning my expertise.'",
+                "Mix educational and personal content",
+                "Include success stories and case studies",
+                "Provide actionable tips and insights"
+              ] 
+            },
+            { 
+              id: "fl-email-4", 
+              title: "Human automation setup: Configure email automation", 
+              done: false, 
+              tips: [
+                "Set up welcome sequence automation",
+                "Create segmentation rules",
+                "Test all automated sequences"
+              ] 
+            },
+            { 
+              id: "fl-email-5", 
+              title: "AI optimization: Plan email performance tracking", 
+              done: false, 
+              tips: [
+                "AI Prompt: 'What email metrics should I track for [your business] and how should I optimize based on performance? Include open rates, click rates, conversion rates, and engagement metrics.'",
+                "Track metrics that matter to your business",
+                "A/B test subject lines and content",
+                "Regularly review and optimize"
+              ] 
+            }
           ]
         },
         {
-          id: "fl-engage",
-          title: "Engage daily with your audience",
-          description: "Reply, ask, listen.",
+          id: "fl-launch-strategy",
+          title: "Plan your launch strategy",
+          description: "Create a systematic approach to launching your offerings that builds anticipation and drives sales. Use AI to plan launch sequences and marketing campaigns.",
           done: false,
-          tips: ["Reply within 24h", "Ask questions", "Share behind-the-scenes"],
+          tips: [
+            "AI Prompt: 'Help me create a launch strategy for [your offering] that serves [your avatar]. Include: pre-launch content, launch sequence, pricing strategy, and post-launch follow-up that maximizes sales and customer satisfaction.'",
+            "Build anticipation before the launch",
+            "Create urgency without being pushy",
+            "Use social proof and testimonials",
+            "Plan for post-launch follow-up",
+            "Test pricing and positioning"
+          ],
           children: [
-            { id: "fl-engage-1", title: "Set 15-min daily engage block", done: false },
-            { id: "fl-engage-2", title: "Create 5 engagement questions", done: false }
+            { 
+              id: "fl-launch-1", 
+              title: "AI pre-launch planning: Design anticipation-building content", 
+              done: false, 
+              tips: [
+                "AI Prompt: 'Create a 2-week pre-launch content plan for [your offering] that builds anticipation and educates [your avatar] about the problem it solves. Include teasers, behind-the-scenes, and educational content.'",
+                "Share your creation process",
+                "Educate about the problem you solve",
+                "Build excitement and anticipation"
+              ] 
+            },
+            { 
+              id: "fl-launch-2", 
+              title: "Human pricing strategy: Test and optimize pricing", 
+              done: false, 
+              tips: [
+                "Research competitor pricing",
+                "Test different price points",
+                "Consider value-based pricing"
+              ] 
+            },
+            { 
+              id: "fl-launch-3", 
+              title: "AI launch sequence: Create launch day content plan", 
+              done: false, 
+              tips: [
+                "AI Prompt: 'Create a launch day content sequence for [your offering] including: announcement post, detailed explanation, social proof, urgency creation, and multiple touchpoints throughout the day.'",
+                "Create multiple touchpoints",
+                "Use social proof effectively",
+                "Create appropriate urgency"
+              ] 
+            },
+            { 
+              id: "fl-launch-4", 
+              title: "Human sales page: Create compelling sales page", 
+              done: false, 
+              tips: [
+                "Focus on benefits over features",
+                "Include social proof and testimonials",
+                "Make it easy to buy"
+              ] 
+            },
+            { 
+              id: "fl-launch-5", 
+              title: "AI follow-up strategy: Plan post-launch nurturing", 
+              done: false, 
+              tips: [
+                "AI Prompt: 'Create a post-launch follow-up strategy for [your offering] including: thank you sequence, onboarding emails, usage tips, and re-engagement campaigns for non-buyers.'",
+                "Thank buyers and provide next steps",
+                "Nurture non-buyers with value",
+                "Gather feedback for improvements"
+              ] 
+            }
+          ]
+        },
+        {
+          id: "fl-community-building",
+          title: "Build your community",
+          description: "Create a thriving community around your brand that supports and amplifies your message. Use AI to plan community engagement and growth strategies.",
+          done: false,
+          tips: [
+            "AI Prompt: 'Help me build a community around [your business] that serves [your avatar]. Include: community platform selection, engagement strategies, content ideas, moderation guidelines, and growth tactics that create genuine connections.'",
+            "Focus on serving the community first",
+            "Create spaces for meaningful interaction",
+            "Moderate with care and consistency",
+            "Encourage user-generated content",
+            "Build relationships, not just followers"
+          ],
+          children: [
+            { 
+              id: "fl-community-1", 
+              title: "AI platform selection: Choose best community platform", 
+              done: false, 
+              tips: [
+                "AI Prompt: 'What's the best platform for building a community around [your business] that serves [your avatar]? Consider engagement features, moderation tools, and audience preferences.'",
+                "Consider where your audience is most active",
+                "Think about moderation and management needs",
+                "Evaluate platform features and limitations"
+              ] 
+            },
+            { 
+              id: "fl-community-2", 
+              title: "Human community guidelines: Create clear rules and expectations", 
+              done: false, 
+              tips: [
+                "Set clear behavioral expectations",
+                "Define what's acceptable and what's not",
+                "Create reporting and moderation processes"
+              ] 
+            },
+            { 
+              id: "fl-community-3", 
+              title: "AI engagement strategies: Plan community interaction tactics", 
+              done: false, 
+              tips: [
+                "AI Prompt: 'Create engagement strategies for my [community type] including: discussion starters, weekly themes, challenges, and ways to encourage member participation and interaction.'",
+                "Create regular discussion topics",
+                "Plan interactive activities",
+                "Encourage member-to-member connections"
+              ] 
+            },
+            { 
+              id: "fl-community-4", 
+              title: "Human moderation system: Set up community management", 
+              done: false, 
+              tips: [
+                "Create moderation guidelines",
+                "Set up reporting systems",
+                "Plan for community growth"
+              ] 
+            },
+            { 
+              id: "fl-community-5", 
+              title: "AI growth tactics: Develop community expansion strategies", 
+              done: false, 
+              tips: [
+                "AI Prompt: 'How can I grow my [community type] organically while maintaining quality? Include referral strategies, content sharing tactics, and partnership opportunities.'",
+                "Focus on organic growth",
+                "Encourage member referrals",
+                "Create shareable content"
+              ] 
+            }
+          ]
+        },
+        {
+          id: "fl-partnerships",
+          title: "Develop strategic partnerships",
+          description: "Build mutually beneficial relationships with other creators and businesses. Use AI to identify partnership opportunities and create collaboration strategies.",
+          done: false,
+          tips: [
+            "AI Prompt: 'Help me identify partnership opportunities for [your business] that serves [your avatar]. Include: ideal partner types, collaboration ideas, outreach strategies, and ways to create mutual value.'",
+            "Focus on mutual value creation",
+            "Start with small, low-risk collaborations",
+            "Build relationships before asking for favors",
+            "Document partnership processes",
+            "Measure partnership success"
+          ],
+          children: [
+            { 
+              id: "fl-partnership-1", 
+              title: "AI partner research: Identify ideal collaboration partners", 
+              done: false, 
+              tips: [
+                "AI Prompt: 'Who are the ideal partnership targets for [your business] that serves [your avatar]? Include complementary businesses, influencers, and organizations that share similar values and audiences.'",
+                "Look for complementary, not competing, businesses",
+                "Consider audience overlap and alignment",
+                "Research potential partners' values and approach"
+              ] 
+            },
+            { 
+              id: "fl-partnership-2", 
+              title: "Human collaboration ideas: Brainstorm partnership opportunities", 
+              done: false, 
+              tips: [
+                "Think of ways to create mutual value",
+                "Consider different collaboration formats",
+                "Start with low-commitment opportunities"
+              ] 
+            },
+            { 
+              id: "fl-partnership-3", 
+              title: "AI outreach strategy: Create partnership pitch templates", 
+              done: false, 
+              tips: [
+                "AI Prompt: 'Create partnership outreach templates for [your business] including: introduction email, collaboration proposal, and follow-up messages that focus on mutual value.'",
+                "Focus on what you can offer them",
+                "Be specific about collaboration ideas",
+                "Make it easy for them to say yes"
+              ] 
+            },
+            { 
+              id: "fl-partnership-4", 
+              title: "Human relationship building: Plan partnership nurturing", 
+              done: false, 
+              tips: [
+                "Engage with potential partners' content",
+                "Build relationships before pitching",
+                "Look for ways to help them first"
+              ] 
+            },
+            { 
+              id: "fl-partnership-5", 
+              title: "AI partnership tracking: Set up collaboration measurement", 
+              done: false, 
+              tips: [
+                "AI Prompt: 'How should I measure the success of partnerships for [your business]? Include metrics for reach, engagement, conversions, and relationship building.'",
+                "Track both quantitative and qualitative results",
+                "Document what works and what doesn't",
+                "Regularly review partnership performance"
+              ] 
+            }
+          ]
+        },
+        {
+          id: "fl-customer-feedback",
+          title: "Implement customer feedback systems",
+          description: "Create systems to gather, analyze, and act on customer feedback. Use AI to analyze feedback patterns and improve your offerings.",
+          done: false,
+          tips: [
+            "AI Prompt: 'Help me create a customer feedback system for [your business] that serves [your avatar]. Include: feedback collection methods, analysis processes, response strategies, and improvement implementation.'",
+            "Make feedback collection easy and regular",
+            "Respond to all feedback promptly",
+            "Use feedback to improve offerings",
+            "Share improvements with customers",
+            "Create feedback loops for continuous improvement"
+          ],
+          children: [
+            { 
+              id: "fl-feedback-1", 
+              title: "AI feedback collection: Design comprehensive feedback system", 
+              done: false, 
+              tips: [
+                "AI Prompt: 'Create a customer feedback collection strategy for [your business] including: survey questions, feedback timing, collection methods, and incentives that encourage honest responses.'",
+                "Ask specific, actionable questions",
+                "Make feedback collection convenient",
+                "Offer incentives for participation"
+              ] 
+            },
+            { 
+              id: "fl-feedback-2", 
+              title: "Human response system: Create feedback response process", 
+              done: false, 
+              tips: [
+                "Respond to all feedback within 24-48 hours",
+                "Thank customers for their input",
+                "Explain how you'll use their feedback"
+              ] 
+            },
+            { 
+              id: "fl-feedback-3", 
+              title: "AI analysis process: Set up feedback analysis workflow", 
+              done: false, 
+              tips: [
+                "AI Prompt: 'How should I analyze customer feedback for [your business] to identify patterns, priorities, and actionable insights? Include categorization, trend analysis, and improvement prioritization.'",
+                "Look for patterns and trends",
+                "Categorize feedback by type and priority",
+                "Identify actionable improvement opportunities"
+              ] 
+            },
+            { 
+              id: "fl-feedback-4", 
+              title: "Human improvement implementation: Plan feedback-driven improvements", 
+              done: false, 
+              tips: [
+                "Prioritize improvements based on impact",
+                "Communicate changes to customers",
+                "Track improvement results"
+              ] 
+            },
+            { 
+              id: "fl-feedback-5", 
+              title: "AI continuous improvement: Create feedback loop optimization", 
+              done: false, 
+              tips: [
+                "AI Prompt: 'How can I optimize my customer feedback system for [your business] to ensure continuous improvement? Include feedback frequency, question optimization, and response automation.'",
+                "Regularly review and improve feedback processes",
+                "Automate routine responses",
+                "Create feedback-driven innovation cycles"
+              ] 
+            }
+          ]
+        },
+        {
+          id: "fl-automation-systems",
+          title: "Set up marketing automation",
+          description: "Automate repetitive marketing tasks to scale your efforts while maintaining personal touch. Use AI to design automation workflows that feel human.",
+          done: false,
+          tips: [
+            "AI Prompt: 'Help me create marketing automation for [your business] that serves [your avatar]. Include: email sequences, social media scheduling, lead nurturing, and customer onboarding that maintains personal connection while scaling efficiently.'",
+            "Automate routine tasks, not relationships",
+            "Maintain personal touch in automated messages",
+            "Test automation thoroughly before launching",
+            "Monitor automation performance regularly",
+            "Have human oversight for complex interactions"
+          ],
+          children: [
+            { 
+              id: "fl-automation-1", 
+              title: "AI workflow design: Map customer journey automation", 
+              done: false, 
+              tips: [
+                "AI Prompt: 'Map the customer journey for [your business] and identify automation opportunities. Include: lead capture, nurturing sequences, onboarding, and retention campaigns that feel personal.'",
+                "Map the complete customer journey",
+                "Identify repetitive tasks for automation",
+                "Ensure automation feels personal"
+              ] 
+            },
+            { 
+              id: "fl-automation-2", 
+              title: "Human automation setup: Configure marketing tools", 
+              done: false, 
+              tips: [
+                "Choose tools that integrate well",
+                "Set up automation triggers and conditions",
+                "Test all automation workflows"
+              ] 
+            },
+            { 
+              id: "fl-automation-3", 
+              title: "AI content automation: Create automated content sequences", 
+              done: false, 
+              tips: [
+                "AI Prompt: 'Create automated content sequences for [your business] including: welcome emails, nurture campaigns, re-engagement sequences, and onboarding content that provides value while building relationships.'",
+                "Focus on providing value in every message",
+                "Personalize automated content",
+                "Include clear next steps"
+              ] 
+            },
+            { 
+              id: "fl-automation-4", 
+              title: "Human monitoring system: Set up automation oversight", 
+              done: false, 
+              tips: [
+                "Monitor automation performance",
+                "Set up alerts for issues",
+                "Have human backup for complex situations"
+              ] 
+            },
+            { 
+              id: "fl-automation-5", 
+              title: "AI optimization: Plan automation performance tracking", 
+              done: false, 
+              tips: [
+                "AI Prompt: 'What metrics should I track for marketing automation in [your business]? Include: open rates, click rates, conversion rates, and engagement metrics to optimize performance.'",
+                "Track key performance indicators",
+                "A/B test automated messages",
+                "Regularly optimize based on results"
+              ] 
+            }
+          ]
+        },
+        {
+          id: "fl-analytics-tracking",
+          title: "Set up analytics and tracking",
+          description: "Implement comprehensive analytics to measure what's working and optimize your marketing efforts. Use AI to analyze data and identify improvement opportunities.",
+          done: false,
+          tips: [
+            "AI Prompt: 'Help me set up analytics and tracking for [your business] that serves [your avatar]. Include: key metrics to track, tracking setup, data analysis processes, and optimization strategies based on performance data.'",
+            "Track metrics that matter to your business",
+            "Set up proper attribution tracking",
+            "Regularly review and analyze data",
+            "Use data to make informed decisions",
+            "Focus on actionable insights"
+          ],
+          children: [
+            { 
+              id: "fl-analytics-1", 
+              title: "AI metrics planning: Define key performance indicators", 
+              done: false, 
+              tips: [
+                "AI Prompt: 'What are the most important metrics to track for [your business] that serves [your avatar]? Include: traffic, engagement, conversion, and business metrics that directly impact success.'",
+                "Focus on metrics that drive business results",
+                "Include both leading and lagging indicators",
+                "Make metrics actionable and specific"
+              ] 
+            },
+            { 
+              id: "fl-analytics-2", 
+              title: "Human tracking setup: Implement analytics tools", 
+              done: false, 
+              tips: [
+                "Choose analytics tools that integrate well",
+                "Set up proper tracking codes",
+                "Test tracking implementation"
+              ] 
+            },
+            { 
+              id: "fl-analytics-3", 
+              title: "AI data analysis: Create data review processes", 
+              done: false, 
+              tips: [
+                "AI Prompt: 'How should I analyze analytics data for [your business] to identify trends, opportunities, and issues? Include: data review frequency, analysis methods, and reporting formats.'",
+                "Set up regular data review schedules",
+                "Look for patterns and trends",
+                "Identify actionable insights"
+              ] 
+            },
+            { 
+              id: "fl-analytics-4", 
+              title: "Human optimization: Plan data-driven improvements", 
+              done: false, 
+              tips: [
+                "Use data to guide decision-making",
+                "Test changes based on insights",
+                "Document what works and what doesn't"
+              ] 
+            },
+            { 
+              id: "fl-analytics-5", 
+              title: "AI reporting: Create automated reporting system", 
+              done: false, 
+              tips: [
+                "AI Prompt: 'Create automated reporting for [your business] analytics including: weekly performance summaries, monthly trend analysis, and quarterly business reviews that highlight key insights and recommendations.'",
+                "Automate routine reporting",
+                "Focus on insights, not just data",
+                "Make reports actionable and clear"
+              ] 
+            }
+          ]
+        },
+        {
+          id: "fl-sales-process",
+          title: "Optimize your sales process",
+          description: "Create a systematic approach to converting prospects into customers. Use AI to analyze your sales process and identify optimization opportunities.",
+          done: false,
+          tips: [
+            "AI Prompt: 'Help me optimize the sales process for [your business] that serves [your avatar]. Include: lead qualification, sales conversations, objection handling, closing techniques, and follow-up strategies that build trust and drive conversions.'",
+            "Focus on serving prospects, not just selling",
+            "Build trust before asking for the sale",
+            "Handle objections with empathy",
+            "Follow up consistently and professionally",
+            "Track and optimize conversion rates"
+          ],
+          children: [
+            { 
+              id: "fl-sales-1", 
+              title: "AI sales funnel: Map complete sales process", 
+              done: false, 
+              tips: [
+                "AI Prompt: 'Map the complete sales funnel for [your business] from first contact to purchase. Include: lead sources, qualification criteria, sales conversations, and conversion points.'",
+                "Document every step in the sales process",
+                "Identify potential bottlenecks",
+                "Create clear qualification criteria"
+              ] 
+            },
+            { 
+              id: "fl-sales-2", 
+              title: "Human conversation scripts: Create sales conversation guides", 
+              done: false, 
+              tips: [
+                "Focus on understanding customer needs",
+                "Provide value in every conversation",
+                "Make scripts feel natural, not robotic"
+              ] 
+            },
+            { 
+              id: "fl-sales-3", 
+              title: "AI objection handling: Develop objection response strategies", 
+              done: false, 
+              tips: [
+                "AI Prompt: 'What are the most common objections for [your offering] and how should I handle them? Include: price objections, timing concerns, and competitive comparisons with empathetic responses.'",
+                "Address objections with empathy",
+                "Focus on value over price",
+                "Provide social proof and testimonials"
+              ] 
+            },
+            { 
+              id: "fl-sales-4", 
+              title: "Human follow-up system: Create systematic follow-up process", 
+              done: false, 
+              tips: [
+                "Follow up consistently but not aggressively",
+                "Provide additional value in follow-ups",
+                "Respect prospect's timeline and decisions"
+              ] 
+            },
+            { 
+              id: "fl-sales-5", 
+              title: "AI conversion optimization: Analyze and improve conversion rates", 
+              done: false, 
+              tips: [
+                "AI Prompt: 'How can I improve conversion rates for [your business]? Include: A/B testing ideas, conversion optimization tactics, and ways to reduce friction in the sales process.'",
+                "Test different approaches and messages",
+                "Reduce friction in the buying process",
+                "Track and optimize conversion metrics"
+              ] 
+            }
           ]
         }
       ]
