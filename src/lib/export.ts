@@ -83,7 +83,7 @@ export async function exportPDF(blueprint: Blueprint): Promise<Uint8Array> {
         }
         
         const indent = 55 + (depth * 20);
-        const prefix = task.done ? "✓" : "○";
+        const prefix = task.done ? "[X]" : "[ ]";
         const taskColor = task.done ? mutedColor : textColor;
         
         // Task title
@@ -166,7 +166,7 @@ function formatMarkdownLine(text: string): string {
   return text
     .replace(/\*\*(.*?)\*\*/g, '$1') // Remove bold markers
     .replace(/\*(.*?)\*/g, '$1') // Remove italic markers
-    .replace(/^- (.*$)/gm, '• $1') // Convert list items
+    .replace(/^- (.*$)/gm, '- $1') // Convert list items
     .substring(0, 80); // Limit line length
 }
 

@@ -634,11 +634,11 @@ function AppPageContent() {
                   </div>
                 )}
                 
-                {/* Top fade overlay */}
-                <div className="absolute top-0 left-0 right-0 h-16 fade-overlay-top z-20 pointer-events-none" />
+                {/* Top fade overlay - Fixed to viewport */}
+                <div className="fixed top-0 left-0 right-0 h-16 fade-overlay-top z-20 pointer-events-none" />
                 
-                {/* Bottom fade overlay */}
-                <div className="absolute bottom-0 left-0 right-0 h-16 fade-overlay-bottom z-20 pointer-events-none" />
+                {/* Bottom fade overlay - Fixed to viewport */}
+                <div className="fixed bottom-0 left-0 right-0 h-16 fade-overlay-bottom z-20 pointer-events-none" />
                 
                 <TaskList 
                   tasks={currentPhaseData?.phase.tasks || []} 
