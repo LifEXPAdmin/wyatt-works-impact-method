@@ -100,7 +100,7 @@ export default function Tour({
     
     // Sort rectangles by position
     const sortedRects = [...unblurredRects].sort((a, b) => a.top - b.top);
-    const overlayPieces: JSX.Element[] = [];
+    const overlayPieces: React.JSX.Element[] = [];
     
     let currentY = 0;
     sortedRects.forEach((rect, index) => {
@@ -349,16 +349,16 @@ export default function Tour({
     }
   }, [currentStep]);
 
-  const handleSkip = () => {
+  const handleSkip = useCallback(() => {
     localStorage.setItem(storageKey, "done");
     onClose();
-  };
+  }, [storageKey, onClose]);
 
-  const handleFinish = () => {
+  const handleFinish = useCallback(() => {
     localStorage.setItem(storageKey, "done");
     onFinish?.();
     onClose();
-  };
+  }, [storageKey, onFinish, onClose]);
 
   if (!isOpen || !currentStepData) return null;
 
