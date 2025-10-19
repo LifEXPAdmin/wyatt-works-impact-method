@@ -90,7 +90,7 @@ export default function Tour({
               left: 0,
               top: currentY,
               width: viewportWidth,
-              height: rect.top - currentY,
+              height: rect.top - currentY + 1, // Small overlap
             }}
           />
         );
@@ -104,9 +104,9 @@ export default function Tour({
             className="absolute bg-black/70 backdrop-blur-sm"
             style={{
               left: 0,
-              top: rect.top,
-              width: rect.left,
-              height: rect.height,
+              top: rect.top - 1, // Small overlap to prevent gaps
+              width: rect.left + 1, // Small overlap
+              height: rect.height + 2, // Small overlap
             }}
           />
         );
@@ -118,10 +118,10 @@ export default function Tour({
             key={`right-${index}`}
             className="absolute bg-black/70 backdrop-blur-sm"
             style={{
-              left: rect.right,
-              top: rect.top,
-              width: viewportWidth - rect.right,
-              height: rect.height,
+              left: rect.right - 1, // Small overlap
+              top: rect.top - 1, // Small overlap
+              width: viewportWidth - rect.right + 1, // Small overlap
+              height: rect.height + 2, // Small overlap
             }}
           />
         );
@@ -138,9 +138,9 @@ export default function Tour({
           className="absolute bg-black/70 backdrop-blur-sm"
           style={{
             left: 0,
-            top: currentY,
+            top: currentY - 1, // Small overlap
             width: viewportWidth,
-            height: viewportHeight - currentY,
+            height: viewportHeight - currentY + 1, // Small overlap
           }}
         />
       );
